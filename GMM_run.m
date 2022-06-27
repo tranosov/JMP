@@ -6,12 +6,13 @@ Estimate GMM
 
 clear; clc;
 clear global;
-cd 'C:\Users\ranos\OneDrive - Umich\Documents\D\Michigan\Res\Female careers in location\Codes\matlab'
+%cd 'C:\Users\ranos\OneDrive - Umich\Documents\D\Michigan\Res\Female careers in location\Codes\matlab'
 rng(357)
+fprintf('Running GMM estimation.');
 
-forparams =readtable('C:\Users\ranos\OneDrive - Umich\Documents\D\Michigan\Res\Female careers in location\Codes\matlab\PREP.xlsx','Sheet','PARSTEST','ReadVariableNames', true,'ReadRowNames',true);
-formom =readtable('C:\Users\ranos\OneDrive - Umich\Documents\D\Michigan\Res\Female careers in location\Codes\matlab\PREP.xlsx','Sheet','MOMS','ReadVariableNames', true,'ReadRowNames',true);
-forw =readtable('C:\Users\ranos\OneDrive - Umich\Documents\D\Michigan\Res\Female careers in location\Codes\matlab\PREP.xlsx','Sheet','W','ReadVariableNames', true,'ReadRowNames',true);
+forparams =readtable('.\input\PREP.xlsx','Sheet','PARS','ReadVariableNames', true,'ReadRowNames',true);
+formom =readtable('.\input\PREP.xlsx','Sheet','MOMS','ReadVariableNames', true,'ReadRowNames',true);
+forw =readtable('.\input\PREP.xlsx','Sheet','W','ReadVariableNames', true,'ReadRowNames',true);
 
 paramsall=forparams(:,'value');
 paramsest=forparams(forparams.('toestimateR')==1,'value');
@@ -25,13 +26,13 @@ pars=paramsest;
 global RESC
 RESC=10^3;
 global VERBOSE
-VERBOSE=0;
+VERBOSE=1;
 
 fopt=10^(-6); % no idea
 x0=table2array(paramsest);
 LB=table2array(forparams(paramsest.Properties.RowNames,'min'));
 UB=table2array(forparams(paramsest.Properties.RowNames,'max'));
-GG=GMM(x0,pars,momentest,W,momentall,paramsall);
+%GG=GMM(x0,pars,momentest,W,momentall,paramsall);
 
 
 ObjectiveFunction=@(x)GMM(x,pars,momentest,W,momentall,paramsall); % pars has the list!
