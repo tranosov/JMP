@@ -17,7 +17,7 @@ WARNINGS=0;
     cl=cl0;
     kk=1;
     while (sum(abs(cl))>5) && (kk<5)
-            A=500*table2array(params('crrah_','value'));
+            A=300*table2array(params('crrah_','value'));
             if VERBOSE
                 cl=cl
             end
@@ -61,9 +61,10 @@ end
                     while (sum(abs(cl))>0.5) && (kk<10)
                         A=1000*table2array(params('crrah_','value'));
                         lp0=lp0+cl./(A*[1,1,1]); % roughly correct initial guess
-                        kk=kk+1
+                        kk=kk+1;
                         cl=F(lp0);
                         if VERBOSE
+                            kk
                             cl=cl
                         end
                     end

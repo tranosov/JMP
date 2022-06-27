@@ -90,11 +90,15 @@ for j=1:I
             [output,~,EXITFLAG]=fsolve(fn,inputs0(t,j,i,:),options); 
             if (~isreal(output) ) | (output(1)<=0 )| ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
                     %fprintf('Warning')
-                    [output,FVAL,EXITFLAG,OUTPUT]=fsolve(fn,[x0,mu0],options); 
                     %inputs0(t,j,i,:).*sign(fn(inputs0(t,j,i,:))).*[-1,1]*1.1
+                    [output,FVAL,EXITFLAG,OUTPUT]=fsolve(fn,inputs0(t,j,i,:).*sign(fn(inputs0(t,j,i,:))).*[-1,1]*1.1,options);
                     if (~isreal(output)) | (output(1)<=0) | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                    fprintf('Warning on singles - 2')
-                    WARNINGS=WARNINGS+1;
+                            [output,FVAL,EXITFLAG,OUTPUT]=fsolve(fn,[x0,mu0],options);
+                            if (~isreal(output)) | (output(1)<=0) | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
+                                fprintf('Warning on singles - 2')
+                                WARNINGS=WARNINGS+1;
+                                
+                            end      
                     end
             end
             
