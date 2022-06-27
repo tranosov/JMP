@@ -42,7 +42,7 @@ end
 momnames=moments_.Properties.RowNames;
 pnames=params.Properties.RowNames;
 
-filename = "C:\Users\ranos\OneDrive - Umich\Documents\D\Michigan\Res\Female careers in location\Codes\matlab\estimation\progress.txt";
+filename = ".\estimation\progress.txt";
 io = fopen(filename,'a');
 fprintf(io,"GMM function value =   %16.8f\n",G);
 fprintf(io," \n");
@@ -50,7 +50,7 @@ fprintf(io,"time =   %16.8f\n",time);
 fclose(io);
 
 
-filename = "C:\Users\ranos\OneDrive - Umich\Documents\D\Michigan\Res\Female careers in location\Codes\matlab\estimation\progressmoment.txt";
+filename = ".\estimation\progressmoment.txt";
 io = fopen(filename,'a');
 fprintf(io,"GMM function value =   %16.8f\n",G);
 fprintf(io," \n");
