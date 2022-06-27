@@ -1,3 +1,39 @@
 GMM function value =        24.99112125
  
 time =       188.86779550
+GMM function value =        24.98351226
+ 
+time =        84.18232800
+GMM function value =        46.38090225
+ 
+time =        77.54748300
+GMM function value =        77.30056298
+ 
+time =       110.44131800
+GMM function value =        61.97263454
+ 
+time =        50.33064700
+GMM function value =        61.47821605
+ 
+time =        51.60441500
+GMM function value =        61.01834025
+ 
+time =        49.53656200
+GMM function value =        60.59054384
+ 
+time =        45.76855100
+GMM function value =        60.19252581
+ 
+time =        46.81441400
+GMM function value =        59.82214237
+ 
+time =        45.92064200
+GMM function value =        59.47726835
+ 
+time =        47.07981300
+GMM function value =        59.15599393
+ 
+time =        45.06084400
+GMM function value =        58.85680340
+ 
+time =        47.53756700
