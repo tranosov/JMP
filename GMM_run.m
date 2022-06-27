@@ -26,13 +26,13 @@ pars=paramsest;
 global RESC
 RESC=10^3;
 global VERBOSE
-VERBOSE=1;
+VERBOSE=0;
 
 fopt=10^(-6); % no idea
 x0=table2array(paramsest);
 LB=table2array(forparams(paramsest.Properties.RowNames,'min'));
 UB=table2array(forparams(paramsest.Properties.RowNames,'max'));
-GG=GMM(x0,pars,momentest,W,momentall,paramsall);
+%GG=GMM(x0,pars,momentest,W,momentall,paramsall);
 
 
 ObjectiveFunction=@(x)GMM(x,pars,momentest,W,momentall,paramsall); % pars has the list!
