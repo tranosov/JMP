@@ -10,9 +10,9 @@ clear global;
 rng(357)
 fprintf('Running GMM estimation.');
 
-forparams =readtable('.\input\PREP.xlsx','Sheet','PARS','ReadVariableNames', true,'ReadRowNames',true);
-formom =readtable('.\input\PREP.xlsx','Sheet','MOMS','ReadVariableNames', true,'ReadRowNames',true);
-forw =readtable('.\input\PREP.xlsx','Sheet','W','ReadVariableNames', true,'ReadRowNames',true);
+forparams =readtable('./input/PREP.xlsx','Sheet','PARS','ReadVariableNames', true,'ReadRowNames',true);
+formom =readtable('./input/PREP.xlsx','Sheet','MOMS','ReadVariableNames', true,'ReadRowNames',true);
+forw =readtable('./input/PREP.xlsx','Sheet','W','ReadVariableNames', true,'ReadRowNames',true);
 
 paramsall=forparams(:,'value');
 paramsest=forparams(forparams.('toestimateR')==1,'value');
