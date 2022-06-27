@@ -486,7 +486,7 @@ if toinputs==1
                                 (piw_(0,dw)==0)*[inputs0(th,tw,jh,jw,i,1,1),inputs0(th,tw,jh,jw,i,1,2),(1-betaw*dw)*100]*1.1;
                                 [output1,~,EXITFLAG]=fsolve(fn,inp_,options); % to lazy, do better
                                 if ~isreal(output1) | output1(1)<=0 | output1(2)<=0 | lsh(output1(1),output1(2)/100,output1(3)/100,dh,0,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                                    fprintf('Warning 3')
+                                    fprintf('INIT: Warning w0')
                                     output1=output1_;
                                 else
                                     fprintf('Solved');
@@ -529,7 +529,7 @@ if toinputs==1
                             [output2,~,EXITFLAG]=fsolve(fn,inp_,options); % to lazy, do better
                             
                             if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                                fprintf('Warning 2')
+                                fprintf('INIT: Warning 0w')
                                 output2=output2_;
                             else
                                 fprintf('Solved');
@@ -571,7 +571,6 @@ if toinputs==1
                                 (piw_(dh,dw)==1)*[inputs0(th,tw,jh,jw,i,3,1),(1-betah*dh-0.26)*100,inputs0(th,tw,jh,jw,i,3,3)]*0.85+...
                                 (piw_(dh,dw)==0)*[inputs0(th,tw,jh,jw,i,3,1),inputs0(th,tw,jh,jw,i,3,2),(1-betaw*dw-0.23)*100]*0.85;
                             [output3,~,EXITFLAG]=fsolve(fn, inp_,options); 
-                            
                             %todo: if really no solution - somehow code
                             %this option never to be used?
                             if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 | lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  |...
@@ -584,7 +583,7 @@ if toinputs==1
                                 [output3,~,EXITFLAG]=fsolve(fn, inp_,options); 
                                 if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 | lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  |...
                                     lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                                    fprintf('Warning 3')
+                                    fprintf('INIT: Warning ww')
                                     output3=output3_;
                                 else
                                     fprintf('Solved');
@@ -592,10 +591,7 @@ if toinputs==1
                             else
                                 fprintf('Solved');
                             end
-                            options = optimoptions('fsolve','MaxIter',5000,'MaxFunctionEvaluations',5000,...
-                                        'FunctionTolerance',10^(-8),'Display','off','Algorithm','levenberg-marquardt',...
-                                        'StepTolerance', 10^(-12));
-                         
+     
                         end 
                       inputs(th,tw,jh,jw,i,3,:)=real(output3);
               
