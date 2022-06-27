@@ -93,7 +93,7 @@ for j=1:I
                     %inputs0(t,j,i,:).*sign(fn(inputs0(t,j,i,:))).*[-1,1]*1.1
                     [output,FVAL,EXITFLAG,OUTPUT]=fsolve(fn,inputs0(t,j,i,:).*sign(fn(inputs0(t,j,i,:))).*[-1,1]*1.1,options);
                     if (~isreal(output)) | (output(1)<=0) | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                            [output,FVAL,EXITFLAG,OUTPUT]=fsolve(fn,[x0,mu0],options);
+                            [output,FVAL,EXITFLAG,OUTPUT]=fsolve(fn,[mu0,x0],options);
                             if (~isreal(output)) | (output(1)<=0) | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
                                 fprintf('Warning on singles - 2')
                                 WARNINGS=WARNINGS+1;
