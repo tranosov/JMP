@@ -1,6 +1,6 @@
 function OUTC=labors(pp,alloutput,lambda,EQS,PARREST)
 %global EQS JLs AC typeic D betah WARNINGS mm params
-global WARNINGS
+global WARNINGS VERBOSE
 global IN
 rng(357)
 
@@ -167,17 +167,21 @@ for i=1:I
                     [output1,~,EXITFLAG]=fsolve(fn,inputs0(th,tw,jh,jw,i,1,:),options) ;
                 end
                 if ~isreal(output1) | output1(1)<=0 | output1(2)<=0 | lsh(output1(1),output1(2)/100,output1(3)/100,dh,0,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                    %fprintf('Warning');                    
+                    if VERBOSE
+                        fprintf('Warning');    
+                    end
                     options0 = optimoptions('fsolve','MaxIter',5000,'MaxFunctionEvaluations',5000,...
                             'FunctionTolerance',TOL,'Display','off','Algorithm','trust-region'); %,'StepTolerance', STEPTOL);
-                    [output1,~,EXITFLAG]=fsolve(fn,[mu00,reshape(inputs0(th,tw,jh,jw,i,1,2:3),1,2)*1.1],options0);
+                    [output1,~,EXITFLAG]=fsolve(fn,[inputs0(th,tw,jh,jw,i,1,:)*1.1],options0);  
                     if ~isreal(output1) | output1(1)<=0 | output1(2)<=0 | lsh(output1(1),output1(2)/100,output1(3)/100,dh,0,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                        fprintf('labors: Warning w0')
-                        WARNINGS=WARNINGS+1;
-                        output1=real(output1);
-                        return
+                        [output1,~,EXITFLAG]=fsolve(fn,[mu00,reshape(inputs0(th,tw,jh,jw,i,1,2:3),1,2)*1.1],options0);
+                        if ~isreal(output1) | output1(1)<=0 | output1(2)<=0 | lsh(output1(1),output1(2)/100,output1(3)/100,dh,0,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
+                            fprintf('labors: Warning w0')
+                            WARNINGS=WARNINGS+1;
+                            output1=real(output1);
+                            return
+                        end
                     end
-                    
                 end
 
                 if piw_(0,dw)>0 && piw_(0,dw)<1 
@@ -198,15 +202,20 @@ for i=1:I
                     [output2,~,EXITFLAG]=fsolve(fn,inputs0(th,tw,jh,jw,i,2,:),options); 
                 end
                 if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                    %fprintf('Warning');
+                    if VERBOSE
+                        fprintf('Warning');    
+                    end
                     options0 = optimoptions('fsolve','MaxIter',5000,'MaxFunctionEvaluations',5000,...
                             'FunctionTolerance',TOL,'Display','off','Algorithm','trust-region','StepTolerance', STEPTOL);
-                    [output2,~,EXITFLAG]=fsolve(fn,[mu000,reshape(inputs0(th,tw,jh,jw,i,2,2:3),1,2)*1.1],options0);
-                    if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                        fprintf('labors: Warning 0w')
-                        WARNINGS=WARNINGS+1;
-                        output2=real(output2);
-                        return
+                        [output2,~,EXITFLAG]=fsolve(fn,[inputs0(th,tw,jh,jw,i,2,:)*1.1],options0);
+                    if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))                       
+                        [output2,~,EXITFLAG]=fsolve(fn,[mu000,reshape(inputs0(th,tw,jh,jw,i,2,2:3),1,2)*1.1],options0);
+                        if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
+                            fprintf('labors: Warning 0w')
+                            WARNINGS=WARNINGS+1;
+                            output2=real(output2);
+                            return
+                        end
                     end
                 end
 
@@ -229,17 +238,21 @@ for i=1:I
                 end
 
                 if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 |  lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  | lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 
-                    %dh
-                    %dw
-                    %fprintf('Warning');
+                    if VERBOSE
+                        fprintf('Warning');
+                    end
                     options0 = optimoptions('fsolve','MaxIter',5000,'MaxFunctionEvaluations',5000,...
                             'FunctionTolerance',TOL,'Display','off','Algorithm','trust-region','StepTolerance', STEPTOL);
-                    [output3,~,EXITFLAG]=fsolve(fn,[mu0,reshape(inputs0(th,tw,jh,jw,i,3,2:3),1,2)*1.1],options0);
+                    [output3,~,EXITFLAG]=fsolve(fn,reshape(inputs0(th,tw,jh,jw,i,3,:)*1.1,options0);
                     if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 |  lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  | lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                        fprintf('labors: Warning2 ww')
-                        WARNINGS=WARNINGS+1;
-                        output3=real(output3);
-                        return
+                        
+                        [output3,~,EXITFLAG]=fsolve(fn,[mu0,reshape(inputs0(th,tw,jh,jw,i,3,2:3),1,2)*1.1],options0);
+                        if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 |  lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  | lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
+                            fprintf('labors: Warning2 ww')
+                            WARNINGS=WARNINGS+1;
+                            output3=real(output3);
+                            return
+                        end
                     end
                 end 
 
