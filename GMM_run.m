@@ -8,7 +8,7 @@ clear; clc;
 clear global;
 %cd 'C:\Users\ranos\OneDrive - Umich\Documents\D\Michigan\Res\Female careers in location\Codes\matlab'
 rng(357)
-fprintf('Running GMM estimation.');
+fprintf('Running GMM estimation. CHECK NEW VERSION');
 
 forparams =readtable('./input/PREP.xlsx','Sheet','PARS','ReadVariableNames', true,'ReadRowNames',true);
 formom =readtable('./input/PREP.xlsx','Sheet','MOMS','ReadVariableNames', true,'ReadRowNames',true);
