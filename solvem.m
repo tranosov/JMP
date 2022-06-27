@@ -56,27 +56,27 @@ else
                 end 
                 
                 [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,x0,options);
-                EXITFLAG
+
             end
 
             if (EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3) && (EXITFLAG~=4)
-                OUTPUT
+
                 WARNINGS=WARNINGS+0.5; % had to lower standards
                 fprintf('Trying again');
                 [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,x0*0.9,options);
-                EXITFLAG
+
             end
             if (EXITFLAG~=1) && (EXITFLAG~=2) && (EXITFLAG~=3) && (EXITFLAG~=4)
-                OUTPUT
+
                 fprintf('Trying again again');
                 [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,x0*1.1,options);
-                EXITFLAG
+
             end
             if (EXITFLAG~=1) && (EXITFLAG~=2) && (EXITFLAG~=3) && (EXITFLAG~=4)
-                OUTPUT
+
                 fprintf('Trying again again again');
                 [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,[0.5],options);
-                EXITFLAG
+
                 if (EXITFLAG~=1) && (EXITFLAG~=2) && (EXITFLAG~=3) && (EXITFLAG~=4)              
                     WARNINGS=WARNINGS+1;
                     fprintf('Solvem saved many times.')

@@ -95,15 +95,21 @@ else
                     while (sum(abs(cl))>0.5) && (kkk<3)
                         kk=1;
                         while (sum(abs(cl(end)))>0.1) && (kk<10)
-                            x0=x0 +cl.*([0,0,0,(RESC)*PARREST.('sigmam')/(300*kk)])
-                            cl=F(x0) 
+                            x0=x0 +cl.*([0,0,0,(RESC)*PARREST.('sigmam')/(300*kk)]);
+                            cl=F(x0);
+                            if VERBOSE
+                                cl
+                            end
                             kk=kk+1;
                         end
                         kk=1;
                         while (sum(abs(cl(1:end-1)))>0.4) && (kk<10)
                             A=1/(1000*kk);
-                            x0=x0 +cl.*(A*[1,1,1,0])
-                            [cl]=F(x0) 
+                            x0=x0 +cl.*(A*[1,1,1,0]);
+                            [cl]=F(x0); 
+                            if VERBOSE
+                                cl
+                            end
                             kk=kk+1;
                         end  
                         WARNINGS=0;
