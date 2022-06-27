@@ -32,10 +32,10 @@ fopt=10^(-6); % no idea
 x0=table2array(paramsest);
 LB=table2array(forparams(paramsest.Properties.RowNames,'min'));
 UB=table2array(forparams(paramsest.Properties.RowNames,'max'));
-%GG=GMM(x0,pars,momentest,W,momentall,paramsall);
+GG=GMM(x0,pars,momentest,W,momentall,paramsall);
 
 
 ObjectiveFunction=@(x)GMM(x,pars,momentest,W,momentall,paramsall); % pars has the list!
 
-options = optimoptions(@simulannealbnd,'MaxIterations',10000,'Display','iter');
-[x,fval,exitFlag,output] = simulannealbnd(ObjectiveFunction,x0,LB,UB,options)
+%options = optimoptions(@simulannealbnd,'MaxIterations',10000,'Display','iter');
+%[x,fval,exitFlag,output] = simulannealbnd(ObjectiveFunction,x0,LB,UB,options)
