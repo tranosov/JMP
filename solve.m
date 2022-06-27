@@ -89,8 +89,7 @@ else
                 % seems to be mostly from lambda to prices and not the other
                 % way around
                 if (EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3) && (EXITFLAG~=4)
-                    OUTPUT
-                    fprintf('Trying again');
+                    %fprintf('Trying again');
                     kkk=1;
                     while (sum(abs(cl))>0.5) && (kkk<3)
                         kk=1;
@@ -123,19 +122,19 @@ else
                 if (EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3) && (EXITFLAG~=4)
 
                     WARNINGS=WARNINGS+0.5; % had to lower standards
-                    fprintf('Trying again');
+                    %fprintf('Trying again');
                     [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,x0*0.9,options);
 
                 end
                 if (EXITFLAG~=1) && (EXITFLAG~=2) && (EXITFLAG~=3) && (EXITFLAG~=4)
 
-                    fprintf('Trying again again');
+                    %fprintf('Trying again again');
                     [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,x0*1.1,options);
 
                 end
                 if (EXITFLAG~=1) && (EXITFLAG~=2) && (EXITFLAG~=3) && (EXITFLAG~=4)
 
-                    fprintf('Trying again again again');
+                    %fprintf('Trying again again again');
                     [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,[1,1,1,0.5],options);
 
                     if (EXITFLAG~=1) && (EXITFLAG~=2) && (EXITFLAG~=3) && (EXITFLAG~=4)              

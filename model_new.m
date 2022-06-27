@@ -399,10 +399,10 @@ if toinputs==1
                                 fprintf('INIT: Warning on singles - 3')
                                 output=output_;
                              else
-                                fprintf('Solved');   
+                                %fprintf('Solved');   
                              end
                          else
-                             fprintf('Solved');    
+                             %fprintf('Solved');    
                          end
                 end
                 inputs0S(t,j,i,:)=real(output);
@@ -456,13 +456,13 @@ if toinputs==1
                             [output1,~,EXITFLAG]=fsolve(fn,inputs0(th,tw,jh,jw,i,1,:),options) ;
                         end
                         if piw_(dh,0)==1
-                            fprintf('xh=0');
+                            %fprintf('xh=0');
                             fn=@(mu,Lh,xw) [lsah_eq_xh0(mu,Lh,xw,p,dh,0,ich,lambda) ,multC_eq(Yc(1-betah*dh - Lh,0,ich,icw),p,mu,0,xw,lambda)];
                             fn=@(x)fn(x(1),x(2)/100,x(3)/100);
                             [output1,~,EXITFLAG]=fsolve(fn,[inputs0(th,tw,jh,jw,i,1,1),(1-betah*dh-0.26)*100,inputs0(th,tw,jh,jw,i,1,3)],options) ;
                         end
                         if piw_(dh,0)==0
-                            fprintf('xw=0');
+                            %fprintf('xw=0');
                             fn=@(mu,xh,xw) [lsah_eq_xw0(mu,xh,xw,p,dh,0,ich,lambda) ,multC_eq(Yc(lsh(mu,xh,xw,dh,0,lambda),0,ich,icw),p,mu,xh,xw,lambda)]; % one equation is just xw=0
                             fn=@(x) fn(x(1),x(2)/100,x(3)/100);
                             [output1,~,EXITFLAG]=fsolve(fn,[inputs0(th,tw,jh,jw,i,1,1),inputs0(th,tw,jh,jw,i,1,2),0],options) ;
@@ -470,7 +470,7 @@ if toinputs==1
                         output1_=output1;
                         if ~isreal(output1) | output1(1)<=0 | output1(2)<=0 | lsh(output1(1),output1(2)/100,output1(3)/100,dh,0,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
 
-                            fprintf('Warning');
+                            %fprintf('Warning');
                             %cl=fn(output2);
                             inp_=(piw_(0,dw)>0 && piw_(0,dw)<1)*reshape(inputs0(th,tw,jh,jw,i,1,:),[1,3])*0.9 + ...
                                 (piw_(0,dw)==1)*[inputs0(th,tw,jh,jw,i,1,1),(1-betah*dh-0.26)*100,inputs0(th,tw,jh,jw,i,1,3)]*0.9+...
@@ -479,7 +479,7 @@ if toinputs==1
                             [output1,~,EXITFLAG]=fsolve(fn,inp_,options); % to lazy, do better
                             
                             if ~isreal(output1) | output1(1)<=0 | output1(2)<=0 | lsh(output1(1),output1(2)/100,output1(3)/100,dh,0,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                                fprintf('Warning 2');
+                                %fprintf('Warning 2');
                                 inp_=(piw_(0,dw)>0 && piw_(0,dw)<1)*reshape(inputs0(th,tw,jh,jw,i,1,:),[1,3])*1.1 + ...
                                 (piw_(0,dw)==1)*[inputs0(th,tw,jh,jw,i,1,1),(1-betah*dh-0.26)*100,inputs0(th,tw,jh,jw,i,1,3)]*1.1+...
                                 (piw_(0,dw)==0)*[inputs0(th,tw,jh,jw,i,1,1),inputs0(th,tw,jh,jw,i,1,2),(1-betaw*dw)*100]*1.1;
@@ -488,10 +488,10 @@ if toinputs==1
                                     fprintf('INIT: Warning w0')
                                     output1=output1_;
                                 else
-                                    fprintf('Solved');
+                                    %fprintf('Solved');
                                 end
                             else
-                                fprintf('Solved');
+                                %fprintf('Solved');
                             end
                         end
                         
@@ -504,13 +504,13 @@ if toinputs==1
                             [output2,~,EXITFLAG]=fsolve(fn,inputs0(th,tw,jh,jw,i,2,:),options); 
                         end
                         if piw_(0,dw)==1
-                            fprintf('xh=0');
+                            %fprintf('xh=0');
                             fn=@(mu,xh,xw) [lsaw_eq_xh0(mu,xh,xw,p,0,dw,icw,lambda) ,multC_eq(Yc(0,lsw(mu,xh,xw,0,dw,lambda),ich,icw),p,mu,xh,xw,lambda)];
                             fn=@(x) fn(x(1),x(2)/100,x(3)/100);
                             [output2,~,EXITFLAG]=fsolve(fn,[inputs0(th,tw,jh,jw,i,2,1),0,inputs0(th,tw,jh,jw,i,2,3)],options); 
                         end
                         if piw_(0,dw)==0
-                            fprintf('xw=0');
+                            %fprintf('xw=0');
                             fn=@(mu,xh,Lw) [lsaw_eq_xw0(mu,xh,Lw,p,0,dw,icw,lambda) ,multC_eq(Yc(0,1-betah*dw - Lw,ich,icw),p,mu,xh,0,lambda)];
                             fn=@(x) fn(x(1),x(2)/100,x(3)/100);
                             [output2,~,EXITFLAG]=fsolve(fn,[inputs0(th,tw,jh,jw,i,2,1),inputs0(th,tw,jh,jw,i,2,2),1-betaw*dw-0.26],options); 
@@ -518,7 +518,7 @@ if toinputs==1
                         output2_=output2;
                         if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
 
-                            fprintf('Warning');
+                            %fprintf('Warning');
                             %cl=fn(output2);
                             inp_=(piw_(0,dw)>0 && piw_(0,dw)<1)*reshape(inputs0(th,tw,jh,jw,i,2,:),[1,3])*0.9 + ...
                                 (piw_(0,dw)==1)*[inputs0(th,tw,jh,jw,i,2,1),1-betah*dh-0.26,inputs0(th,tw,jh,jw,i,2,3)]*0.9+...
@@ -530,7 +530,7 @@ if toinputs==1
                                 fprintf('INIT: Warning 0w')
                                 output2=output2_;
                             else
-                                fprintf('Solved');
+                                %fprintf('Solved');
                             end
                             
                         end
@@ -573,7 +573,7 @@ if toinputs==1
                             %this option never to be used?
                             if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 | lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  |...
                                 lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                                fprintf('Warning 2');
+                                %fprintf('Warning 2');
                                 const=0.7;
                                 inp_=(piw_(dh,dw)>0 && piw_(dh,dw)<1)*reshape(inputs0(th,tw,jh,jw,i,3,:),[1,3])*const + ...
                                     (piw_(dh,dw)==1)*[inputs0(th,tw,jh,jw,i,3,1),1-betah*dh-0.26,inputs0(th,tw,jh,jw,i,3,3)]*0.85+...
@@ -584,10 +584,10 @@ if toinputs==1
                                     fprintf('INIT: Warning ww')
                                     output3=output3_;
                                 else
-                                    fprintf('Solved');
+                                    %fprintf('Solved');
                                 end
                             else
-                                fprintf('Solved');
+                                %fprintf('Solved');
                             end
      
                         end 
