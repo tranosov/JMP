@@ -1,6 +1,6 @@
 function OUTS=laborsS(pp,alloutput,EQS,PARREST)
 %global EQS JLs D AS typeic WARNINGS mm params
-global WARNINGS
+global WARNINGS VERBOSE
 global INS
 rng(357)
 
@@ -89,7 +89,9 @@ for j=1:I
             fn=@(in) fn(in(1),in(2));
             [output,~,EXITFLAG]=fsolve(fn,inputs0(t,j,i,:),options); 
             if (~isreal(output) ) | (output(1)<=0 )| ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                    %fprintf('Warning')
+                    if VERBOSE
+                        fprintf('laborS: warning')
+                    end
                     %inputs0(t,j,i,:).*sign(fn(inputs0(t,j,i,:))).*[-1,1]*1.1
                     [output,FVAL,EXITFLAG,OUTPUT]=fsolve(fn,inputs0(t,j,i,:).*sign(fn(inputs0(t,j,i,:))).*[-1,1]*1.1,options);
                     if (~isreal(output)) | (output(1)<=0) | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
