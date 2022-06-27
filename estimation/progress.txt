@@ -1,0 +1,3 @@
+GMM function value =        24.99112125
+ 
+time =       188.86779550
