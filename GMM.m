@@ -42,6 +42,10 @@ end
 momnames=moments_.Properties.RowNames;
 pnames=params.Properties.RowNames;
 
+fprintf("GMM function value =   %16.8f\n",G);
+fprintf(" \n");
+fprintf("time =   %16.8f\n",time);
+
 filename = "./estimation/progress.txt";
 io = fopen(filename,'a');
 fprintf(io,"GMM function value =   %16.8f\n",G);
