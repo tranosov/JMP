@@ -18,7 +18,7 @@ if withmm
     EQS.('inputs')=OUTC.('inputs');
     EQS.('inputsS')=OUTS.('inputs'); % to be sure stuff gets initialized with the  last solution
 
-    clear global IN INS
+    clear global IN INS % why?
 
     params=PARREST.('params'); % has the updated thetas!
     params('LA0','value')={LA};
