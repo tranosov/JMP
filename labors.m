@@ -171,7 +171,7 @@ for i=1:I
                         fprintf('Warning');    
                     end
                     options0 = optimoptions('fsolve','MaxIter',5000,'MaxFunctionEvaluations',5000,...
-                            'FunctionTolerance',TOL,'Display','off','Algorithm','trust-region'); %,'StepTolerance', STEPTOL);
+                            'FunctionTolerance',TOL,'Display','off','Algorithm','trust-region','StepTolerance', STEPTOL);
                     [output1,~,EXITFLAG]=fsolve(fn,[inputs0(th,tw,jh,jw,i,1,:)*1.1],options0);  
                     if ~isreal(output1) | output1(1)<=0 | output1(2)<=0 | lsh(output1(1),output1(2)/100,output1(3)/100,dh,0,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
                         [output1,~,EXITFLAG]=fsolve(fn,[mu00,reshape(inputs0(th,tw,jh,jw,i,1,2:3),1,2)*1.1],options0);
