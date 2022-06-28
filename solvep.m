@@ -103,7 +103,7 @@ end
 
             time=time+toc;
             if VERBOSE
-            toc
+                toc
             end
             
             

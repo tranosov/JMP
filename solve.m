@@ -142,7 +142,10 @@ else
                     end
 
                 end
+                
+                if VERBOSE
                 toc
+                end
 
                 time=time+toc;
     else
