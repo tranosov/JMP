@@ -9,6 +9,7 @@ function [EQS,PARREST]=...
     d21,d31,Sup1,Sup2,Sup3,SupS,addS,out,daddS,aaddS,pophous,...
     XI,wc, PID,typeic_,pid_,wgap_raw,mm_,lsbar, NLY,THETA,THETAHW,sigmam,MtoF) 
 rng(357)
+global VERBOSE
 mm=mm_;
 typeic=typeic_;
 %todo: redo as a structure!
@@ -390,11 +391,16 @@ if toinputs==1
                 [output,FVAL,EXITFLAG,OUTPUT]=fsolve(fn,[mu0,x0],options); 
                 output_=output;
                 if (~isreal(output)) | (output(1)<=0) | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                        %fprintf('INIT: Warning on singles')
+                        if VERBOSE
+                            fprintf('INIT: Warning on singles')
+                        end
                         [output,FVAL,EXITFLAG,OUTPUT]=fsolve(fn,[mu0,x0].*sign(fn([mu0,x0])).*[-1,1]*1.1,options); 
                          if (~isreal(output)) | (output(1)<=0) | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                         %fprintf('INIT: Warning on singles - 2')
-                             [output,FVAL,EXITFLAG,OUTPUT]=fsolve(fn,[mu0,x0].*sign(fn([mu0,x0])).*[-1,1]*1.0005,options); 
+                            if VERBOSE
+                                fprintf('INIT: Warning on singles - 2')
+                            end
+                            
+                            [output,FVAL,EXITFLAG,OUTPUT]=fsolve(fn,[mu0,x0].*sign(fn([mu0,x0])).*[-1,1]*1.0005,options); 
                              if (~isreal(output)) | (output(1)<=0) | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
                                 fprintf('INIT: Warning on singles - 3')
                                 output=output_;
@@ -410,8 +416,8 @@ if toinputs==1
             end
         end
     end
-    ich0=0.0135;
-    icw0=0.0135;
+    ich0=0.0154;
+    icw0=0.0154;
     mu0=  (lambda*ceh)*((1+((1-lambda)/lambda)^(1/crra))/(Yc(0.26,0.2,ich0,icw0)-2.1))^(crra); %l*(1/(w1_d(0.258,0)))*(1/(0.69)^crrat); %0.42; %0.3902;0.6856
     mu00= (lambda*ceh)*((1+((1-lambda)/lambda)^(1/crra))/(Yc(0.2672,0,ich0,icw0)-1.4))^(crra); %l*(1/(w1_d(0.26,0)))*(1/(0.6856)^crrat) ; %0.45; %0.3885; 
     mu000=  (lambda*ceh)*((1+((1-lambda)/lambda)^(1/crra))/(Yc(0,0.2672,ich0,icw0)-1.4))^(crra); %l*(1/(w1_d(0.26,0)))*(1/(0.6856)^crrat) ; %0.45; %0.3885; 
@@ -479,7 +485,9 @@ if toinputs==1
                             [output1,~,EXITFLAG]=fsolve(fn,inp_,options); % to lazy, do better
                             
                             if ~isreal(output1) | output1(1)<=0 | output1(2)<=0 | lsh(output1(1),output1(2)/100,output1(3)/100,dh,0,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                                %fprintf('Warning 2');
+                                if VERBOSE
+                                    fprintf('Warning 2');
+                                end
                                 inp_=(piw_(0,dw)>0 && piw_(0,dw)<1)*reshape(inputs0(th,tw,jh,jw,i,1,:),[1,3])*1.1 + ...
                                 (piw_(0,dw)==1)*[inputs0(th,tw,jh,jw,i,1,1),(1-betah*dh-0.26)*100,inputs0(th,tw,jh,jw,i,1,3)]*1.1+...
                                 (piw_(0,dw)==0)*[inputs0(th,tw,jh,jw,i,1,1),inputs0(th,tw,jh,jw,i,1,2),(1-betaw*dw)*100]*1.1;
@@ -517,8 +525,9 @@ if toinputs==1
                         end
                         output2_=output2;
                         if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-
-                            %fprintf('Warning');
+                            if VERBOSE
+                            fprintf('Warning');
+                            end
                             %cl=fn(output2);
                             inp_=(piw_(0,dw)>0 && piw_(0,dw)<1)*reshape(inputs0(th,tw,jh,jw,i,2,:),[1,3])*0.9 + ...
                                 (piw_(0,dw)==1)*[inputs0(th,tw,jh,jw,i,2,1),1-betah*dh-0.26,inputs0(th,tw,jh,jw,i,2,3)]*0.9+...
@@ -560,7 +569,9 @@ if toinputs==1
                         output3_=output3;
                         if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 |  lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  |...
                                 lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                            %fprintf('Warning');
+                            if VERBOSE
+                                fprintf('Warning');
+                            end
                             %options = optimoptions('fsolve','MaxIter',5000,'MaxFunctionEvaluations',5000,...
                             %            'FunctionTolerance',10^(-8),'Display',iter_,...
                             %            'StepTolerance', 10^(-12),'Algorithm','trust-region');
@@ -573,7 +584,9 @@ if toinputs==1
                             %this option never to be used?
                             if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 | lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  |...
                                 lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                                %fprintf('Warning 2');
+                                if VERBOSE
+                                    fprintf('Warning2');
+                                end
                                 const=0.7;
                                 inp_=(piw_(dh,dw)>0 && piw_(dh,dw)<1)*reshape(inputs0(th,tw,jh,jw,i,3,:),[1,3])*const + ...
                                     (piw_(dh,dw)==1)*[inputs0(th,tw,jh,jw,i,3,1),1-betah*dh-0.26,inputs0(th,tw,jh,jw,i,3,3)]*0.85+...
