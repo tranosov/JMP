@@ -24,7 +24,7 @@ dh0_h=dh0+0.5; %this is a bit arbitrary
 
 dw0=momentall{'scommiles',:} - momentall{'swcommiles_difw',:}; % this is not totally fair - probably the gap is smaller among both work. couples
 lsh0_h=lsh0+momentall{'hhours_pwn_dif',:}/(24*365);
-xh0_h=xh0 - momentall{'hhwk_pwn_difhpww',:}/(24*365);
+xh0_h=xh0 + momentall{'hhwk_pwn_difhpww',:}/(24*365); % corrected
 xw0_h=xw0+momentall{'whwk_pwn_dif',:}/(24*365);
 Lh0=1-lsh0-xh0-b*dh0;
 Lh0_h=1-lsh0_h-xh0_h-b*dh0_h;
