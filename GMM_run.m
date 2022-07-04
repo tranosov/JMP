@@ -40,3 +40,5 @@ ObjectiveFunction=@(x)GMM(x,pars,momentest,W,momentall,paramsall); % pars has th
 options = optimoptions(@simulannealbnd,'MaxFunctionEvaluations',10000,'Display','diagnose');
 [x,fval,exitFlag,output] = simulannealbnd(ObjectiveFunction,x0,LB,UB,options)
 output
+
+% todo: how to make the algorithm look harder?
