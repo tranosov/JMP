@@ -97,7 +97,7 @@ for j=1:I
                     [output,FVAL,EXITFLAG,OUTPUT]=fsolve(fn,inputs0(t,j,i,:).*sign(fn(inputs0(t,j,i,:))).*[-1,1]*1.1,options);
                     if (~isreal(output)) || (output(1)<=0) || ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))|| (numel(output)~=numel(inputs(t,j,i,:)))
                             [output,FVAL,EXITFLAG,OUTPUT]=fsolve(fn,[mu0,x0],options);
-                            if (~isreal(output)) | (output(1)<=0) | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
+                            if (~isreal(output)) | (output(1)<=0) | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4)) || (numel(output)~=numel(inputs(t,j,i,:)))
                                 fprintf('laborsS:  warning 2')
                                 output=real(output_);
                                 WARNINGS=WARNINGS+1;
