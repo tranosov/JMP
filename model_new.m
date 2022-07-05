@@ -374,7 +374,7 @@ lsaw_eq_xw0= @(mu,xh,Lw,p,dh,dw,ic,lambda) [ ((1-lambda)*alphah.*leffecth./((Lw-
 if toinputs==1
     options = optimoptions('fsolve','MaxIter',500,'MaxFunctionEvaluations',500,...
             'FunctionTolerance',10^(-6),'Display','off','Algorithm','levenberg-marquardt',...
-            'StepTolerance', 10^(-10),'ScaleProblem','jacobian'); %'trust-region'); %'StepTolerance',10^(-15),'ScaleProblem','jacobian',
+            'StepTolerance', 10^(-12)); %,'ScaleProblem','jacobian'); %'trust-region'); %'StepTolerance',10^(-15),'ScaleProblem','jacobian',
     x0=0.05;
     mu0=ces*(1/( Ys(0.23,0)-1))^(crra); %0.7402; % figure out!
     p=1;
@@ -486,14 +486,14 @@ if toinputs==1
                             
                             if ~isreal(output1) | output1(1)<=0 | output1(2)<=0 | lsh(output1(1),output1(2)/100,output1(3)/100,dh,0,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
                                 if VERBOSE
-                                    fprintf('Warning 2');
+                                    fprintf('NITIT: Warning w0');
                                 end
                                 inp_=(piw_(0,dw)>0 && piw_(0,dw)<1)*reshape(inputs0(th,tw,jh,jw,i,1,:),[1,3])*1.1 + ...
                                 (piw_(0,dw)==1)*[inputs0(th,tw,jh,jw,i,1,1),(1-betah*dh-0.26)*100,inputs0(th,tw,jh,jw,i,1,3)]*1.1+...
                                 (piw_(0,dw)==0)*[inputs0(th,tw,jh,jw,i,1,1),inputs0(th,tw,jh,jw,i,1,2),(1-betaw*dw)*100]*1.1;
                                 [output1,~,EXITFLAG]=fsolve(fn,inp_,options); % to lazy, do better
                                 if ~isreal(output1) | output1(1)<=0 | output1(2)<=0 | lsh(output1(1),output1(2)/100,output1(3)/100,dh,0,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                                    fprintf('INIT: Warning w0')
+                                    fprintf('INIT: Warning w0 2')
                                     output1=output1_;
                                 else
                                     %fprintf('Solved');
@@ -526,7 +526,7 @@ if toinputs==1
                         output2_=output2;
                         if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
                             if VERBOSE
-                            fprintf('Warning');
+                                fprintf('INIT: Warning 0w');
                             end
                             %cl=fn(output2);
                             inp_=(piw_(0,dw)>0 && piw_(0,dw)<1)*reshape(inputs0(th,tw,jh,jw,i,2,:),[1,3])*0.9 + ...
@@ -536,7 +536,7 @@ if toinputs==1
                             [output2,~,EXITFLAG]=fsolve(fn,inp_,options); % to lazy, do better
                             
                             if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                                fprintf('INIT: Warning 0w')
+                                fprintf('INIT: Warning 0w 2')
                                 output2=output2_;
                             else
                                 %fprintf('Solved');
@@ -570,31 +570,31 @@ if toinputs==1
                         if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 |  lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  |...
                                 lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
                             if VERBOSE
-                                fprintf('Warning');
+                                fprintf('INIT: Warning');
                             end
                             %options = optimoptions('fsolve','MaxIter',5000,'MaxFunctionEvaluations',5000,...
                             %            'FunctionTolerance',10^(-8),'Display',iter_,...
                             %            'StepTolerance', 10^(-12),'Algorithm','trust-region');
                             const=0.85;
                             inp_=(piw_(dh,dw)>0 && piw_(dh,dw)<1)*reshape(inputs0(th,tw,jh,jw,i,3,:),[1,3])*const + ...
-                                (piw_(dh,dw)==1)*[inputs0(th,tw,jh,jw,i,3,1),(1-betah*dh-0.26)*100,inputs0(th,tw,jh,jw,i,3,3)]*0.85+...
-                                (piw_(dh,dw)==0)*[inputs0(th,tw,jh,jw,i,3,1),inputs0(th,tw,jh,jw,i,3,2),(1-betaw*dw-0.23)*100]*0.85;
+                                (piw_(dh,dw)==1)*[inputs0(th,tw,jh,jw,i,3,1),(1-betah*dh-0.26)*100,inputs0(th,tw,jh,jw,i,3,3)]*const+...
+                                (piw_(dh,dw)==0)*[inputs0(th,tw,jh,jw,i,3,1),inputs0(th,tw,jh,jw,i,3,2),(1-betaw*dw-0.23)*100]*const;
                             [output3,~,EXITFLAG]=fsolve(fn, inp_,options); 
                             %todo: if really no solution - somehow code
                             %this option never to be used?
                             if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 | lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  |...
                                 lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
                                 if VERBOSE
-                                    fprintf('Warning2');
+                                    fprintf('INITI: Warning2');
                                 end
                                 const=0.7;
-                                inp_=(piw_(dh,dw)>0 && piw_(dh,dw)<1)*reshape(inputs0(th,tw,jh,jw,i,3,:),[1,3])*const + ...
-                                    (piw_(dh,dw)==1)*[inputs0(th,tw,jh,jw,i,3,1),1-betah*dh-0.26,inputs0(th,tw,jh,jw,i,3,3)]*0.85+...
-                                    (piw_(dh,dw)==0)*[inputs0(th,tw,jh,jw,i,3,1),inputs0(th,tw,jh,jw,i,3,2),1-betaw*dw-0.23]*0.85;
-                                [output3,~,EXITFLAG]=fsolve(fn, inp_,options); 
+                                inp2_=(piw_(dh,dw)>0 && piw_(dh,dw)<1)*reshape(inputs0(th,tw,jh,jw,i,3,:),[1,3])*const + ...
+                                    (piw_(dh,dw)==1)*[inputs0(th,tw,jh,jw,i,3,1),1-betah*dh-0.26,inputs0(th,tw,jh,jw,i,3,3)]*const+...
+                                    (piw_(dh,dw)==0)*[inputs0(th,tw,jh,jw,i,3,1),inputs0(th,tw,jh,jw,i,3,2),1-betaw*dw-0.23]*const;
+                                [output3,~,EXITFLAG]=fsolve(fn, inp2_,options); 
                                 if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 | lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  |...
                                     lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                                    fprintf('INIT: Warning ww')
+                                    fprintf('INIT: Warning ww 3')
                                     output3=output3_;
                                 else
                                     %fprintf('Solved');
