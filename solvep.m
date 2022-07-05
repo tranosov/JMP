@@ -16,21 +16,23 @@ WARNINGS=0;
     cl0=F(lp0);
     cl=cl0;
     kk=1;
-    while (sum(abs(cl))>10) && (kk<5)
-            A=800*table2array(params('crrah_','value'));
-            if VERBOSE
-                cl=cl
+        if WARNINGS==0
+            while (sum(abs(cl))>10) && (kk<5)
+                    A=800*table2array(params('crrah_','value'));
+                    if VERBOSE
+                        cl=cl
+                    end
+                    if WARNINGS>0
+                        lp0=lp0+cl0./(A*[1,1,1]); % go back
+                    else
+                        lp0=lp0+cl./(A*[1,1,1]); % roughly correct initial guess
+                    end
+
+                kk=kk+1;
+                WARNINGS=0;
+                cl=F(lp0);
             end
-            if WARNINGS>0
-                lp0=lp0+cl0./(A*[1,1,1]);
-            else
-                lp0=lp0+cl./(A*[1,1,1]); % roughly correct initial guess
-            end
-            
-        kk=kk+1;
-        WARNINGS=0;
-        cl=F(lp0);
-    end
+        end
 
 time=toc;
 if VERBOSE
@@ -78,7 +80,7 @@ end
             if (EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3) && (EXITFLAG~=4)
 
                 WARNINGS=WARNINGS+0.5; % had to lower standards
-                %fprintf('Trying again');
+                fprintf('Lowering standards in solvep');
                 [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,lp0*0.9,options);
 
             end
@@ -93,11 +95,11 @@ end
                 %fprintf('Trying again again again');
                 [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,[1,1,1],options);
 
-                if (EXITFLAG~=1) && (EXITFLAG~=2) && (EXITFLAG~=3) && (EXITFLAG~=4)              
-                    WARNINGS=WARNINGS+1;
-                    fprintf('Solvep failed many times.')
-                    EXITFLAG=999;
-                end
+            if (EXITFLAG~=1) && (EXITFLAG~=2) && (EXITFLAG~=3) && (EXITFLAG~=4)              
+                WARNINGS=WARNINGS+1;
+                fprintf('Solvep failed many times.')
+                EXITFLAG=999;
+            end
 
             end
 

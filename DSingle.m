@@ -24,13 +24,14 @@ WARNINGS=0; %reset
 OUTS=laborsS(p,alloutput,EQS,PARREST);
 
 if WARNINGS>0
-    DS=999;
+    DS=999*10^6;
     HSingle=999;
     DSh=999;
     DSw=999;
     VS=999;
     Pws=999;
     cexps=999;
+    OUTS=999;
     return
 end
 

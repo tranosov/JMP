@@ -37,10 +37,11 @@ else
         moments_=moments_(momentest.Properties.RowNames,:);
         G=(table2array(moments_)-table2array(momentest))'*W*(table2array(moments_)-table2array(momentest))*UP;
     end
+    momnames=moments_.Properties.RowNames;
+    pnames=params.Properties.RowNames;
+
 end
 
-momnames=moments_.Properties.RowNames;
-pnames=params.Properties.RowNames;
 
 fprintf("GMM function value =   %16.8f\n",G);
 fprintf(" \n");
@@ -60,12 +61,18 @@ fprintf(io,"GMM function value =   %16.8f\n",G);
 fprintf(io," \n");
 fprintf(io,"time =   %16.8f\n",time);
 
-fprintf(io," data and simulated moments\n");
-for jj=1:size(moments_,1)
-    fprintf(io,"%s",char(momnames(jj,1)));
-    fprintf(io,"%16.8f",table2array(momentest(jj,1)) );  
-    fprintf(io,"%16.8f\n",table2array(moments_(jj,1))) ; 
+if EXITFLAG~=999
+    fprintf(io," data and simulated moments\n");
+    for jj=1:size(moments_,1)
+        fprintf(io,"%s",char(momnames(jj,1)));
+        fprintf(io,"%16.8f",table2array(momentest(jj,1)) );  
+        fprintf(io,"%16.8f\n",table2array(moments_(jj,1))) ; 
+    end
+else
+    fprintf(io," data and simulated moments skipped.\n");
+    fprintf(io," solvemodel failed.\n");
 end
+
 fprintf(io," \n");
 fprintf(io," parameter value\n");
 for jj =1:size(params,1)
