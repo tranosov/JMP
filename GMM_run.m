@@ -41,7 +41,7 @@ rng(357);
 options = optimoptions(@simulannealbnd,'MaxFunctionEvaluations',10000,'Display','diagnose');
 % increase temp to have more acceptence
 options.InitialTemperature = 100*max(GG,1); %I think should be in scale of objective function (or like jacobian - how params affect obj function)
-temperature = @(optimValues,options) options.InitialTemperature.*(0.99^optimValues.k); % slow down?
+temperature = @(optimValues,options) options.InitialTemperature.*(0.99.^optimValues.k); % slow down?
 options.TemperatureFcn=temperature;
 
 [x,fval,exitFlag,output] = simulannealbnd(ObjectiveFunction,x0,LB,UB,options)
