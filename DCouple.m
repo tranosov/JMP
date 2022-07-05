@@ -29,7 +29,7 @@ OUTC=labors(p,alloutput,lambda,EQS,PARREST);
 %OUTC.vc
 
 if WARNINGS>0
-    DC=999;
+    DC=999*10^6;
     DC1=999;
     DC2=999;
     HCouple=999;
@@ -38,6 +38,7 @@ if WARNINGS>0
     VC=999;
     cexp1=999;
     cexp2=999;
+    OUTC=999;
     return
 end
 %{
