@@ -17,8 +17,8 @@ WARNINGS=0;
     cl=cl0;
     kk=1;
         if WARNINGS==0
-            while (sum(abs(cl))>10) && (kk<5)
-                    A=400*table2array(params('crrah_','value'));
+            while (sum(abs(cl))>15) && (kk<5)
+                    A=600*table2array(params('crrah_','value'));
                     if VERBOSE
                         cl=cl
                     end
