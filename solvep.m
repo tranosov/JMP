@@ -51,7 +51,7 @@ end
             WARNINGS=0;
             options = optimoptions('fsolve','MaxIter',50,'MaxFunctionEvaluations',500,...
                        'FunctionTolerance',10^(-3), 'Display',iter_,...
-                       'FunValCheck','on','Algorithm','trust-region'); %'trust-region-dogleg' 'Display','final'
+                       'FunValCheck','on','Algorithm','levenberg-marquardt'); %'trust-region-dogleg' 'Display','final'
 
 
             [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,lp0,options);
