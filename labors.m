@@ -178,7 +178,7 @@ for i=1:I
                         if ~isreal(output1) | output1(1)<=0 | output1(2)<=0 | lsh(output1(1),output1(2)/100,output1(3)/100,dh,0,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
                             fprintf('labors: Warning w0')
                             WARNINGS=WARNINGS+1;
-                            output1=real(output1);
+                            OUTC=999;
                             return
                         end
                     end
@@ -213,7 +213,7 @@ for i=1:I
                         if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
                             fprintf('labors: Warning 0w')
                             WARNINGS=WARNINGS+1;
-                            output2=real(output2);
+                            OUTC=999;
                             return
                         end
                     end
@@ -250,7 +250,7 @@ for i=1:I
                         if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 |  lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  | lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
                             fprintf('labors: Warning2 ww')
                             WARNINGS=WARNINGS+1;
-                            output3=real(output3);
+                            OUTC=999;
                             return
                         end
                     end

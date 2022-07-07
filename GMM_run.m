@@ -61,6 +61,12 @@ options.InitialTemperature = 100*max(GG,1); %I think should be in scale of objec
 %options.TemperatureFcn=temperature;
 options.ReannealInterval=50;
 
+options.MaxStallIterations=500; % not sure if this is not just desperate? why would I want to evaluate that many more times around no change?
+options.FunctionTolerance=10^(-6);
+
+options.ObjectiveLimit=10^(-6); 
+%options.MaxFunctionEvaluations
+
 [x,fval,exitFlag,output] = simulannealbnd(ObjectiveFunction,x0,LB,UB,options)
 output
 
