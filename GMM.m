@@ -6,10 +6,10 @@ global VERBOSE
 
 [moments_,time, EXITFLAG]=GMMmoments(pars_,pars,momentest,W,momentall,params);
 
-UP=1;
+UP=10^(-3); % scale down. it is reallyhigh.
 
 if EXITFLAG==999
-    G=10^20*UP;
+    G=10^(23)*UP;
 else
     G=(moments_-table2array(momentest))'*W*(moments_-table2array(momentest))*UP;
 end

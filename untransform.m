@@ -1,7 +1,6 @@
 
 function params=untransform(params)
 
-
 % untransform
 params('LA0','value')={1/(exp(-params{'LA0',:}) +1)};
 params('deltaw_','value')={1/(exp(-params{'deltaw_',:}) +1)};
@@ -12,10 +11,10 @@ params('Jseg','value')={1/(exp(-params{'Jseg',:}) +1)};
 
 params('line','value')={(1+ 1/(exp(-(params{'line',:}-1)) +1))  };
 
-params('d','value')={exp(params{'d',:})};
+
 params('pish_','value')={exp(params{'pish_',:})};
 params('PHID_','value')={exp(params{'PHID_',:})};
-params('gamd_','value')={exp(params{'gamd_',:})};
+
 params('eta_','value')={exp(params{'eta_',:})};
 params('ce_','value')={exp(params{'ce_',:})};
 
@@ -34,4 +33,6 @@ params('wc','value')={exp(params{'wc',:})};
 %params('pi_','value')={exp(params{'pi_',:})};
 
 
+params('d','value')={exp(params{'d',:})*10};
+params('gamd_','value')={exp(params{'gamd_',:})*100};
 end
