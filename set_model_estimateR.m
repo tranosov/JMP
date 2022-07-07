@@ -1,6 +1,10 @@
 
 function [EQS,PARREST]=set_model_estimateR(params,reinitialize)
 
+
+% untransform - separate function before!
+
+
 % UNCHANGED
 wa=params{'wa',:};
 dmin=params{'dmin',:};
@@ -16,16 +20,13 @@ AS1=params{'AS1',:};
 A1=params{'A1',:};
 AC_sub=params{'AC_sub',:};
 d=params{'d',:};
-LA0=params{'LA0',:};
 Jcenter=params{'Jcenter',:};
 jobdif_=params{'jobdif_',:};
 Jseg=params{'Jseg',:};
 sw=params{'sw',:};
 sel=params{'sel',:};
-plocal_=params{'plocal_',:};
 gamd_=params{'gamd_',:};
 PHID_=params{'PHID_',:};
-deltaw_=params{'deltaw_',:};
 line=params{'line',:};
 muw=params{'muw',:};
 crra_=params{'crra_',:};
@@ -37,9 +38,14 @@ AC2=params{'AC2',:};
 mm_=params{'mm',:};
 sigmam=params{'sigmam',:};
 
+LA0=params{'LA0',:};
+deltaw_=params{'deltaw_',:};
+plocal_=params{'plocal_',:};
+
 % ALSO ESTIMATED
-ce_=params{'ce_',:};
 eta_=params{'eta_',:};
+crrat_=params{'crrat_',:};
+ce_=params{'ce_',:};
 
 
 % PREPPED BEFORE
@@ -48,8 +54,7 @@ pish_=params{'pish_',:};
 piel_=params{'piel_',:};
 crrax_=params{'crrax_',:};
 piw_=params{'piw_',:};
-pi_=params{'pi_',:};
-crrat_=params{'crrat_',:};
+pi_=params{'pi_',:}; 
 
 
 THETA=params{'THETA',:}; % but gets adjusted later!
