@@ -12,7 +12,7 @@ tic
 params(pars.Properties.RowNames,:)= array2table(pars_, 'RowNames',pars.Properties.RowNames);
 params=untransform(params);
 
-params(pars.Properties.RowNames,:) % already untransformed
+%params(pars.Properties.RowNames,:) % already untransformed
 
 parsc=calibrate1(params,momentall); %calibrate within
 params(parsc.Properties.RowNames,:)=parsc;
