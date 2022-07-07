@@ -13,11 +13,14 @@ fprintf('Running GMM estimation. CHECK NEW');
 
 filename = "./estimation/progressmoment.txt";
 io = fopen(filename,'a');
+fprintf(io," \n");
 fprintf(io,"Rerun routine. \n");
+fclose(io);
 filename = "./estimation/progress.txt";
 io = fopen(filename,'a');
+fprintf(io," \n");
 fprintf(io,"Rerun routine. \n");
-
+fclose(io);
 
 %%
 forparams =readtable('./input/PREP.xlsx','Sheet','PARS','ReadVariableNames', true,'ReadRowNames',true);
@@ -29,6 +32,7 @@ paramsest=forparams(forparams.('toestimateR')==1,'value');
 momentall=formom(:,'value');
 momentest=formom(formom.('toestimate')==1,'value');
 W=table2array(forw( momentest.Properties.RowNames, momentest.Properties.RowNames))\eye(size(momentest.Properties.RowNames,1));
+%[SEs]=SEs(x0,pars,momentest,W,momentall,paramsall);
 
 
 
@@ -55,7 +59,7 @@ options = optimoptions(@simulannealbnd,'MaxFunctionEvaluations',10000,'Display',
 options.InitialTemperature = 100*max(GG,1); %I think should be in scale of objective function (or like jacobian - how params affect obj function)
 %temperature = @(optimValues,options) options.InitialTemperature.*(0.99.^optimValues.k); % slow down?
 %options.TemperatureFcn=temperature;
-%options.ReannealInterval=50;
+options.ReannealInterval=50;
 
 [x,fval,exitFlag,output] = simulannealbnd(ObjectiveFunction,x0,LB,UB,options)
 output
@@ -67,5 +71,3 @@ output
 % temperature slower?
 %temperature = @(optimValues,options) options.InitialTemperature.*(0.99^optimValues.k)
 %options.TemperatureFcn=@temperature
-
-saupdates
