@@ -38,7 +38,7 @@ time=toc;
          
 tic
 Fm=@(x) Clearing_justmm(x,EQS,PARREST); 
-tol=10^(-3);
+tol=10^(-3); % stricter than overall
 if norm(Fm(x0(end)))^2 >tol 
     optionsz = optimset('TolX',tol,'Display',iter_);
     out=fzero(Fm,x0(end),optionsz); % something is off here...
@@ -60,7 +60,7 @@ tol=1;
 options = optimoptions('fsolve','MaxIter',500,'MaxFunctionEvaluations',5000,...
            'FunctionTolerance',tol*10^(-1), 'Display',iter_,...
            'Algorithm','trust-region'); 
-if norm(Fp(x0(1:end-1)))^2 >tol   
+if norm(Fp(x0(1:end-1)))^2 >tol*10^(-1)   
     x0(1:end-1)=fsolve(Fp,x0(1:end-1),options);
 end
 params('LA0','value')=LA0_;
@@ -82,6 +82,9 @@ if WARNINGS>0
 else 
     if norm(cl)^2 >tol  
                 tic
+if VERBOSE
+fprintf('Have to do joint solution...')
+end
                 [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,x0,options);
                 % does not really work - check whether I can help it somehow?
 

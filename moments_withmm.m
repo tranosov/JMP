@@ -1,5 +1,5 @@
 
-function [moments_,other,time,EXITFLAG]...
+function [moments_,other,time,EXITFLAG,params]...
     =moments_withmm(p,LA,params,EQS,PARREST,withmm,fast,FORCEFIT)
 global RESC VERBOSE
 tic
@@ -20,7 +20,7 @@ if withmm
 
     clear global IN INS % why?
 
-    params=PARREST.('params'); % has the updated thetas!
+    params=PARREST.('params'); % has the updated thetas!- and also to output + updated prices
     params('LA0','value')={LA};
     params('p0_1','value')={p(1)};
     params('p0_2','value')={p(2)};

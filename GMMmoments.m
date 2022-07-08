@@ -1,4 +1,4 @@
-function [moments_,time,EXITFLAG,params]=GMMmoments(pars_,pars,momentest,W,momentall,params)
+function [moments_,time,EXITFLAG,params_final]=GMMmoments(pars_,pars,momentest,W,momentall,params)
 % set model
 % solve model
 % create moments to compare to daya
@@ -32,10 +32,11 @@ time=time+time_;
 
 if EXITFLAG==999
     moments_=999;
+    params_final=params;
     return 
 else
     FORCEFIT=1; %change THETAs to fit the required marriage behavior
-    [moments_,~,time_,EXITFLAG]...
+    [moments_,~,time_,EXITFLAG,params_final]...
         =moments_withmm(p,LA,params,EQS,PARREST,1,1,FORCEFIT);
     time=time+time_;
     if EXITFLAG==999
