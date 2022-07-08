@@ -17,9 +17,9 @@ pnames=params_.Properties.RowNames; % params used
 pnames2=pars.Properties.RowNames; % estimation inputs
 
 
-fprintf(" \n");
+%fprintf(" \n");
 fprintf("GMM function value =   %16.8f\n",G);
-fprintf(" \n");
+%fprintf(" \n");
 fprintf("time =   %16.8f\n",time);
 
 filename = "./estimation/progress.txt";

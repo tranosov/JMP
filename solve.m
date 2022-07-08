@@ -57,12 +57,30 @@ end
 tic
 Fp=@(x) Clearing(x,EQS,PARREST); 
 tol=1;
-options = optimoptions('fsolve','MaxIter',500,'MaxFunctionEvaluations',5000,...
-           'FunctionTolerance',tol*10^(-1), 'Display',iter_,...
-           'Algorithm','trust-region'); 
-if norm(Fp(x0(1:end-1)))^2 >tol*10^(-1)   
+
+
+clp=Fp(x0(1:end-1));
+if norm(clp)^2 >tol*10^(-1)   
+    if sum(abs(clp))>10
+        options = optimoptions('fsolve','MaxIter',500,'MaxFunctionEvaluations',5000,...
+                   'FunctionTolerance',tol*10^(-1), 'Display',iter_,...
+                   'Algorithm','levenberg-marquardt',...
+                    'StepTolerance', 10^(-8));
+    else 
+        options = optimoptions('fsolve','MaxIter',500,'MaxFunctionEvaluations',5000,...
+                   'FunctionTolerance',tol*10^(-1), 'Display',iter_,...
+                   'Algorithm','trust-region');
+    end
     x0(1:end-1)=fsolve(Fp,x0(1:end-1),options);
 end
+%options = optimoptions('fsolve','MaxIter',500,'MaxFunctionEvaluations',5000,...
+%           'FunctionTolerance',tol*10^(-1), 'Display',iter_,...
+%           'Algorithm','Algorithm','trust-region');
+
+%if (eflag~=1) && (eflag~=2)&& (eflag~=3) && (eflag~=4)  
+%    x0(1:end-1)=fsolve(Fp,x0(1:end-1),options);
+%end
+
 params('LA0','value')=LA0_;
 PARREST.('params')=params;
 time=time+toc;
@@ -74,6 +92,7 @@ end
 WARNINGS=0;
 F=@(x) Clearing_withmm(x,EQS,PARREST); 
 cl=F(x0); 
+
 if WARNINGS>0
     output=[999,999,999,999];
     EXITFLAG=999;
