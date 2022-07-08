@@ -3,7 +3,8 @@
 function parsc=calibrate1(params,momentall)
 
 b=params{'b',:};
-%ce_=params{'ce_',:};
+ce_=params{'ce_',:};
+crra_=params{'crra_',:};
 l=params{'LA0',:};
 wa=params{'wa',:};
 wgap_raw=params{'wgap_raw',:};
@@ -49,7 +50,7 @@ pish_=(xs0^(crrax_))/((1-a*ls0 -b*d0-xs0)^crrat_);
 NLY_=momentall{'NLY_',:};
 NLY=(lsh0*w1+lsw0*w2)*NLY_/(1-NLY_);
 
-parsc = array2table([NLY,pish_,piel_,crrax_,piw_,pi_]','VariableNames',{'value'}, 'RowNames',...
-    {'NLY','pish_','piel_','crrax_','piw_','pi_'}); %'crrat_',log(ce_)
+parsc = array2table([NLY,pish_,piel_,crrax_,piw_,pi_,ce_,crra_]','VariableNames',{'value'}, 'RowNames',...
+    {'NLY','pish_','piel_','crrax_','piw_','pi_','ces_','crrah_'}); %'crrat_',log(ce_)
 
 end

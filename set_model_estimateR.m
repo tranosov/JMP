@@ -56,6 +56,9 @@ crrax_=params{'crrax_',:};
 piw_=params{'piw_',:};
 pi_=params{'pi_',:}; 
 
+ces_=params{'ces_',:};
+crrah_=params{'crrah_',:};
+
 
 THETA=params{'THETA',:}; % but gets adjusted later!
 THETAHW=params{'THETAHW',:};
@@ -99,13 +102,14 @@ pophous=1;
 PID=0; 
 %lsbar=1;
 
-ces_=ce_; % fixed
+%ces_=ce_; % fixed
+%crrah_=crra_;
 ceh_=ce_;
 cew_=ce_;
 leh=1;
 lew=1;
 etaC_=eta_; % fixed
-crrah_=crrat_;
+
 
 
 Wschool=1/jobdif_; % close to 1 - evenly distributed.

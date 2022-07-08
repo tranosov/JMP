@@ -14,6 +14,7 @@ global VERBOSE
         lssw=999;
         p=p0;
         LA=LA0; 
+        return
     else
         tic
         HS=PARREST.('HS');
@@ -22,10 +23,22 @@ global VERBOSE
         I=size(HS,2);
         T=size(Jw,2);
         W=3;
-
-        [~,~, DSh, DSw, VS,~]=DSingle(p,0,EQS,PARREST);
-        [~, DC1, DC2,~,Pw,~,~,cexp1,cexp2,OUTC]=DCouple(p,1,LA,EQS,PARREST); 
-
+        
+        
+        [DS,~, DSh, DSw, VS,~]=DSingle(p,0,EQS,PARREST);
+        if (size(DS,1)==1)
+            lssh=999;
+            lssw=999;
+            EXITFLAG=999;
+            return
+        end
+        [DC, DC1, DC2,~,Pw,~,~,cexp1,cexp2,OUTC]=DCouple(p,1,LA,EQS,PARREST); 
+        if (size(DC,1)==1)
+            lssh=999;
+            lssw=999;
+            EXITFLAG=999;
+            return
+        end
 
         DSh_agr=sum(DSh,4);
         DSw_agr=sum(DSw,4);

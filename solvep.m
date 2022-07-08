@@ -52,7 +52,7 @@ end
             options = optimoptions('fsolve','MaxIter',50,'MaxFunctionEvaluations',500,...
                        'FunctionTolerance',10^(-3), 'Display',iter_,...
                        'FunValCheck','on','Algorithm','levenberg-marquardt'); %'trust-region-dogleg' 'Display','final'
-
+%'StepTolerance', STEPTOL?
 
             [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,lp0,options);
             if (EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3) && (EXITFLAG~=4)
