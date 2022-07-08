@@ -656,7 +656,7 @@ WWplus=repmat(DC_worksboth_long(DC_worksboth_long>0),1,size(Xplus,1)).*eye(size(
 betas=zeros(6,2);
 
 
-try chol((X'*WW*X))
+try chol((X'*WW*X));
     y=lsdif(DC_long>0,:);
     b=((X'*WW*X)\eye(size(X'*WW*X)))*(X'*WW*y);
     betas(1,:)=[b(end-1),b(end)];
@@ -668,7 +668,7 @@ try chol((X'*WW*X))
     y=hwkdif(DC_long>0,:);
     b=((X'*WW*X)\eye(size(X'*WW*X)))*(X'*WW*y);
     betas(5,:)=[b(end-1),b(end)];
-catch ME
+catch ME;
     betas(1,:)=10^12;
     betas(3,:)=10^12;
     betas(5,:)=10^12;
@@ -676,7 +676,7 @@ catch ME
 end
 
 
-try chol((Xplus'*WWplus*Xplus))
+try chol((Xplus'*WWplus*Xplus));
    y=lsdif(DC_worksboth_long>0,:);
     b=((Xplus'*WWplus*Xplus)\eye(size(Xplus'*WWplus*Xplus)))*(Xplus'*WWplus*y);
     betas(2,:)=[b(end-1),b(end)];
@@ -689,7 +689,7 @@ try chol((Xplus'*WWplus*Xplus))
     b=((Xplus'*WWplus*Xplus)\eye(size(Xplus'*WWplus*Xplus)))*(Xplus'*WWplus*y);
     betas(6,:)=[b(end-1),b(end)];
     
-catch ME
+catch ME;
     disp('Matrix (X*WW*X)_plus is not symmetric positive definite')
     betas(2,:)=10^12;
     betas(4,:)=10^12;
