@@ -61,6 +61,12 @@ GG=GMM(x0,pars,momentest,W_,momentall,paramsall);
 global GMIN
 GMIN=GG
 %GG=6;
+filename = "./estimation/progress.txt";
+io = fopen(filename,'a');
+fprintf(" \n");
+fprintf(io," FLAG: MINIMUM \n");
+fclose(io);
+
 
 
 ObjectiveFunction=@(x)GMM(x,pars,momentest,W_,momentall,paramsall); % pars has the list!
@@ -70,7 +76,7 @@ options = optimoptions(@simulannealbnd,'MaxFunctionEvaluations',10000,'Display',
 options.InitialTemperature = 300*max(GG,1); %I think should be in scale of objective function (or like jacobian - how params affect obj function)
 %temperature = @(optimValues,options) options.InitialTemperature.*(0.99.^optimValues.k); % slow down?
 %options.TemperatureFcn=temperature;
-options.ReannealInterval=40;
+options.ReannealInterval=35; % brought down so there is more search
 
 options.MaxStallIterations=500; % not sure if this is not just desperate? why would I want to evaluate that many more times around no change?
 options.FunctionTolerance=10^(-6);
