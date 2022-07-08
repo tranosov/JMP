@@ -31,7 +31,17 @@ paramsall=forparams(:,'value');
 paramsest=forparams(forparams.('toestimateR')==1,'value');
 momentall=formom(:,'value');
 momentest=formom(formom.('toestimate')==1,'value');
-W=table2array(forw( momentest.Properties.RowNames, momentest.Properties.RowNames))\eye(size(momentest.Properties.RowNames,1));
+global DOWN
+DOWN=10^4; % scale down W. it is reallyhigh.
+
+filename = "./estimation/progress.txt";
+io = fopen(filename,'a');
+fprintf(io," \n");
+fprintf(io,"Scaling down weighting matrix by a factor %16.8f\n",DOWN);
+fclose(io);
+
+
+W_=(DOWN.*table2array(forw( momentest.Properties.RowNames, momentest.Properties.RowNames)))\eye(size(momentest.Properties.RowNames,1));
 %[SEs]=SEs(x0,pars,momentest,W,momentall,paramsall);
 
 
@@ -47,12 +57,12 @@ VERBOSE=0;
 x0=table2array(paramsest);
 LB=table2array(forparams(paramsest.Properties.RowNames,'min'));
 UB=table2array(forparams(paramsest.Properties.RowNames,'max'));
-GG=GMM(x0,pars,momentest,W,momentall,paramsall);
+GG=GMM(x0,pars,momentest,W_,momentall,paramsall);
 GG
 %GG=6;
 
 
-ObjectiveFunction=@(x)GMM(x,pars,momentest,W,momentall,paramsall); % pars has the list!
+ObjectiveFunction=@(x)GMM(x,pars,momentest,W_,momentall,paramsall); % pars has the list!
 rng(357);
 options = optimoptions(@simulannealbnd,'MaxFunctionEvaluations',10000,'Display','diagnose');
 % increase temp to have more acceptence

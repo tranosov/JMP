@@ -1,21 +1,23 @@
-function [moments_,time,EXITFLAG]=GMMmoments(pars_,pars,momentest,W,momentall,params)
+function [moments_,time,EXITFLAG,params]=GMMmoments(pars_,pars,momentest,W,momentall,params)
 % set model
 % solve model
 % create moments to compare to daya
 
 global VERBOSE
-if VERBOSE
-array2table(pars_, 'RowNames',pars.Properties.RowNames)
-end
 
 tic
 params(pars.Properties.RowNames,:)= array2table(pars_, 'RowNames',pars.Properties.RowNames);
 params=untransform(params);
 
 %params(pars.Properties.RowNames,:) % already untransformed
-
 parsc=calibrate1(params,momentall); %calibrate within
 params(parsc.Properties.RowNames,:)=parsc;
+
+if VERBOSE
+    params %(pars.Properties.RowNames,:) % show untransofmed version!
+%array2table(pars_, 'RowNames',pars.Properties.RowNames)
+end
+
 [EQS,PARREST] = set_model_estimateR(params,1);
 time=toc;
 

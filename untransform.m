@@ -17,6 +17,7 @@ params('PHID_','value')={exp(params{'PHID_',:})};
 
 params('eta_','value')={exp(params{'eta_',:})};
 params('ce_','value')={exp(params{'ce_',:})};
+params('ces_','value')={exp(params{'ces_',:})}; % irrelevant
 
 params('sel','value')={exp(params{'sel',:})};
 params('Jcenter','value')={exp(params{'Jcenter',:})};
