@@ -1,0 +1,1520 @@
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor   10000.00000000
+GMM function value =         4.02810643
+ 
+time =        61.76853900
+GMM function value =         4.36945394
+ 
+time =        72.86587900
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor   10000.00000000
+GMM function value =         4.02810643
+ 
+time =        55.72951800
+GMM function value =         4.36945394
+ 
+time =        77.57207300
+GMM function value =       139.92576817
+ 
+time =        94.64461500
+GMM function value =        17.11870015
+ 
+time =        78.32250600
+GMM function value =        18.20099662
+ 
+time =        67.22522600
+GMM function value =        18.28881197
+ 
+time =        49.28242100
+GMM function value =        18.22183854
+ 
+time =        53.10998800
+GMM function value =        18.33433460
+ 
+time =        48.97553500
+GMM function value =        18.31168215
+ 
+time =        71.79368200
+GMM function value =        18.28448821
+ 
+time =        52.05908200
+GMM function value =        19.37628923
+ 
+time =        98.62135800
+GMM function value =        18.29842423
+ 
+time =        52.46768300
+GMM function value =        18.22366246
+ 
+time =        49.29757400
+GMM function value =        18.36086137
+ 
+time =        65.82541800
+GMM function value =        18.16854054
+ 
+time =        79.44729300
+GMM function value =        18.31216901
+ 
+time =        77.02050800
+GMM function value =        18.23143854
+ 
+time =        66.91549100
+GMM function value =        18.25850244
+ 
+time =        49.31243900
+GMM function value =        18.23103978
+ 
+time =        50.19176200
+GMM function value =        18.26061048
+ 
+time =        48.84297800
+GMM function value =        18.19896895
+ 
+time =        52.28248800
+GMM function value =        21.20581253
+ 
+time =       107.69946200
+GMM function value =        18.26656239
+ 
+time =        50.35660400
+GMM function value =        18.27490235
+ 
+time =        49.47883000
+GMM function value =        18.28803648
+ 
+time =        47.88202800
+GMM function value =        18.17209644
+ 
+time =        77.88377900
+GMM function value =        18.40769111
+ 
+time =        77.93535100
+GMM function value =        18.28698363
+ 
+time =        47.41185900
+GMM function value =        18.21436225
+ 
+time =        52.21157000
+GMM function value =        18.26287269
+ 
+time =        64.32459200
+GMM function value =        18.14802207
+ 
+time =        65.61054700
+GMM function value =        18.62516813
+ 
+time =        75.56885600
+GMM function value =        18.32050803
+ 
+time =        50.72809800
+GMM function value =        18.23092816
+ 
+time =        69.28454800
+GMM function value =        18.28259981
+ 
+time =        47.28405000
+GMM function value =        18.19318731
+ 
+time =        70.43747100
+GMM function value =        18.24880507
+ 
+time =        47.94062800
+GMM function value =        18.36003160
+ 
+time =        47.48685400
+GMM function value =        18.31157419
+ 
+time =        69.41644400
+GMM function value =        18.47328870
+ 
+time =        77.20929200
+GMM function value =        18.17117557
+ 
+time =        67.07592800
+GMM function value =        18.25596957
+ 
+time =        68.58142700
+GMM function value =        18.17822253
+ 
+time =        50.52048700
+GMM function value =        18.28767726
+ 
+time =        49.03348900
+GMM function value =        18.27870428
+ 
+time =        47.85441100
+GMM function value =        18.27520327
+ 
+time =        50.39690600
+GMM function value =        18.14265870
+ 
+time =        68.69437200
+GMM function value =        18.23209656
+ 
+time =        75.88936300
+GMM function value =        18.28159046
+ 
+time =        50.91938400
+GMM function value =        18.23909551
+ 
+time =        64.47939800
+GMM function value =        18.25847501
+ 
+time =        68.62151600
+GMM function value =        18.22504095
+ 
+time =        50.87346500
+GMM function value =        18.33626977
+ 
+time =        69.41794100
+GMM function value =        18.22236557
+ 
+time =        48.46541600
+GMM function value =        18.29318050
+ 
+time =        47.26996000
+GMM function value =        18.44553746
+ 
+time =        69.16141800
+GMM function value =        18.53030288
+ 
+time =        73.71288900
+GMM function value =        18.56129017
+ 
+time =        63.45873500
+GMM function value =        18.56982911
+ 
+time =        83.79351200
+GMM function value =        18.55902649
+ 
+time =       134.80686900
+GMM function value =        18.45827776
+ 
+time =        64.97376800
+GMM function value =        18.29554621
+ 
+time =        49.94800000
+GMM function value =        17.77134109
+ 
+time =        49.71291800
+GMM function value =        17.46526109
+ 
+time =        47.00306700
+GMM function value =        17.31963349
+ 
+time =        47.57410100
+GMM function value =        17.52400109
+ 
+time =        45.99901800
+GMM function value =        17.80780283
+ 
+time =        47.68659100
+GMM function value =        17.47603545
+ 
+time =        66.66057800
+GMM function value =        17.55573436
+ 
+time =        68.79893500
+GMM function value =        17.83748672
+ 
+time =        52.78329200
+GMM function value =        18.22674167
+ 
+time =        71.90383800
+GMM function value =        18.34624693
+ 
+time =        58.06102000
+GMM function value =        18.36371881
+ 
+time =        61.65841300
+GMM function value =        18.63404553
+ 
+time =        55.46144400
+GMM function value =        19.27075025
+ 
+time =        65.28437500
+GMM function value =        20.03259140
+ 
+time =        61.86141800
+GMM function value =        20.58126099
+ 
+time =        63.82192800
+GMM function value =        23.98719122
+ 
+time =        68.09031600
+GMM function value =        26.24965961
+ 
+time =        90.11745200
+GMM function value =        27.14976721
+ 
+time =        73.10980900
+GMM function value =        25.26344770
+ 
+time =        65.49176700
+GMM function value =        30.21407970
+ 
+time =        76.74292200
+GMM function value =        36.29706573
+ 
+time =        61.18605300
+GMM function value =        41.82491638
+ 
+time =        62.41466700
+GMM function value =        48.65898982
+ 
+time =        87.09745900
+GMM function value =        48.14269767
+ 
+time =        64.61080900
+GMM function value =        50.38895959
+ 
+time =        79.14199600
+GMM function value =        48.32388185
+ 
+time =        80.75821400
+GMM function value =        49.22607285
+ 
+time =        73.49617900
+GMM function value =        71.13714830
+ 
+time =        73.85884800
+GMM function value =        56.33789452
+ 
+time =        77.28777800
+GMM function value =        59.96035925
+ 
+time =        65.86638500
+GMM function value =        55.93506575
+ 
+time =        87.65407800
+GMM function value =        53.65482774
+ 
+time =        80.45523100
+GMM function value =        57.65865177
+ 
+time =        65.85080700
+GMM function value =        60.08065521
+ 
+time =        70.13903800
+GMM function value =        54.82643618
+ 
+time =        68.25041700
+GMM function value =        62.85652455
+ 
+time =        66.18266900
+GMM function value =        52.90823235
+ 
+time =        66.67309600
+GMM function value =        55.97232503
+ 
+time =        90.28131300
+GMM function value =        57.18146423
+ 
+time =        65.05976800
+GMM function value =        47.49472963
+ 
+time =        68.28920700
+GMM function value =        51.22135365
+ 
+time =        61.28033900
+GMM function value =        46.58470739
+ 
+time =        90.70331900
+GMM function value =        44.88967625
+ 
+time =        70.62212200
+GMM function value =        46.88109420
+ 
+time =        74.46883700
+GMM function value =        46.26826062
+ 
+time =        69.97128400
+GMM function value =        42.15329653
+ 
+time =        53.40494400
+GMM function value =        40.00189940
+ 
+time =        69.72546100
+GMM function value =        35.75977813
+ 
+time =        44.02958300
+GMM function value =        32.62066676
+ 
+time =        52.18012400
+GMM function value =        29.79112874
+ 
+time =        45.35397500
+GMM function value =        31.04043934
+ 
+time =        44.83336600
+GMM function value =        25.18352705
+ 
+time =        43.25717300
+GMM function value =        20.61719330
+ 
+time =        47.11802600
+GMM function value =        16.78731093
+ 
+time =        44.03200300
+GMM function value =        16.13488040
+ 
+time =        42.34412700
+GMM function value =        16.50020991
+ 
+time =        42.80361100
+GMM function value =        16.55188862
+ 
+time =        49.17337900
+GMM function value =        16.54835539
+ 
+time =        41.83683100
+GMM function value =        16.56844217
+ 
+time =        44.50726000
+GMM function value =        16.61477406
+ 
+time =        45.09823300
+GMM function value =        16.64399155
+ 
+time =        41.93091600
+GMM function value =        16.69018652
+ 
+time =        46.36732400
+GMM function value =        16.81676422
+ 
+time =        41.76223600
+GMM function value =        16.96116235
+ 
+time =        42.02465600
+GMM function value =        17.16807865
+ 
+time =        42.11724900
+GMM function value =        17.36182315
+ 
+time =        42.42859200
+GMM function value =        17.47043178
+ 
+time =        43.78651900
+GMM function value =        17.37480024
+ 
+time =        42.29419100
+GMM function value =        17.41903423
+ 
+time =        45.23152300
+GMM function value =        17.49830335
+ 
+time =        41.83210000
+GMM function value =        17.52537872
+ 
+time =        41.35944800
+GMM function value =        17.58763351
+ 
+time =        41.54724600
+GMM function value =        17.63720255
+ 
+time =       106.32457500
+GMM function value =        17.61331913
+ 
+time =        72.81459600
+GMM function value =        17.49937856
+ 
+time =        74.82774300
+GMM function value =        17.20900843
+ 
+time =        72.59158200
+GMM function value =        16.49098995
+ 
+time =        55.73514900
+GMM function value =        15.53879526
+ 
+time =        76.70638500
+GMM function value =        14.76707107
+ 
+time =        41.37768500
+GMM function value =        14.13234976
+ 
+time =        47.45470400
+GMM function value =        13.49207320
+ 
+time =        45.27090300
+GMM function value =        12.88744827
+ 
+time =        43.38630100
+GMM function value =        12.38432630
+ 
+time =        43.87366400
+GMM function value =        11.89269673
+ 
+time =        41.13477000
+GMM function value =        11.47871115
+ 
+time =        40.79208700
+GMM function value =        11.06146279
+ 
+time =        41.17352800
+GMM function value =        10.68513745
+ 
+time =        41.70191000
+GMM function value =        10.34557963
+ 
+time =        40.36119200
+GMM function value =        10.05857755
+ 
+time =        38.51677400
+GMM function value =         9.77089748
+ 
+time =        38.60888700
+GMM function value =         9.50770827
+ 
+time =        57.91634600
+GMM function value =         9.09698930
+ 
+time =        39.78196300
+GMM function value =         8.89755695
+ 
+time =        38.83827000
+GMM function value =         8.66233293
+ 
+time =        41.41014900
+GMM function value =         8.40631677
+ 
+time =        38.74391000
+GMM function value =         8.26759314
+ 
+time =        37.34541700
+GMM function value =         8.08887662
+ 
+time =        36.90631400
+GMM function value =         8.13517622
+ 
+time =        36.84787900
+GMM function value =         7.73529378
+ 
+time =        37.44456000
+GMM function value =         7.59531644
+ 
+time =        68.23477400
+GMM function value =         7.70798819
+ 
+time =        37.94008900
+GMM function value =         7.57319757
+ 
+time =        89.51743400
+GMM function value =         7.17511966
+ 
+time =        70.22746800
+GMM function value =         7.02593125
+ 
+time =        54.92202100
+GMM function value =         6.85687010
+ 
+time =        74.06448100
+GMM function value =         6.72168716
+ 
+time =        77.08611200
+GMM function value =         6.58191220
+ 
+time =        89.44008400
+GMM function value =         5.97332957
+ 
+time =        69.27391000
+GMM function value =         5.72181081
+ 
+time =       154.35852300
+GMM function value =         5.81389112
+ 
+time =        54.30756400
+GMM function value =         6.36685183
+ 
+time =        71.42165500
+GMM function value =         5.35688895
+ 
+time =        67.97004900
+GMM function value =         5.61999639
+ 
+time =        66.04399500
+GMM function value =         5.87088012
+ 
+time =        76.11401000
+GMM function value =         5.82945013
+ 
+time =        69.26561600
+GMM function value =         5.68114735
+ 
+time =        84.55827000
+GMM function value =         5.87717562
+ 
+time =        66.28288900
+GMM function value =         5.81034548
+ 
+time =        64.67569500
+GMM function value =         5.67725072
+ 
+time =        98.81824900
+GMM function value =         5.66805593
+ 
+time =        68.42229100
+GMM function value =         5.53833612
+ 
+time =        65.43561300
+GMM function value =         5.54814559
+ 
+time =        44.65872700
+GMM function value =         5.42823659
+ 
+time =        74.30920800
+GMM function value =         5.26801240
+ 
+time =        76.70561900
+GMM function value =         5.44492131
+ 
+time =        74.50401100
+GMM function value =         5.37840142
+ 
+time =        68.87675400
+GMM function value =         5.34875954
+ 
+time =        71.47582300
+GMM function value =         5.24875873
+ 
+time =        67.41555600
+GMM function value =         5.27323065
+ 
+time =        71.42874200
+GMM function value =         5.24134993
+ 
+time =        80.23295900
+GMM function value =         5.20602404
+ 
+time =        68.85924700
+GMM function value =         5.18524126
+ 
+time =        68.99705500
+GMM function value =         5.05571673
+ 
+time =        50.54055800
+GMM function value =         5.14710857
+ 
+time =        61.93619700
+GMM function value =         5.09683953
+ 
+time =        68.99884800
+GMM function value =         5.08084962
+ 
+time =        64.91963900
+GMM function value =         5.03898908
+ 
+time =        51.01042400
+GMM function value =         5.03745254
+ 
+time =        57.18565800
+GMM function value =         4.85090502
+ 
+time =        66.17293100
+GMM function value =         4.92033173
+ 
+time =        67.62839300
+GMM function value =         4.89373685
+ 
+time =        63.57120300
+GMM function value =         4.94545469
+ 
+time =        69.70931700
+GMM function value =         4.93507848
+ 
+time =        70.23622900
+GMM function value =         4.84649484
+ 
+time =        64.69846700
+GMM function value =         4.71355921
+ 
+time =        76.02863000
+GMM function value =         4.82409252
+ 
+time =        55.50936100
+GMM function value =         4.79073627
+ 
+time =        62.46461300
+GMM function value =         4.81036365
+ 
+time =        63.88881300
+GMM function value =         4.75354026
+ 
+time =        61.73496200
+GMM function value =         4.76070530
+ 
+time =        64.70229800
+GMM function value =         4.74943019
+ 
+time =        61.43505300
+GMM function value =         4.73964120
+ 
+time =        57.20362400
+GMM function value =         4.72928035
+ 
+time =        58.93541900
+GMM function value =         4.70277647
+ 
+time =        59.93350800
+GMM function value =         4.68883539
+ 
+time =        74.14301200
+GMM function value =         4.68495884
+ 
+time =        59.09756600
+GMM function value =         4.67557099
+ 
+time =        58.73009000
+GMM function value =         4.68907797
+ 
+time =        58.27206500
+GMM function value =         4.50266497
+ 
+time =        57.36414500
+GMM function value =         4.50671739
+ 
+time =        58.13400700
+GMM function value =         4.64303466
+ 
+time =        57.52015700
+GMM function value =         4.48372279
+ 
+time =        70.90295400
+GMM function value =         4.62715451
+ 
+time =        56.68361500
+GMM function value =         4.63016705
+ 
+time =        66.36209100
+GMM function value =         4.62216035
+ 
+time =        68.96487700
+GMM function value =         4.64801911
+ 
+time =        62.99086100
+GMM function value =         4.64448876
+ 
+time =        62.93598000
+GMM function value =         4.63129734
+ 
+time =        58.47778100
+GMM function value =         4.63369919
+ 
+time =        63.44729500
+GMM function value =         4.62570015
+ 
+time =        66.75774300
+GMM function value =         4.59249774
+ 
+time =        67.09090200
+GMM function value =         4.58862262
+ 
+time =        63.77065300
+GMM function value =         4.58645631
+ 
+time =        52.60801000
+GMM function value =         4.58386389
+ 
+time =        71.91771100
+GMM function value =         4.57868893
+ 
+time =        69.78065700
+GMM function value =         4.57492554
+ 
+time =        75.43201800
+GMM function value =         4.57178140
+ 
+time =        57.81986300
+GMM function value =         4.56959335
+ 
+time =        50.69876500
+GMM function value =         4.56696930
+ 
+time =        55.90826300
+GMM function value =         4.59688396
+ 
+time =        52.65923500
+GMM function value =         4.59175393
+ 
+time =        72.22647800
+GMM function value =         4.56590724
+ 
+time =        51.29057600
+GMM function value =         4.58465184
+ 
+time =        70.08831300
+GMM function value =         4.57856723
+ 
+time =        60.85551000
+GMM function value =         4.56025749
+ 
+time =        72.93209100
+GMM function value =         4.44470844
+ 
+time =        54.22977800
+GMM function value =         4.57795095
+ 
+time =        53.38876800
+GMM function value =         4.54887950
+ 
+time =        63.06263700
+GMM function value =         4.53750795
+ 
+time =        55.54804000
+GMM function value =         4.54053379
+ 
+time =        48.42547700
+GMM function value =         4.54427933
+ 
+time =        46.61557500
+GMM function value =         4.53357936
+ 
+time =        54.83549300
+GMM function value =         4.53655674
+ 
+time =        44.92178500
+GMM function value =         4.53144967
+ 
+time =        65.96714800
+GMM function value =         4.53361783
+ 
+time =        60.54632200
+GMM function value =         4.53274181
+ 
+time =        58.83355600
+GMM function value =         4.38235469
+ 
+time =        66.16205700
+GMM function value =         4.40112496
+ 
+time =        46.29696700
+GMM function value =         4.39977336
+ 
+time =        48.36884700
+GMM function value =         4.39758387
+ 
+time =        66.29856800
+GMM function value =         4.39695431
+ 
+time =        62.99499300
+GMM function value =         4.39638822
+ 
+time =        63.01049200
+GMM function value =         4.39566199
+ 
+time =        62.53747900
+GMM function value =         4.39495858
+ 
+time =        85.60516100
+GMM function value =         4.39124167
+ 
+time =        59.15028900
+GMM function value =         4.39083141
+ 
+time =        76.91456600
+GMM function value =         4.39031539
+ 
+time =        61.50537900
+GMM function value =         4.38668278
+ 
+time =        63.38388500
+GMM function value =         4.38616874
+ 
+time =        65.07260000
+GMM function value =         4.38567705
+ 
+time =        63.96814100
+GMM function value =         4.38521028
+ 
+time =        64.69339600
+GMM function value =         4.38477169
+ 
+time =        61.91370500
+GMM function value =         4.38434716
+ 
+time =        65.57043500
+GMM function value =         4.38396116
+ 
+time =        62.45624000
+GMM function value =         4.38355915
+ 
+time =        60.92596000
+GMM function value =         4.38332974
+ 
+time =        62.71040600
+GMM function value =         4.38310417
+ 
+time =        79.73749400
+GMM function value =         4.38277800
+ 
+time =        67.41367700
+GMM function value =         4.38246973
+ 
+time =        73.71902000
+GMM function value =         4.37868972
+ 
+time =        62.39876800
+GMM function value =         4.38189579
+ 
+time =        74.23952800
+GMM function value =         4.38162442
+ 
+time =        72.08054100
+GMM function value =         4.37788610
+ 
+time =        66.11274900
+GMM function value =         4.37764673
+ 
+time =        63.08823000
+GMM function value =         4.37741661
+ 
+time =        63.84800300
+GMM function value =         4.38329509
+ 
+time =        82.06815900
+GMM function value =         4.38292645
+ 
+time =        73.52783400
+GMM function value =         4.38273036
+ 
+time =        87.20801200
+GMM function value =         4.38256997
+ 
+time =        86.15329600
+GMM function value =         4.38057474
+ 
+time =        83.59584900
+GMM function value =         4.38255387
+ 
+time =        95.72435500
+GMM function value =         4.38204372
+ 
+time =        73.63204300
+GMM function value =         4.38059784
+ 
+time =        80.84097300
+GMM function value =         4.37984785
+ 
+time =        78.23233400
+GMM function value =         4.38029445
+ 
+time =        86.96211700
+GMM function value =         4.37986200
+ 
+time =        71.52249600
+GMM function value =         4.37969916
+ 
+time =        64.29065900
+GMM function value =         4.38003089
+ 
+time =        91.49824600
+GMM function value =         4.37944691
+ 
+time =        63.62451700
+GMM function value =         4.38957082
+ 
+time =        70.36843000
+GMM function value =         4.37912985
+ 
+time =        67.87288300
+GMM function value =         4.38936461
+ 
+time =        71.82553900
+GMM function value =         4.38141960
+ 
+time =        65.28165000
+GMM function value =         4.38920358
+ 
+time =        72.66318200
+GMM function value =         4.38125103
+ 
+time =        74.37502500
+GMM function value =         4.38904988
+ 
+time =        80.48198100
+GMM function value =         4.38110706
+ 
+time =        73.82799500
+GMM function value =         4.38893508
+ 
+time =        86.61965500
+GMM function value =         4.38097093
+ 
+time =        73.92270000
+GMM function value =         4.38879354
+ 
+time =        84.82949900
+GMM function value =         4.38863021
+ 
+time =        80.36939000
+GMM function value =         4.38078872
+ 
+time =        74.00789300
+GMM function value =         4.38863299
+ 
+time =        89.85968800
+GMM function value =         4.38067806
+ 
+time =        73.96738400
+GMM function value =         4.38851685
+ 
+time =        81.39575600
+GMM function value =         4.38056837
+ 
+time =        75.49610000
+GMM function value =         4.38849376
+ 
+time =        81.57861700
+GMM function value =         4.38293048
+ 
+time =        96.20532700
+GMM function value =         4.38054622
+ 
+time =        73.73642700
+GMM function value =         4.38596565
+ 
+time =        93.24529400
+GMM function value =         4.38226139
+ 
+time =        62.54514800
+GMM function value =         4.38763408
+ 
+time =        73.92282000
+GMM function value =         4.38602202
+ 
+time =       106.22685300
+GMM function value =         4.38565557
+ 
+time =        69.48254000
+GMM function value =         4.38563328
+ 
+time =        91.36170900
+GMM function value =         4.38519858
+ 
+time =        62.38042500
+GMM function value =         4.38559250
+ 
+time =        90.32029600
+GMM function value =         4.38515755
+ 
+time =        65.58646000
+GMM function value =         4.38524054
+ 
+time =        68.26473100
+GMM function value =         4.38507641
+ 
+time =        71.11995700
+GMM function value =         4.38550353
+ 
+time =        90.71798900
+GMM function value =         4.38508606
+ 
+time =        63.24295000
+GMM function value =         4.38513197
+ 
+time =        68.56813700
+GMM function value =         4.38556163
+ 
+time =        79.24315000
+GMM function value =         4.38551034
+ 
+time =        86.16458800
+GMM function value =         4.38502322
+ 
+time =        63.03436100
+GMM function value =         4.38504478
+ 
+time =        63.08020200
+GMM function value =         4.38502084
+ 
+time =        61.69943600
+GMM function value =         4.38503109
+ 
+time =        71.31882600
+GMM function value =         4.38547798
+ 
+time =        82.02759600
+GMM function value =         4.38495939
+ 
+time =        64.56409100
+GMM function value =         4.38497320
+ 
+time =        63.66911800
+GMM function value =         4.38558104
+ 
+time =        91.38403500
+GMM function value =         4.38493368
+ 
+time =        70.62440700
+GMM function value =         4.38544586
+ 
+time =        81.17753500
+GMM function value =         4.38491906
+ 
+time =        71.10996400
+GMM function value =         4.38552935
+ 
+time =        92.65715500
+GMM function value =         4.38488790
+ 
+time =        70.75647100
+GMM function value =         4.38505737
+ 
+time =        65.54309400
+GMM function value =         4.38522097
+ 
+time =        69.35687500
+GMM function value =         4.38487735
+ 
+time =        70.88780600
+GMM function value =         4.38521320
+ 
+time =        75.10234800
+GMM function value =         4.38504481
+ 
+time =        74.49830200
+GMM function value =         4.38485697
+ 
+time =        64.48831500
+GMM function value =         4.38500006
+ 
+time =        82.58358000
+GMM function value =         4.38533247
+ 
+time =        71.55364000
+GMM function value =         4.38503713
+ 
+time =        74.93837200
+GMM function value =         4.38500994
+ 
+time =        89.67188600
+GMM function value =         4.38501635
+ 
+time =        86.95725200
+GMM function value =         4.38481223
+ 
+time =        68.60543300
+GMM function value =         4.38516135
+ 
+time =        93.32513100
+GMM function value =         4.38479550
+ 
+time =        74.68054300
+GMM function value =         4.38485370
+ 
+time =        78.91372300
+GMM function value =         4.38519136
+ 
+time =        83.76045600
+GMM function value =         4.38490636
+ 
+time =        72.15469900
+GMM function value =         4.38540722
+ 
+time =        95.29417900
+GMM function value =         4.38543945
+ 
+time =       101.29523400
+GMM function value =         4.38478079
+ 
+time =        71.84216600
+GMM function value =         4.38490640
+ 
+time =        71.10364600
+GMM function value =         4.38493869
+ 
+time =        71.99281800
+GMM function value =         4.38177964
+ 
+time =        89.17355600
+GMM function value =         4.38477502
+ 
+time =        80.68944300
+GMM function value =         4.38535781
+ 
+time =        97.57234000
+GMM function value =         4.38512522
+ 
+time =        99.61645800
+GMM function value =         4.38495412
+ 
+time =       110.53077700
+GMM function value =         4.38495021
+ 
+time =        84.06136700
+GMM function value =         4.38504706
+ 
+time =        77.77281500
+GMM function value =         4.38515774
+ 
+time =        82.54169800
+GMM function value =         4.38490164
+ 
+time =        76.18345600
+GMM function value =         4.38543271
+ 
+time =        79.20140500
+GMM function value =         4.38473797
+ 
+time =        66.74453400
+GMM function value =         4.38460333
+ 
+time =        58.60774800
+GMM function value =         4.38487372
+ 
+time =        74.17667300
+GMM function value =         4.38500450
+ 
+time =        81.60188100
+GMM function value =         4.38540141
+ 
+time =        76.01031900
+GMM function value =         4.38538597
+ 
+time =        89.23522700
+GMM function value =         4.38536044
+ 
+time =        81.31864200
+GMM function value =         4.38507070
+ 
+time =       101.21483500
+GMM function value =         4.38551721
+ 
+time =        90.84271300
+GMM function value =         4.38505446
+ 
+time =        94.28749700
+GMM function value =         4.38502993
+ 
+time =        74.56626000
+GMM function value =         4.38480085
+ 
+time =        72.17201000
+GMM function value =         4.38535255
+ 
+time =        78.83366400
+GMM function value =         4.38507494
+ 
+time =        77.87381100
+GMM function value =         4.38535803
+ 
+time =        80.63232600
+GMM function value =         4.38489948
+ 
+time =        78.18866400
+GMM function value =         4.38507558
+ 
+time =        87.77047100
+GMM function value =         4.38174873
+ 
+time =        88.55818000
+GMM function value =         4.38536714
+ 
+time =        85.46943800
+GMM function value =         4.38523009
+ 
+time =        95.85415300
+GMM function value =         4.38536837
+ 
+time =        75.02986100
+GMM function value =         4.38534336
+ 
+time =        86.45296400
+GMM function value =         4.38485757
+ 
+time =        69.95597000
+GMM function value =         4.38536623
+ 
+time =        68.44914200
+GMM function value =         4.38513438
+ 
+time =        69.40903900
+GMM function value =         4.38507869
+ 
+time =        83.24197300
+GMM function value =         4.38526531
+ 
+time =        69.32862200
+GMM function value =         4.38506800
+ 
+time =        86.08848700
+GMM function value =         4.38540883
+ 
+time =        62.32536100
+GMM function value =         4.38221486
+ 
+time =        73.61978000
+GMM function value =         4.38130529
+ 
+time =        76.09496900
+GMM function value =         4.38511809
+ 
+time =        84.18739100
+GMM function value =         4.38543505
+ 
+time =        66.33150300
+GMM function value =         4.38555007
+ 
+time =        84.02401200
+GMM function value =         4.38542680
+ 
+time =        74.76990400
+GMM function value =         4.38554937
+ 
+time =        99.37524500
+GMM function value =         4.38536545
+ 
+time =        74.06161200
+GMM function value =         4.38503842
+ 
+time =        71.13034600
+GMM function value =         4.38498575
+ 
+time =        70.82969200
+GMM function value =         4.38204514
+ 
+time =        80.08910900
+GMM function value =         4.38534891
+ 
+time =        75.57248700
+GMM function value =         4.38221447
+ 
+time =        66.96367600
+GMM function value =         4.38511902
+ 
+time =        68.12599300
+GMM function value =         4.38538408
+ 
+time =        85.22273400
+GMM function value =         4.38519227
+ 
+time =        58.39562800
+GMM function value =         4.38546894
+ 
+time =        67.44314800
+GMM function value =         4.38541498
+ 
+time =        92.15263800
+GMM function value =         4.38531609
+ 
+time =        97.88988600
+GMM function value =         4.38188904
+ 
+time =        75.68716200
+GMM function value =         4.38202607
+ 
+time =        76.99241800
+GMM function value =         4.38520841
+ 
+time =        90.38070000
+GMM function value =         4.38506552
+ 
+time =        79.74866500
+GMM function value =         4.38545522
+ 
+time =        70.32248400
+GMM function value =         4.38551750
+ 
+time =        91.55881100
+GMM function value =         4.38542087
+ 
+time =        79.13541900
+GMM function value =         4.38464013
+ 
+time =        59.10928600
+GMM function value =         4.38211693
+ 
+time =        72.25724100
+GMM function value =         4.38530486
+ 
+time =        73.21675700
+GMM function value =         4.38216577
+ 
+time =        79.74037400
+GMM function value =         4.38504187
+ 
+time =        77.71452400
+GMM function value =         4.38504607
+ 
+time =        69.51076500
+GMM function value =         4.38488717
+ 
+time =        68.22684600
+GMM function value =         4.37210573
+ 
+time =        62.62486900
+GMM function value =         4.38350293
+ 
+time =        92.05629700
+GMM function value =         4.38166091
+ 
+time =        71.36133100
+GMM function value =         4.38533609
+ 
+time =        63.50303000
+GMM function value =         4.38168931
+ 
+time =        70.54687400
+GMM function value =         4.38533602
+ 
+time =        71.14164000
+GMM function value =         4.38157097
+ 
+time =        57.37977100
+GMM function value =         4.38461396
+ 
+time =        78.44786500
+GMM function value =         4.38507754
+ 
+time =        86.52219400
+GMM function value =         4.38303846
+ 
+time =        60.99555400
+GMM function value =         4.38208713
+ 
+time =        78.83061900
+GMM function value =         4.38451051
+ 
+time =        64.56324100
+GMM function value =         4.38520518
+ 
+time =        69.12142100
+GMM function value =         4.38198532
+ 
+time =        66.61048000
+GMM function value =         4.37802093
+ 
+time =        53.13849900
+GMM function value =         4.38017658
+ 
+time =        80.57197900
+GMM function value =         4.38491831
+ 
+time =        59.36013900
+GMM function value =         4.38548146
+ 
+time =        85.69544500
+GMM function value =         4.38310989
+ 
+time =        83.80318500
+GMM function value =         4.38552716
+ 
+time =        75.60095800
+GMM function value =         4.38168661
+ 
+time =        65.40620800
+GMM function value =         4.38527700
+ 
+time =        78.58305600
+GMM function value =         4.38186466
+ 
+time =        78.90983600
+GMM function value =         4.38099500
+ 
+time =        66.15065800
+GMM function value =         4.38503620
+ 
+time =        59.66277400
+GMM function value =         4.38133364
+ 
+time =        63.32716800
+GMM function value =         4.38341673
+ 
+time =        70.95641300
+GMM function value =         4.38549696
+ 
+time =        64.13660100
+GMM function value =         4.38323058
+ 
+time =        89.77609300
+GMM function value =         4.38494525
+ 
+time =        73.10503500
+GMM function value =         4.38169468
+ 
+time =        98.60498200
+GMM function value =         4.38509063
+ 
+time =        84.84580600
+GMM function value =         4.38506345
+ 
+time =        52.67004300
+GMM function value =         4.38522624
+ 
+time =        61.58912500
+GMM function value =         4.38319873
+ 
+time =        64.16261300
+GMM function value =         4.38116785
+ 
+time =        80.98597100
+GMM function value =         4.38473619
+ 
+time =        81.16190600
+GMM function value =         4.38515278
+ 
+time =        96.01489700
+GMM function value =         4.38503431
+ 
+time =        90.46902400
+GMM function value =         4.38313229
+ 
+time =        80.22291300
+GMM function value =         4.38075606
+ 
+time =        48.64299100
+GMM function value =         4.38237816
+ 
+time =        75.24795600
+GMM function value =         4.38461190
+ 
+time =        64.45954100
+GMM function value =         4.38325705
+ 
+time =        66.36157600
+GMM function value =         4.38312912
+ 
+time =        89.80656300
+GMM function value =         4.38520156
+ 
+time =        60.27173800
+GMM function value =         4.38364526
+ 
+time =        62.27449200
+GMM function value =         4.38496819
+ 
+time =        60.64868000
+GMM function value =         4.37800041
+ 
+time =        53.63033600
+GMM function value =         4.38504780
+ 
+time =        66.83462800
+GMM function value =         4.38536409
+ 
+time =        72.00357800
+GMM function value =         4.38325529
+ 
+time =        63.67001600
+GMM function value =         4.38517974
+ 
+time =        52.96766300
+GMM function value =         4.38548558
+ 
+time =        83.21812300
+GMM function value =         4.38535998
+ 
+time =        61.70460400
+GMM function value =         4.38521892
+ 
+time =        54.51109700
+GMM function value =         4.38360093
+ 
+time =        75.66211800
+GMM function value =         4.38513684
+ 
+time =        66.95975100
