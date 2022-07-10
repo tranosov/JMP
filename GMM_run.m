@@ -23,7 +23,7 @@ fprintf(io,"Rerun routine. \n");
 fclose(io);
 
 %%
-forparams =readtable('./input/PREP.xlsx','Sheet','PARS','ReadVariableNames', true,'ReadRowNames',true);
+forparams =readtable('./input/PREP.xlsx','Sheet','PARSTEST','ReadVariableNames', true,'ReadRowNames',true);
 formom =readtable('./input/PREP.xlsx','Sheet','MOMS','ReadVariableNames', true,'ReadRowNames',true);
 forw =readtable('./input/PREP.xlsx','Sheet','W','ReadVariableNames', true,'ReadRowNames',true);
 
@@ -74,7 +74,7 @@ fclose(io);
     options.InitialTemperature = 300*max(GG,1); %I think should be in scale of objective function (or like jacobian - how params affect obj function)
     %temperature = @(optimValues,options) options.InitialTemperature.*(0.99.^optimValues.k); % slow down?
     %options.TemperatureFcn=temperature;
-    options.ReannealInterval=50; % brought down so there is more search
+    options.ReannealInterval=25; % brought down so there is more search
 
     options.MaxStallIterations=500; % not sure if this is not just desperate? why would I want to evaluate that many more times around no change?
     options.FunctionTolerance=10^(-6);
