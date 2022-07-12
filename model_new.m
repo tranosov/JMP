@@ -340,7 +340,7 @@ lsb_eq1= @(mu,xh,xw,p,dh,dw,ich,icw,lambda) (mulh(mu,xh,xw,dh,dw,ich,lambda) - w
     (lsh(mu,xh,xw,dh,dw,lambda)>lsbar)*(CONS)*(lsh(mu,xh,xw,dh,dw,lambda)-lsbar)^1 +(lsh(mu,xh,xw,dh,dw,lambda)<=0)*10^6;
 lsb_eq2= @(mu,xh,xw,p,dh,dw,ich,icw,lambda) (mulw(mu,xh,xw,dh,dw,icw,lambda) - w2_d(lsw(mu,xh,xw,dh,dw,lambda),ich)*mu)*(lsw(mu,xh,xw,dh,dw,lambda)<lsbar) + ...
 (lsw(mu,xh,xw,dh,dw,lambda)>lsbar)*(CONS)*(lsw(mu,xh,xw,dh,dw,lambda)-lsbar)^1 + (lsw(mu,xh,xw,dh,dw,lambda)<=0)*10^6;
-lsb_eq = @(mu,xh,xw,p,dh,dw,ich,icw,lambda) 10000*[ lsb_eq1(mu,xh,xw,p,dh,dw,ich,icw,lambda),lsb_eq2(mu,xh,xw,p,dh,dw,ich,icw,lambda)];
+lsb_eq = @(mu,xh,xw,p,dh,dw,ich,icw,lambda) [ lsb_eq1(mu,xh,xw,p,dh,dw,ich,icw,lambda),lsb_eq2(mu,xh,xw,p,dh,dw,ich,icw,lambda)];
 %recently added a bit more precision
 
 % couples - one works    
