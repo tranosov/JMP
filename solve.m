@@ -53,7 +53,11 @@ Fm=@(x) Clearing_justmm(x,EQS,PARREST);
 tol=10^(-3); % stricter than overall
 if norm(Fm(x0(end)))^2 >tol 
     optionsz = optimset('TolX',tol,'Display',iter_);
-    out=fzero(Fm,x0_,optionsz); % something is off here...
+    try
+        out=fzero(Fm,x0_,optionsz); % something is off here...
+    catch
+        out=fzero(Fm,x0(end),optionsz); 
+    end
     x0(end)=out;
 end 
 
