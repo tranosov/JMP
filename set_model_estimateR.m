@@ -133,8 +133,8 @@ toinputs=reinitialize;
     d21,d31,Sup1,Sup2,Sup3,SupS,addS,out,daddS,aaddS,pophous, Xi,wc, PID,typeic_,pid_,wgap_raw,mm_,lsbar,NLY,THETA,THETAHW,sigmam,MtoF);
 
 
-params('crrah_','value')={params{'crrah_',:}};
-params('ces_','value')={params{'ces_',:}};
+params('crrah_','value')={'crrah_'};
+params('ces_','value')={'ces_'};
 PARREST.('params')=params;
 
 
