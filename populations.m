@@ -100,15 +100,15 @@ if FORCEFIT==0.5 % only THETAHW, not THETA - just so I can treat lambda as a par
     dTHETAHW=-(uhC-uhS) - log( (M/F)*(1+exp(-(uwC-uwS)/sigmam))  -1)*sigmam; % making marriage market clear
     params{'THETAHW',:}=THETAHW + dTHETAHW;
     PARREST.('params')=params;
-    uhC=uhC+dTHETA+dTHETAHW;
-    uwC=uwC+ dTHETA ;  % does this work?
+    uhC=uhC+dTHETAHW;
+    %uwC=uwC;  % does this work?
     OUTC.('uh')=uh+(dTHETAHW)/2 ; % per period!
-    OUTC.('uw')= uw  ;
+    %OUTC.('uw')= uw  ;
        
 end
 
 clmm=  F*(exp((uwC-uwS)/sigmam)/(1+exp((uwC-uwS)/sigmam)))  - M*(exp((uhC-uhS)/sigmam)/(1+exp((uhC-uhS)/sigmam)));
-if clmm>10^(0)
+if clmm>10^(-2)
     fprintf('Marrriage market uncleared - on purpose?')
     FORCEFIT=FORCEFIT
     clmm=clmm

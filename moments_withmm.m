@@ -3,7 +3,8 @@ function [moments_,other,time,EXITFLAG,params]...
     =moments_withmm(p,LA,params,EQS,PARREST,withmm,fast,FORCEFIT)
 global RESC VERBOSE
 tic
-[DC, DC1, DC2,HCouple,Pw,hC,VC,cexp1,cexp2,OUTC, DS,HSingle, DSh, DSw, VS,Pws,cexps,OUTS,EQS,PARREST] = populations(p,LA,EQS,PARREST,FORCEFIT);
+[DC, DC1, DC2,HCouple,Pw,hC,VC,cexp1,cexp2,OUTC, DS,HSingle, DSh, DSw, VS,Pws,cexps,OUTS,EQS,PARREST] = ...
+    populations(p,LA,EQS,PARREST,FORCEFIT);
 other=99;
 [moments_,~]...
                 =moments(p,EQS,PARREST, DC, DC1, DC2,HCouple,Pw,hC,VC,cexp1,cexp2,OUTC, DS,HSingle, DSh, DSw, VS,Pws,cexps,OUTS,fast);
