@@ -8,7 +8,7 @@ clear; clc;
 clear global;
 %cd 'C:\Users\ranos\OneDrive - Umich\Documents\D\Michigan\Res\Female careers in location\Codes\matlab'
 rng(357)
-fprintf('Running GMM estimation. CHECK NEW');
+fprintf('Running GMM estimation. CHECK NEW\n');
 
 
 filename = "./estimation/progressmoment.txt";
