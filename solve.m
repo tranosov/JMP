@@ -42,14 +42,14 @@ if isempty(mup)
     x0_=x0(end);
 else
     if mup==1
-        x0_=[max(0.001,x0(end)*0.95),x0(end)*1.05]; % more men in mm, clm(x0(end)) should be<0, lambda down to incite women
-        x02_=[max(0.001,x0(end)*0.5),x0(end)*1.05];
-        x03_=[max(0.001,x0(end)*0.5),x0(end)*1.1];
+        x0_=[max(0.001*RESC,x0(end)*0.95),x0(end)*1.05]; % more men in mm, clm(x0(end)) should be<0, lambda down to incite women
+        x02_=[max(0.001*RESC,x0(end)*0.5),x0(end)*1.05];
+        x03_=[max(0.001*RESC,x0(end)*0.5),x0(end)*1.1];
     end
     if mup==(-1)
-        x0_=[0.95*x0(end),min(x0(end)*1.05,0.999)]; % less men in mm, clm(x0(end)) should be>0, lambda up to incite men
-        x02_=[0.95*x0(end),min(x0(end)*2,0.999)];
-        x03_=[0.9*x0(end),min(x0(end)*2,0.999)];
+        x0_=[0.95*x0(end),min(x0(end)*1.05,0.999*RESC)]; % less men in mm, clm(x0(end)) should be>0, lambda up to incite men
+        x02_=[0.95*x0(end),min(x0(end)*1.5,0.999*RESC)];
+        x03_=[0.9*x0(end),min(x0(end)*1.5,0.999*RESC)];
     end
 end 
 
