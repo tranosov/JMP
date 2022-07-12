@@ -56,7 +56,7 @@ if withmm
         return
     end
     
-    mup=0;
+    mup=-1;
     [lssh2_,lssw2_,p2_,LA2_,time_,EXITFLAG]...
     =lss_function(mf2,params,EQS,PARREST,1,1);
     time=time+time_;

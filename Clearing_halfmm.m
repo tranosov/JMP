@@ -99,7 +99,7 @@ F=sum(sum(sum(DSw_agr)))*(1/(1/3 + ssw_*2/3)) ; %+ sum(sum(sum(sum(sum(DC_agr)))
 %clmm=  F*(exp((uwC-uwS)/sigmam)/(1+exp((uwC-uwS)/sigmam)))  - M*(exp((uhC-uhS)/sigmam)/(1+exp((uhC-uhS)/sigmam)));
 %ssh=1/(1+exp((uhC-uhS)/sigmam)) ;
 ssw=1/(1+exp((uwC-uwS)/sigmam)) ;
-ssw=ssh;
+ssh=ssw;
 %log((1-0.15)/0.15)*sigmam = dU
 
 CONSTSH=(ssh*M*(2/3)+(1/3)*M  )/(sum(sum(sum(DSh_agr))));
