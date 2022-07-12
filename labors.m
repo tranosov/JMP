@@ -90,7 +90,7 @@ inputs=zeros(T,T,I,I,I,3,3);
 vc=zeros(T,T,I,I,I,3); % last - only h, only w, both work
 Hc=zeros(T,T,I,I,I,3);
 TOL=10^(-15);
-STEPTOL=10^(-15); % would need more iterations!
+STEPTOL=10^(-10); % would need more iterations! plus by melo byt <TOL!
 
 % lingering issue: still I have sometimes different guesses reading to
 % slightly differenc cl. And persistently sow.
