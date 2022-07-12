@@ -90,13 +90,13 @@ end
             end
             if (EXITFLAG~=1) && (EXITFLAG~=2) && (EXITFLAG~=3) && (EXITFLAG~=4)
 
-                %fprintf('Trying again again');
+                fprintf('Trying again again');
                 [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,lp0*1.1,options);
 
             end
             if (EXITFLAG~=1) && (EXITFLAG~=2) && (EXITFLAG~=3) && (EXITFLAG~=4)
 
-                %fprintf('Trying again again again');
+                fprintf('Trying again again again');
                 [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,[1,1,1],options);
 
             if (EXITFLAG~=1) && (EXITFLAG~=2) && (EXITFLAG~=3) && (EXITFLAG~=4)              
