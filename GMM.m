@@ -8,7 +8,8 @@ global VERBOSE GMIN ITER %DOWN
 
 
 if EXITFLAG==999
-    G=10^(23);
+    params_
+    G=10^(6);
 else
     G=(moments_-table2array(momentest))'*W*(moments_-table2array(momentest));
 end
