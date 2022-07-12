@@ -5,3 +5,38 @@ Scaling down weighting matrix by a factor    1000.00000000
 GMM function value =        21.05747619
 time =       273.32819000
  iter: 
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+GMM function value =        19.49876545
+time =       247.10933100
+ iter: 
+ FLAG: MINIMUM 
+ 
+Routine terminated. 
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+GMM function value =        19.86248794
+time =       184.82242400
+ iter: 
+ FLAG: MINIMUM 
+GMM function value =        23.04597497
+time =       179.96756800
+ iter:       0.00000000
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+GMM function value =        17.47706232
+time =       180.36478200
+ iter: 
+ FLAG: MINIMUM 
+GMM function value =        19.99330985
+time =       183.07123100
+ iter:       0.00000000
+GMM function value =   99999999999999991611392.00000000
+time =      4149.87874800
+ iter:       1.00000000
