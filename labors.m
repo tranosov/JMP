@@ -90,11 +90,11 @@ inputs=zeros(T,T,I,I,I,3,3);
 vc=zeros(T,T,I,I,I,3); % last - only h, only w, both work
 Hc=zeros(T,T,I,I,I,3);
 TOL=10^(-15);
-STEPTOL=10^(-15);
+STEPTOL=10^(-15); % would need more iterations!
 
 % lingering issue: still I have sometimes different guesses reading to
 % slightly differenc cl. And persistently sow.
-options = optimoptions('fsolve','MaxIter',2000,'MaxFunctionEvaluations',2000,...
+options = optimoptions('fsolve','MaxIter',3000,'MaxFunctionEvaluations',3000,...
         'FunctionTolerance',TOL,'Display','off','Algorithm','levenberg-marquardt','ScaleProblem','jacobian',...
         'StepTolerance', STEPTOL); %,'StepTolerance', STEPTOL); %'trust-region') ;%,...
         %'StepTolerance', 10^(-20)); %'ScaleProblem','jacobian'
@@ -170,16 +170,21 @@ for i=1:I
                     if VERBOSE
                         fprintf('Warning');    
                     end
-                    options0 = optimoptions('fsolve','MaxIter',5000,'MaxFunctionEvaluations',5000,...
-                            'FunctionTolerance',TOL,'Display','off','Algorithm','trust-region','StepTolerance', STEPTOL);
-                    [output1,~,EXITFLAG]=fsolve(fn,[inputs0(th,tw,jh,jw,i,1,:)*1.1],options0);  
+                    
+                    [output1,~,EXITFLAG]=fsolve(fn,[inputs0(th,tw,jh,jw,i,1,:)*2],options);  
                     if ~isreal(output1) | output1(1)<=0 | output1(2)<=0 | lsh(output1(1),output1(2)/100,output1(3)/100,dh,0,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                        [output1,~,EXITFLAG]=fsolve(fn,[mu00,reshape(inputs0(th,tw,jh,jw,i,1,2:3),1,2)*1.1],options0);
+                        [output1,~,EXITFLAG]=fsolve(fn,[inputs0(th,tw,jh,jw,i,1,:)*0.5],options);  
+                        
                         if ~isreal(output1) | output1(1)<=0 | output1(2)<=0 | lsh(output1(1),output1(2)/100,output1(3)/100,dh,0,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                            fprintf('labors: Warning w0')
-                            WARNINGS=WARNINGS+1;
-                            OUTC=999;
-                            return
+                            options0 = optimoptions('fsolve','MaxIter',5000,'MaxFunctionEvaluations',5000,...
+                                'FunctionTolerance',TOL,'Display','off','Algorithm','trust-region','StepTolerance', STEPTOL);
+                            [output1,~,EXITFLAG]=fsolve(fn,[mu00,reshape(inputs0(th,tw,jh,jw,i,1,2:3),1,2)*1.1],options0);
+                            if ~isreal(output1) | output1(1)<=0 | output1(2)<=0 | lsh(output1(1),output1(2)/100,output1(3)/100,dh,0,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
+                                fprintf('labors: Warning w0')
+                                WARNINGS=WARNINGS+1;
+                                OUTC=999;
+                                return
+                            end
                         end
                     end
                 end
@@ -205,16 +210,21 @@ for i=1:I
                     if VERBOSE
                         fprintf('Warning');    
                     end
-                    options0 = optimoptions('fsolve','MaxIter',5000,'MaxFunctionEvaluations',5000,...
-                            'FunctionTolerance',TOL,'Display','off','Algorithm','trust-region','StepTolerance', STEPTOL);
-                        [output2,~,EXITFLAG]=fsolve(fn,[inputs0(th,tw,jh,jw,i,2,:)*1.1],options0);
-                    if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))                       
-                        [output2,~,EXITFLAG]=fsolve(fn,[mu000,reshape(inputs0(th,tw,jh,jw,i,2,2:3),1,2)*1.1],options0);
-                        if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                            fprintf('labors: Warning 0w')
-                            WARNINGS=WARNINGS+1;
-                            OUTC=999;
-                            return
+                    
+                    [output2,~,EXITFLAG]=fsolve(fn,[inputs0(th,tw,jh,jw,i,2,:)*2],options);
+                    if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
+                        [output2,~,EXITFLAG]=fsolve(fn,[inputs0(th,tw,jh,jw,i,2,:)*0.5],options);
+                    
+                        if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))                       
+                            options0 = optimoptions('fsolve','MaxIter',5000,'MaxFunctionEvaluations',5000,...
+                                'FunctionTolerance',TOL,'Display','off','Algorithm','trust-region','StepTolerance', STEPTOL);
+                            [output2,~,EXITFLAG]=fsolve(fn,[mu000,reshape(inputs0(th,tw,jh,jw,i,2,2:3),1,2)*1.1],options0);
+                            if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
+                                fprintf('labors: Warning 0w')
+                                WARNINGS=WARNINGS+1;
+                                OUTC=999;
+                                return
+                            end
                         end
                     end
                 end
@@ -241,17 +251,21 @@ for i=1:I
                     if VERBOSE
                         fprintf('Warning');
                     end
-                    options0 = optimoptions('fsolve','MaxIter',5000,'MaxFunctionEvaluations',5000,...
-                            'FunctionTolerance',TOL,'Display','off','Algorithm','trust-region','StepTolerance', STEPTOL);
-                    [output3,~,EXITFLAG]=fsolve(fn,inputs0(th,tw,jh,jw,i,3,:)*1.1,options0);
-                    if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 |  lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  | lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                        
-                        [output3,~,EXITFLAG]=fsolve(fn,[mu0,reshape(inputs0(th,tw,jh,jw,i,3,2:3),1,2)*1.1],options0);
+                    
+                    [output3,~,EXITFLAG]=fsolve(fn,inputs0(th,tw,jh,jw,i,3,:)*2,options);
+                    if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 |  lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  | lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 
+                        [output3,~,EXITFLAG]=fsolve(fn,inputs0(th,tw,jh,jw,i,3,:)*0.5,options);
                         if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 |  lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  | lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                            fprintf('labors: Warning2 ww')
-                            WARNINGS=WARNINGS+1;
-                            OUTC=999;
-                            return
+                            options0 = optimoptions('fsolve','MaxIter',5000,'MaxFunctionEvaluations',5000,...
+                                'FunctionTolerance',TOL,'Display','off','Algorithm','trust-region','StepTolerance', STEPTOL);
+
+                            [output3,~,EXITFLAG]=fsolve(fn,[mu0,reshape(inputs0(th,tw,jh,jw,i,3,2:3),1,2)*1.1],options0);
+                            if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 |  lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  | lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
+                                fprintf('labors: Warning2 ww')
+                                WARNINGS=WARNINGS+1;
+                                OUTC=999;
+                                return
+                            end
                         end
                     end
                 end 
