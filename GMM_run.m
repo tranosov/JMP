@@ -50,7 +50,7 @@ pars=paramsest;
 global RESC
 RESC=10^3;
 global VERBOSE
-VERBOSE=1;
+VERBOSE=0;
 
 
 %fopt=10^(-6); % no idea
