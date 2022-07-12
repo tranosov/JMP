@@ -56,8 +56,8 @@ crrax_=params{'crrax_',:};
 piw_=params{'piw_',:};
 pi_=params{'pi_',:}; 
 
-ces_=params{'ces_',:};
-crrah_=params{'crrah_',:};
+%ces_=params{'ces_',:};
+%crrah_=params{'crrah_',:};
 
 
 THETA=params{'THETA',:}; % but gets adjusted later!
@@ -102,8 +102,10 @@ pophous=1;
 PID=0; 
 %lsbar=1;
 
-%ces_=ce_; % fixed
-%crrah_=crra_;
+ces_=ce_; % fixed
+crrah_=crra_;
+
+
 ceh_=ce_;
 cew_=ce_;
 leh=1;
@@ -130,6 +132,9 @@ toinputs=reinitialize;
     gamd_,PHID_,deltaw_,PHI_,rhod_,PHIW_,line,muw,muwL,swL,crra_,crrat_,crrah_,crrax_,pih_,piw_,pi_,pish_,pisw_,piel_,pitheta_,qel_,...
     d21,d31,Sup1,Sup2,Sup3,SupS,addS,out,daddS,aaddS,pophous, Xi,wc, PID,typeic_,pid_,wgap_raw,mm_,lsbar,NLY,THETA,THETAHW,sigmam,MtoF);
 
+
+params('crrah_','value')={params{'crrah_',:}};
+params('ces_','value')={params{'ces_',:}};
 PARREST.('params')=params;
 
 

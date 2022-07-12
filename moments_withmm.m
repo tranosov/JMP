@@ -45,13 +45,18 @@ if withmm
     %}
     %F=@(x) Clearing_withmm(x,EQS,PARREST); 
     %F([log(p),LA*(RESC)])
+    
+    global mup
+    mup=1;
     [lssh1_,lssw1_,p1_,LA1_,time_,EXITFLAG]...
     =lss_function(mf1,params,EQS,PARREST,1,1);
     time=time+time_;
     if EXITFLAG==999
         return
     end
-    [lssh2_,lssw2_,p2_,LA2_time_,EXITFLAG]...
+    
+    mup=0;
+    [lssh2_,lssw2_,p2_,LA2_,time_,EXITFLAG]...
     =lss_function(mf2,params,EQS,PARREST,1,1);
     time=time+time_;
     if EXITFLAG==999

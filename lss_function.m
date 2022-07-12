@@ -7,7 +7,7 @@ global VERBOSE
     LA0=params{'LA0',:};
     p0=[params{'p0_1',:},params{'p0_2',:},params{'p0_3',:}];
     params('MtoF','value')={MtoF};
-    reinitialize=0.5; % 0 vs 0.5 vs 1 - 0.5 is reset PARREST and EQS, but not new inputs  
+    reinitialize=0.5; % 0 vs 0.5 vs 1 - 0.5 is reset PARREST and EQS with new lambda, but not new inputs  
     [p,LA,EXITFLAG,time]=solvemodel(params,EQS,PARREST,p0,LA0,reinitialize,psolve,msolve);
     if EXITFLAG==999
         lssh=999;

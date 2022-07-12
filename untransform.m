@@ -29,6 +29,14 @@ params('crra_','value')={exp(params{'crra_',:})};
 params('crrat_','value')={exp(params{'crrat_',:})};
 params('pid_','value')={exp(params{'pid_',:})};
 params('wc','value')={exp(params{'wc',:})};
+params('crrah_','value')={exp(params{'crrah_',:})};
+params('crrax_','value')={exp(params{'crrax_',:})};
+params('piel_','value')={exp(params{'piel_',:})};
+params('pi_','value')={exp(params{'pi_',:})};
+params('NLY','value')={exp(params{'NLY',:})};
+
+
+params('wgap_raw','value')={-exp(params{'wgap_raw',:})};
 
 
 %params('pi_','value')={exp(params{'pi_',:})};
