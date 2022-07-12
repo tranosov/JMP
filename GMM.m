@@ -82,7 +82,7 @@ fprintf(io," \n");
 fprintf(io," parameter value - raw inputs\n");
 for jj =1:size(params,1)
     fprintf(io,"%s",char(pnames2(jj,1)));
-    fprintf(io,"%16.8f\n",table2array(pars_(jj,1)));
+    fprintf(io,"%16.8f\n",pars_(jj,1));
 end
 fclose(io);
 
