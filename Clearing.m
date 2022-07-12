@@ -17,13 +17,13 @@ p=exp(lp);
 HS=PARREST.('HS');
 
 
-[DS,HSingle,DSh, DSw]=DSingle(p,0,EQS,PARREST);
+[DS,HSingle,DSh, DSw]=DSingle(p,1,EQS,PARREST);
 if (size(DS,1)==1)
     clearing=[1,1,1]*10^6; % penalty
     return
 end
 
-[DC, DC1, DC2,HCouple]=DCouple(p,0,99,EQS,PARREST);
+[DC, DC1, DC2,HCouple,Pw,hC,VC,cexp1,cexp2,OUTC]=DCouple(p,1,99,EQS,PARREST);
 if  (size(DC,1)==1) 
     clearing=[1,1,1]*10^6; % penalty
     return
