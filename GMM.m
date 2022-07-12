@@ -51,7 +51,7 @@ if EXITFLAG~=999
         fprintf(io,"%16.8f",table2array(momentest(jj,1)) );  
         fprintf(io,"%16.8f\n",moments_(jj,1)) ; 
     end
-    fprintf(" \n");
+    fprintf(io," \n");
     fprintf(io," data and simulated moments: and dif and weighted dif \n");
     weightedm=((moments_-table2array(momentest))'*W).*(moments_-table2array(momentest))';
     for jj=1:size(moments_,1)
