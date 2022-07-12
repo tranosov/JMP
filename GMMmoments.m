@@ -1,4 +1,4 @@
-function [moments_,time,EXITFLAG,params_final]=GMMmoments(pars_,pars,momentest,W,momentall,params)
+function [moments_,time,EXITFLAG,params_final]=GMMmoments(pars_,pars,momentest,momentall,params)
 % set model
 % solve model
 % create moments to compare to daya

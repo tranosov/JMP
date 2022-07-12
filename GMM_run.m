@@ -50,7 +50,7 @@ pars=paramsest;
 global RESC
 RESC=10^3;
 global VERBOSE
-VERBOSE=0;
+VERBOSE=1;
 
 
 %fopt=10^(-6); % no idea
@@ -58,8 +58,9 @@ x0=table2array(paramsest);
 LB=table2array(forparams(paramsest.Properties.RowNames,'min'));
 UB=table2array(forparams(paramsest.Properties.RowNames,'max'));
 GG=GMM(x0,pars,momentest,W_,momentall,paramsall);
-global GMIN
+global GMIN ITER
 GMIN=GG
+ITER=0;
 %GG=6;
 filename = "./estimation/progress.txt";
 io = fopen(filename,'a');
@@ -71,12 +72,12 @@ fclose(io);
     rng(357);
     options = optimoptions(@simulannealbnd,'MaxFunctionEvaluations',10000,'Display','diagnose');
     % increase temp to have more acceptence
-    options.InitialTemperature = 300*max(GG,1); %I think should be in scale of objective function (or like jacobian - how params affect obj function)
+    options.InitialTemperature = 200*max(GG,1); %I think should be in scale of objective function (or like jacobian - how params affect obj function)
     %temperature = @(optimValues,options) options.InitialTemperature.*(0.99.^optimValues.k); % slow down?
     %options.TemperatureFcn=temperature;
-    options.ReannealInterval=25; % brought down so there is more search
+    options.ReannealInterval=10; % brought down A LOT so there is more search
 
-    options.MaxStallIterations=500; % not sure if this is not just desperate? why would I want to evaluate that many more times around no change?
+    options.MaxStallIterations=100; % not sure if this is not just desperate? why would I want to evaluate that many more times around no change?
     options.FunctionTolerance=10^(-6);
 
     options.ObjectiveLimit=10^(-6); 
