@@ -47,7 +47,7 @@ else
     end
     if mup==0
         x0_=[x0(end),x0(end)*1.05];
-        x02_=[x0(end),x0(end)*1.5];
+        x02_=[x0(end),x0(end)*2];
     end
 end 
 
