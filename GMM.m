@@ -80,7 +80,7 @@ for jj =1:size(params,1)
 end
 fprintf(io," \n");
 fprintf(io," parameter value - raw inputs\n");
-for jj =1:size(params,1)
+for jj =1:size(pars_,1)
     fprintf(io,"%s",char(pnames2(jj,1)));
     fprintf(io,"%16.8f\n",pars_(jj,1));
 end
