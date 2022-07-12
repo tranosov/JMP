@@ -43,9 +43,11 @@ if isempty(mup)
 else
     if mup==1
         x0_=[x0(end)*0.95,x0(end)];
+        x02_=[x0(end)*0.5,x0(end)];
     end
     if mup==0
         x0_=[x0(end),x0(end)*1.05];
+        x02_=[x0(end),x0(end)*1.5];
     end
 end 
 
@@ -56,7 +58,15 @@ if norm(Fm(x0(end)))^2 >tol
     try
         out=fzero(Fm,x0_,optionsz); % something is off here...
     catch
-        out=fzero(Fm,x0(end),optionsz); 
+        try
+            out=fzero(Fm,x02_,optionsz); 
+        catch
+            fprintf('Failed to resolve for lambda in solve');
+            output=[999,999,999,999];
+            EXITFLAG=999;
+            time=time+toc;
+            return
+        end
     end
     x0(end)=out;
 end 
