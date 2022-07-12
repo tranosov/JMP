@@ -102,8 +102,8 @@ if FORCEFIT==0.5 % only THETAHW, not THETA - just so I can treat lambda as a par
     PARREST.('params')=params;
     uhC=uhC+dTHETA+dTHETAHW;
     uwC=uwC+ dTHETA ;  % does this work?
-    OUTC.('uh')=uh+(dTHETA+dTHETAHW)/2 ; % per period!
-    OUTC.('uw')= uw+ (dTHETA)/2  ;
+    OUTC.('uh')=uh+(dTHETAHW)/2 ; % per period!
+    OUTC.('uw')= uw  ;
        
 end
 
