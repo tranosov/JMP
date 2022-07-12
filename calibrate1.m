@@ -3,18 +3,23 @@
 function parsc=calibrate1(params,momentall)
 
 b=params{'b',:};
-ce_=params{'ce_',:};
-crra_=params{'crra_',:};
+%ce_=params{'ce_',:};
+%crra_=params{'crra_',:};
 l=params{'LA0',:};
 wa=params{'wa',:};
 wgap_raw=params{'wgap_raw',:};
 crrat_=params{'crrat_',:};
+wc=params{'wc',:};
 
 a=1;
+ss_=momentall{'snmarried',:};
+ss=(ss_*(2/3)+(1/3));
+spww=1+(momentall{'wlfp_dif',:});
+
 ls0=momentall{'shours',:}/(24*365);
 d0=momentall{'scommiles',:};
 xs0=momentall{'shwk',:}/(24*365); % housework of singles
-Ls0=1-a*ls0 -b*d0-xs0;
+%Ls0=1-a*ls0 -b*d0-xs0;
 
 lsh0=momentall{'hhours_pww',:}/(24*365);
 lsw0=lsh0+momentall{'whours_pww_dif',:}/(24*365);
@@ -32,8 +37,8 @@ Lh0=1-lsh0-xh0-b*dh0;
 Lh0_h=1-lsh0_h-xh0_h-b*dh0_h;
 Lw0=1-lsw0-xw0-b*dw0;
 Lw0_h=1-xw0_h;
-w1=wa;
-w2=wa*exp(wgap_raw);
+w1=wa*exp(0.0135*wc);
+w2=wa*exp(wgap_raw)*exp(0.0135*wc);
 
 %crrat_=(log(w1/w2)+log((1-l)/l))/log((1-lsw0-xw0-b*dw0)/(1-lsh0-xh0-b*dh0) ) ; % take out of
 %the calibarion - it is too important!
@@ -48,9 +53,12 @@ pi_= (l/pih_).*(T0^(crrax_-piel_))*(xh0^(piel_))/((Lh0_h)^crrat_);
 pish_=(xs0^(crrax_))/((1-a*ls0 -b*d0-xs0)^crrat_);
 
 NLY_=momentall{'NLY_',:};
-NLY=(lsh0*w1+lsw0*w2)*NLY_/(1-NLY_);
+NLY=( (1-ss)*((lsh0*w1+lsw0*w2)*spww  + (1-spww)*(lsh0_h*w1)) + ss*ls0*w1*2   )*NLY_/(1-NLY_);
+% depends on wage gap. and on wc
 
-parsc = array2table([NLY,pish_,piel_,crrax_,piw_,pi_,ce_,crra_]','VariableNames',{'value'}, 'RowNames',...
-    {'NLY','pish_','piel_','crrax_','piw_','pi_','ces_','crrah_'}); %'crrat_',log(ce_)
+%(lsh0*w1+lsw0*w2)*NLY_/(1-NLY_);
+
+parsc = array2table([NLY,pish_,piel_,crrax_,piw_,pi_]','VariableNames',{'value'}, 'RowNames',...
+    {'NLY','pish_','piel_','crrax_','piw_','pi_'}); %'crrat_',log(ce_) %'ces_','crrah_'
 
 end

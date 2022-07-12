@@ -28,6 +28,9 @@ AS=PARREST.('AS');
 HS=PARREST.('HS');
 Jc=PARREST.('Jc');
 
+params=PARREST.('params');
+NLY=params{'NLY',:};
+
 N=size(D);
 I=N(1);
 N=size(Jw);
@@ -547,7 +550,11 @@ sHC=sum(pHCi)/sum(sumC(YC.*DC));
 sH=(sum(pHSi)+sum(pHCi))/(sum(sumS(YS.*DS))+sum(sumC(YC.*DC)));
 
 YncomeC=sum(sumC(YC.*DC))./sum(DCi);
+YncomeS=sum(sumS(YS.*DS))./sum(DSi);
 hC=sum(sumC(HCouple))/sum(DCi);
+
+
+NLY_=(NLY*0.5*sum(sumS(DS))+ NLY*sum(sumC(DC)))/(sum(sumS(YS.*DS))+sum(sumC(YC.*DC)));
 %%
 % distance to opportunities vs working vs commuting
 DC_long=reshape(DC.*(DC>=0),I*I*T*T*I*W*W,1);
@@ -839,7 +846,7 @@ Keys = {'scity_dif', 'wlfp_dif', 'hlfp','whours_pww_dif',...
     'whwk_pww','whwk_pwn_dif','whwk_pnw_dif','hhwk_pww_dif','hhwk_pwn_difhpww','hhwk_pnw_difhpww',...
     'd_jobjob_all_psid','d_jobjob_within_psid','d_jobjob_hw','d_jobjob_hw_actual',...
     'abs_hdo_wdo','shouseexp','p_gradient','wagegap_hw_withn','shwk',...
-    'snmarried','scity','sjobscity','sd_hdo_wdo','p_gradient_simple'};
+    'snmarried','scity','sjobscity','sd_hdo_wdo','p_gradient_simple','NLY_'};
 Keyso =  {'shnmarried','swnmarried','sdj_dif','sshouseexp','cshouseexp','wagegap_actual','wagegap_hw',...
     'p_gradient_swdjobs',...
     'hVC_hVS' , 'wVC_wVS','hL','wL','hl','wl','hx','wx','hcom0','wcom0','hcom','wcom','hcons','wcons',...
@@ -859,7 +866,7 @@ model_m=[sDSi(1)-sDCi(1),workwC_raw-workhC_raw, workhC_raw, (hourswC_pww_raw-hou
         xwC_pww_raw*24*365, ( xwC_h0_raw - xwC_pww_raw)*24*365, (xwC_0w_raw - xwC_pww_raw)*24*365, (xhC_pww_raw-xwC_pww_raw)*24*365,( xhC_h0_raw - xhC_pww_raw)*24*365, (xhC_0w_raw - xhC_pww_raw)*24*365,...
         jobjob_all_m, jobjob_within_m, jobjob_hw_m, jobjob_hwact,...
         abs_hdo_wdo,sH,  pg(1,1),-wagegap_hw_within,xS_raw*24*365,...
-        shnmarried,scity,JLs_all_m(1,1),sd_hdo_wdo,p_gradient_simple];
+        shnmarried,scity,JLs_all_m(1,1),sd_hdo_wdo,p_gradient_simple,NLY_];
 model_m_add=[shnmarried,swnmarried,distalljS_m_raw-distalljC_m_raw, sHS, sHC,wagegap_actual,wagegap_hw , pg(2,1) ];
 other_=[hVMAR ,wVMAR, leisurehC_raw,leisurewC_raw,hourshC_raw,hourswC_raw,xhC_raw,xwC_raw,comtimehC_raw*betah,comtimewC_raw*betah,commutehC_raw*betah,commutewC_raw*betah,conshC_raw,conswC_raw,...
    uconshC_raw,uconswC_raw,uconshS_raw,uconswS_raw,...

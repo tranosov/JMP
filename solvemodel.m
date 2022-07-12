@@ -3,6 +3,8 @@ function [p,LA,EXITFLAG,time]=solvemodel(params,EQS,PARREST,p0,LA0,reinitialize,
 % options to kill one or both market clearings?
 % output all moments or only
 
+%reinitialize=0.5; % 0 vs 0.5 vs 1 - 0.5 is reset PARREST and EQS with new lambda, but not new inputs  
+
 global RESC
 if isempty(RESC)
     RESC=10^6;

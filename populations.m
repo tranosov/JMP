@@ -69,7 +69,7 @@ uwC=sum(sum(sum(sum(sum(DC1_agr.*uwC_)))))./sum(sum(sum(sum(sum(DC1_agr)))))+sum
 M=sum(sum(sum(DSh_agr)))*(1/(1/3 + ssh_*2/3)) ; %+ sum(sum(sum(sum(sum(DC_agr)))));
 F=sum(sum(sum(DSw_agr)))*(1/(1/3 + ssw_*2/3)) ; %+ sum(sum(sum(sum(sum(DC_agr)))));
 
-if FORCEFIT==1
+if FORCEFIT==1 % recalibrate THETA and THETAHW (for within estimation routine)
     params=PARREST.('params');
     THETA=params{'THETA',:};  
     THETAHW=params{'THETAHW',:};  
@@ -92,7 +92,27 @@ if FORCEFIT==1
        
 end
 
+
+if FORCEFIT==0.5 % only THETAHW, not THETA - just so I can treat lambda as a parameter.
+    params=PARREST.('params');
+    %THETA=params{'THETA',:};  
+    THETAHW=params{'THETAHW',:};  
+    dTHETAHW=-(uhC-uhS) - log( (M/F)*(1+exp(-(uwC-uwS)/sigmam))  -1)*sigmam; % making marriage market clear
+    params{'THETAHW',:}=THETAHW + dTHETAHW;
+    PARREST.('params')=params;
+    uhC=uhC+dTHETA+dTHETAHW;
+    uwC=uwC+ dTHETA ;  % does this work?
+    OUTC.('uh')=uh+(dTHETA+dTHETAHW)/2 ; % per period!
+    OUTC.('uw')= uw+ (dTHETA)/2  ;
+       
+end
+
 clmm=  F*(exp((uwC-uwS)/sigmam)/(1+exp((uwC-uwS)/sigmam)))  - M*(exp((uhC-uhS)/sigmam)/(1+exp((uhC-uhS)/sigmam)));
+if clmm>10^(0)
+    fprintf('Marrriage market uncleared - on purpose?')
+    FORCEFIT=FORCEFIT
+    clmm=clmm
+end
 ssh=1/(1+exp((uhC-uhS)/sigmam)) ;
 ssw=1/(1+exp((uwC-uwS)/sigmam)) ;
 %log((1-0.15)/0.15)*sigmam = dU
@@ -115,5 +135,7 @@ DC=DC*CONSTC;
 DC1=DC1*CONSTC;
 DC2=DC2*CONSTC;
 
+% issue: marriage market does not clear here, if it is not forced to. I
+% should have resolved.
 
 end

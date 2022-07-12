@@ -37,11 +37,23 @@ time=toc;
 %}      
          
 tic
+global mup
+if isempty(mup)
+    x0_=x0(end);
+else
+    if mup==1
+        x0_=[x0(end)*0.95,x0(end)];
+    end
+    if mup==0
+        x0_=[x0(end),x0(end)*1.05];
+    end
+end 
+
 Fm=@(x) Clearing_justmm(x,EQS,PARREST); 
 tol=10^(-3); % stricter than overall
 if norm(Fm(x0(end)))^2 >tol 
     optionsz = optimset('TolX',tol,'Display',iter_);
-    out=fzero(Fm,x0(end),optionsz); % something is off here...
+    out=fzero(Fm,x0_,optionsz); % something is off here...
     x0(end)=out;
 end 
 
@@ -57,30 +69,12 @@ end
 tic
 Fp=@(x) Clearing(x,EQS,PARREST); 
 tol=1;
-
-
-clp=Fp(x0(1:end-1));
-if norm(clp)^2 >tol*10^(-1)   
-    if sum(abs(clp))>10
-        options = optimoptions('fsolve','MaxIter',500,'MaxFunctionEvaluations',5000,...
-                   'FunctionTolerance',tol*10^(-1), 'Display',iter_,...
-                   'Algorithm','levenberg-marquardt',...
-                    'StepTolerance', 10^(-8));
-    else 
-        options = optimoptions('fsolve','MaxIter',500,'MaxFunctionEvaluations',5000,...
-                   'FunctionTolerance',tol*10^(-1), 'Display',iter_,...
-                   'Algorithm','trust-region');
-    end
+options = optimoptions('fsolve','MaxIter',500,'MaxFunctionEvaluations',5000,...
+           'FunctionTolerance',tol*10^(-1), 'Display',iter_,...
+           'Algorithm','trust-region'); 
+if norm(Fp(x0(1:end-1)))^2 >tol*10^(-1)   
     x0(1:end-1)=fsolve(Fp,x0(1:end-1),options);
 end
-%options = optimoptions('fsolve','MaxIter',500,'MaxFunctionEvaluations',5000,...
-%           'FunctionTolerance',tol*10^(-1), 'Display',iter_,...
-%           'Algorithm','Algorithm','trust-region');
-
-%if (eflag~=1) && (eflag~=2)&& (eflag~=3) && (eflag~=4)  
-%    x0(1:end-1)=fsolve(Fp,x0(1:end-1),options);
-%end
-
 params('LA0','value')=LA0_;
 PARREST.('params')=params;
 time=time+toc;
@@ -92,7 +86,6 @@ end
 WARNINGS=0;
 F=@(x) Clearing_withmm(x,EQS,PARREST); 
 cl=F(x0); 
-
 if WARNINGS>0
     output=[999,999,999,999];
     EXITFLAG=999;

@@ -1,4 +1,7 @@
-function [moments_,time,EXITFLAG,params_final]=GMMmoments(pars_,pars,momentest,momentall,params)
+function [moments_,time,EXITFLAG,params_final]=GMMmoments(pars_,pars,momentest,momentall,params,recalibrate)
+
+%recalibrate: 1 - all within estimation recalibration. 0.6 - only THETAHW THETA, 0.5 - only THETAHW
+
 % set model
 % solve model
 % create moments to compare to daya
@@ -10,8 +13,10 @@ params(pars.Properties.RowNames,:)= array2table(pars_, 'RowNames',pars.Propertie
 params=untransform(params);
 
 %params(pars.Properties.RowNames,:) % already untransformed
-parsc=calibrate1(params,momentall); %calibrate within
-params(parsc.Properties.RowNames,:)=parsc;
+if recalibrate==1
+    parsc=calibrate1(params,momentall); %calibrate within
+    params(parsc.Properties.RowNames,:)=parsc;
+end
 
 if VERBOSE
     params %(pars.Properties.RowNames,:) % show untransofmed version!
@@ -25,7 +30,14 @@ if VERBOSE
 toc
 end
 
+if recalibrate>=0.5 % THETAHW will be recalibrate, so do not resolve lambda
 [p,LA,EXITFLAG,time_]=solvemodel(params,EQS,PARREST,[params{'p0_1',:},params{'p0_2',:},params{'p0_3',:} ],params{'LA0',:},0,1,0); % just prices! % do not reset params
+else
+    % so I have to solve with marriage market to have a new lambda - if I
+    % wanted comp stats wrt THETAHW
+[p,LA,EXITFLAG,time_]=solvemodel(params,EQS,PARREST,[params{'p0_1',:},params{'p0_2',:},params{'p0_3',:} ],params{'LA0',:},0,1,1);
+end
+
 time=time+time_;
 
 
@@ -35,7 +47,7 @@ if EXITFLAG==999
     params_final=params;
     return 
 else
-    FORCEFIT=1; %change THETAs to fit the required marriage behavior
+    FORCEFIT=(recalibrate>=0.6)+0.5*(recalibrate==0.5); %change THETAs to fit the required marriage behavior?
     [moments_,~,time_,EXITFLAG,params_final]...
         =moments_withmm(p,LA,params,EQS,PARREST,1,1,FORCEFIT);
     time=time+time_;

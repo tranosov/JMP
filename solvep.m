@@ -49,20 +49,16 @@ end
             tic
             
             WARNINGS=0;
-            if sum(abs(cl))>10
-                options = optimoptions('fsolve','MaxIter',500,'MaxFunctionEvaluations',5000,...
-                           'FunctionTolerance',10^(-3), 'Display',iter_,...
-                           'Algorithm','levenberg-marquardt',...
-                            'StepTolerance', 10^(-8));
-            else 
-                options = optimoptions('fsolve','MaxIter',500,'MaxFunctionEvaluations',5000,...
-                           'FunctionTolerance',10^(-3), 'Display',iter_,...
-                           'Algorithm','trust-region');
-            end
-                        %'levenberg-marquardt', 'StepTolerance', 10^(-8)); %'trust-region-dogleg' 'Display','final'
+            options = optimoptions('fsolve','MaxIter',50,'MaxFunctionEvaluations',500,...
+                       'FunctionTolerance',10^(-3), 'Display',iter_,...
+                       'FunValCheck','on','Algorithm','levenberg-marquardt'); %'trust-region-dogleg' 'Display','final'
 %'StepTolerance', STEPTOL?
-
-            [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,lp0,options);
+            try
+                [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,lp0,options);
+            catch
+                EXITFLAG=999;
+                output=lp0;
+            end
             if (EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3) && (EXITFLAG~=4)
 
                 %fprintf('Trying again');
