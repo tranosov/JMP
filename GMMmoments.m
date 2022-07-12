@@ -18,20 +18,27 @@ if recalibrate==1
     params(parsc.Properties.RowNames,:)=parsc;
 end
 
+
+
+[EQS,PARREST] = set_model_estimateR(params,1);
+params=PARREST.('params');
 if VERBOSE
     params %(pars.Properties.RowNames,:) % show untransofmed version!
 %array2table(pars_, 'RowNames',pars.Properties.RowNames)
 end
 
-[EQS,PARREST] = set_model_estimateR(params,1);
 time=toc;
 
 if VERBOSE
 toc
 end
 
-if recalibrate>=0.5 % THETAHW will be recalibrate, so do not resolve lambda
+if recalibrate>=0.6 % THETAHW and THETA will be recalibrated, so do not resolve lambda 
 [p,LA,EXITFLAG,time_]=solvemodel(params,EQS,PARREST,[params{'p0_1',:},params{'p0_2',:},params{'p0_3',:} ],params{'LA0',:},0,1,0); % just prices! % do not reset params
+
+elseif recalibrate==0.5 % only THETAHW should be recalibrated
+[p,LA,EXITFLAG,time_]=solvemodel(params,EQS,PARREST,[params{'p0_1',:},params{'p0_2',:},params{'p0_3',:} ],params{'LA0',:},0,1,0.5);
+
 else
     % so I have to solve with marriage market to have a new lambda - if I
     % wanted comp stats wrt THETAHW
@@ -60,5 +67,7 @@ else
 
 end
 moments_=table2array(moments_);
+moments_(isnan(moments_))=999*10^3; % this is pretty arbitrary. is primarily because sometimes the model has now pnw. And I guess I want them?
+
 
 end
