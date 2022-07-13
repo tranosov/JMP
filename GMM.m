@@ -8,7 +8,7 @@ global VERBOSE GMIN ITER %DOWN
 
 
 if EXITFLAG==999
-    params_
+    params_;
     G=10^(6);
 else
     G=(moments_-table2array(momentest))'*W*(moments_-table2array(momentest));
@@ -61,9 +61,11 @@ if EXITFLAG~=999
         %fprintf(io,"%16.8f ",abs(table2array(momentest(jj,1)) -moments_(jj,1))) ; 
         fprintf(io,"%16.8f\n",weightedm(1,jj)) ; 
     end
+    
     if G<GMIN
         GMIN=G;
         fprintf(" \n");
+        fprintf(" FLAG: MINIMUM \n");
         fprintf(io," FLAG: MINIMUM \n");
     end
     
