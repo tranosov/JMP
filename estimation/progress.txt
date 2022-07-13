@@ -1,0 +1,313 @@
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+GMM function value =        11.55812368
+time =       100.10812100
+ iter: 
+ FLAG: MINIMUM 
+GMM function value =        11.87957161
+time =        79.82892300
+ iter:       0.00000000
+GMM function value =       103.60667591
+time =       143.81222500
+ iter:       1.00000000
+GMM function value =       159.45093644
+time =       143.31971400
+ iter:       2.00000000
+GMM function value =       149.96192680
+time =       138.19042500
+ iter:       3.00000000
+GMM function value =       149.96191510
+time =       142.25767500
+ iter:       4.00000000
+GMM function value =       149.96191510
+time =       141.00115600
+ iter:       5.00000000
+GMM function value =       149.96191510
+time =       141.47598500
+ iter:       6.00000000
+GMM function value =       149.96191510
+time =       140.39530700
+ iter:       7.00000000
+GMM function value =       149.96191510
+time =       140.89535500
+ iter:       8.00000000
+GMM function value =       149.96191510
+time =       139.71659200
+ iter:       9.00000000
+GMM function value =       149.96191510
+time =       140.91512700
+ iter:      10.00000000
+GMM function value =       149.96191510
+time =       140.87972800
+ iter:      11.00000000
+GMM function value =       149.96191510
+time =       141.86125200
+ iter:      12.00000000
+GMM function value =       149.96191510
+time =       142.04631900
+ iter:      13.00000000
+GMM function value =       149.96191510
+time =       141.96819100
+ iter:      14.00000000
+GMM function value =       149.96191510
+time =       142.52758000
+ iter:      15.00000000
+GMM function value =       149.96191510
+time =       142.38671600
+ iter:      16.00000000
+GMM function value =       149.96191510
+time =       141.88019400
+ iter:      17.00000000
+GMM function value =       149.96191510
+time =       140.82442300
+ iter:      18.00000000
+GMM function value =       149.96191510
+time =       141.55462500
+ iter:      19.00000000
+GMM function value =       149.96191510
+time =       142.12250700
+ iter:      20.00000000
+GMM function value =       149.96191510
+time =       143.77607700
+ iter:      21.00000000
+GMM function value =       149.96191510
+time =       145.16904900
+ iter:      22.00000000
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+GMM function value =        11.49065241
+time =        71.33120900
+ iter: 
+ FLAG: MINIMUM 
+GMM function value =        11.78918910
+time =        67.71548800
+ iter:       0.00000000
+GMM function value =      3722.11588924
+time =       134.41605300
+ iter:       1.00000000
+GMM function value =       159.45096650
+time =       140.14127300
+ iter:       2.00000000
+GMM function value =       149.96211785
+time =       139.00085700
+ iter:       3.00000000
+GMM function value =       149.96210617
+time =       148.21222100
+ iter:       4.00000000
+GMM function value =       149.96210617
+time =       145.20680500
+ iter:       5.00000000
+GMM function value =       149.96210617
+time =       145.75069700
+ iter:       6.00000000
+GMM function value =       149.96210617
+time =       146.73716100
+ iter:       7.00000000
+GMM function value =       149.96210617
+time =       144.72001800
+ iter:       8.00000000
+GMM function value =       149.96210617
+time =       145.91845300
+ iter:       9.00000000
+GMM function value =       149.96210617
+time =       146.27088200
+ iter:      10.00000000
+GMM function value =       149.96210617
+time =       146.20887800
+ iter:      11.00000000
+GMM function value =       149.96210617
+time =       143.60412100
+ iter:      12.00000000
+GMM function value =       149.96210617
+time =       148.13551400
+ iter:      13.00000000
+GMM function value =       149.96210617
+time =       145.95467700
+ iter:      14.00000000
+GMM function value =       149.96210617
+time =       146.30511600
+ iter:      15.00000000
+GMM function value =       149.96210617
+time =       145.41473200
+ iter:      16.00000000
+GMM function value =       149.96210617
+time =       145.84913200
+ iter:      17.00000000
+GMM function value =       149.96210617
+time =       145.43662100
+ iter:      18.00000000
+GMM function value =       149.96210617
+time =       142.36793300
+ iter:      19.00000000
+GMM function value =       149.96210617
+time =       143.27138800
+ iter:      20.00000000
+GMM function value =       149.96210617
+time =       142.62376800
+ iter:      21.00000000
+GMM function value =       149.96210617
+time =       142.44313300
+ iter:      22.00000000
+GMM function value =       149.96210617
+time =       142.34915600
+ iter:      23.00000000
+GMM function value =       149.96210617
+time =       151.83850600
+ iter:      24.00000000
+GMM function value =       149.96210617
+time =       152.11588100
+ iter:      25.00000000
+GMM function value =       149.96210617
+time =       146.61727600
+ iter:      26.00000000
+GMM function value =       149.96210617
+time =       146.96199600
+ iter:      27.00000000
+GMM function value =       149.96210617
+time =       148.23359100
+ iter:      28.00000000
+GMM function value =       149.96210617
+time =       143.83116100
+ iter:      29.00000000
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+GMM function value =        11.49065241
+time =        68.72632500
+ iter: 
+ FLAG: MINIMUM 
+GMM function value =        11.78918910
+time =        64.73747300
+ iter:       0.00000000
+GMM function value =      3722.11588924
+time =       128.35271800
+ iter:       1.00000000
+GMM function value =       159.45096650
+time =       136.76769900
+ iter:       2.00000000
+GMM function value =       149.96211785
+time =       140.08840300
+ iter:       3.00000000
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+GMM function value =        11.52092454
+time =       514.06052900
+ iter: 
+ FLAG: MINIMUM 
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+GMM function value =        11.65667192
+time =       177.30797200
+ iter: 
+ FLAG: MINIMUM 
+GMM function value =        11.78950226
+time =       151.44981600
+ iter:       0.00000000
+GMM function value =   1000000.00000000
+time =        39.56732400
+ iter:       1.00000000
+GMM function value =   1000000.00000000
+time =         4.91763100
+ iter:       2.00000000
+GMM function value =   1000000.00000000
+time =         4.72200400
+ iter:       3.00000000
+GMM function value =   1000000.00000000
+time =         4.82838500
+ iter:       4.00000000
+GMM function value =   1000000.00000000
+time =         4.87394100
+ iter:       5.00000000
+GMM function value =   1000000.00000000
+time =         4.86774500
+ iter:       6.00000000
+GMM function value =   1000000.00000000
+time =         4.84023300
+ iter:       7.00000000
+GMM function value =   1000000.00000000
+time =         4.92795700
+ iter:       8.00000000
+GMM function value =   1000000.00000000
+time =         4.88138700
+ iter:       9.00000000
+GMM function value =   1000000.00000000
+time =         4.68232100
+ iter:      10.00000000
+GMM function value =   1000000.00000000
+time =         4.67050700
+ iter:      11.00000000
+GMM function value =   1000000.00000000
+time =         4.66223000
+ iter:      12.00000000
+GMM function value =   1000000.00000000
+time =         4.66175300
+ iter:      13.00000000
+GMM function value =   1000000.00000000
+time =         4.65166600
+ iter:      14.00000000
+GMM function value =   1000000.00000000
+time =         4.69239700
+ iter:      15.00000000
+GMM function value =   1000000.00000000
+time =         4.88210600
+ iter:      16.00000000
+GMM function value =   1000000.00000000
+time =         4.88088200
+ iter:      17.00000000
+GMM function value =   1000000.00000000
+time =         4.78289700
+ iter:      18.00000000
+GMM function value =   1000000.00000000
+time =         4.70265800
+ iter:      19.00000000
+GMM function value =   1000000.00000000
+time =         4.67409700
+ iter:      20.00000000
+ 
+Routine terminated. 
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+GMM function value =        16.19705967
+time =       142.45572200
+ iter: 
+ FLAG: MINIMUM 
+GMM function value =        18.76273064
+time =       135.28496500
+ iter:       0.00000000
+GMM function value =   1000000.00000000
+time =        42.61156200
+ iter:       1.00000000
+GMM function value =   1000000.00000000
+time =        41.29178300
+ iter:       2.00000000
+GMM function value =   1000000.00000000
+time =        41.61136900
+ iter:       3.00000000
+GMM function value =   1000000.00000000
+time =        41.46636200
+ iter:       4.00000000
+GMM function value =   1000000.00000000
+time =        41.44437200
+ iter:       5.00000000
+GMM function value =   1000000.00000000
+time =        41.47951200
+ iter:       6.00000000
