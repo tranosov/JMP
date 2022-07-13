@@ -297,7 +297,7 @@ else
 end
 
 
-CONS=100;
+CONS=10;
 % prepare equations to solve for mu (only in spacial cases it has a closed form)
 multS_eq=@(Y,p,mu,x) [(- Y + cs(mu) + hdS(mu,p) + qs(mu,x))]; % will solve a system of equations for (mu,x)
 multC_eq=@(Y,p,mu,xh,xw,lambda) 1000*CONS*[(- Y + cc(mu,lambda) + hdC(mu,p) + qc(mu,xh,xw))];
