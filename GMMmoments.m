@@ -22,10 +22,7 @@ end
 
 [EQS,PARREST] = set_model_estimateR(params,1);
 params=PARREST.('params');
-if VERBOSE
-    params %(pars.Properties.RowNames,:) % show untransofmed version!
-%array2table(pars_, 'RowNames',pars.Properties.RowNames)
-end
+
 
 time=toc;
 
@@ -67,7 +64,7 @@ else
 
 end
 moments_=table2array(moments_);
-moments_(isnan(moments_))=999*10^3; % this is pretty arbitrary. is primarily because sometimes the model has now pnw. And I guess I want them?
+moments_(isnan(moments_))=10^3; % this is pretty arbitrary. is primarily because sometimes the model has now pnw. And I guess I want them?
 
 
 end
