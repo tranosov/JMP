@@ -8,7 +8,7 @@ clear; clc;
 clear global;
 %cd 'C:\Users\ranos\OneDrive - Umich\Documents\D\Michigan\Res\Female careers in location\Codes\matlab'
 rng(357)
-fprintf('Running GMM estimation. CHECK NEW\n');
+fprintf('Running GMM estimation.\n');
 
 
 filename = "./estimation/progressmoment.txt";
@@ -27,6 +27,9 @@ forparams =readtable('./input/PREP.xlsx','Sheet','PARSTEST','ReadVariableNames',
 formom =readtable('./input/PREP.xlsx','Sheet','MOMS','ReadVariableNames', true,'ReadRowNames',true);
 forw =readtable('./input/PREP.xlsx','Sheet','W','ReadVariableNames', true,'ReadRowNames',true);
 
+fprintf('Inputs loaded.\n');
+
+
 paramsall=forparams(:,'value');
 paramsest=forparams(forparams.('toestimateR')==1,'value');
 momentall=formom(:,'value');
@@ -44,6 +47,7 @@ fclose(io);
 W_=(DOWN.*table2array(forw( momentest.Properties.RowNames, momentest.Properties.RowNames)))\eye(size(momentest.Properties.RowNames,1));
 %[SEs]=SEs(x0,pars,momentest,W,momentall,paramsall);
 
+fprintf('W inverted.\n');
 
 
 pars=paramsest;
