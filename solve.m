@@ -60,6 +60,7 @@ if norm(Fm(x0(end)))^2 >tol
     try
         out=fzero(Fm,x0_,optionsz); % something is off here...
     catch
+        stop=1;
         try
             out=fzero(Fm,x02_,optionsz); 
         catch

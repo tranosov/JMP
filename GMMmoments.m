@@ -64,7 +64,7 @@ else
 
 end
 moments_=table2array(moments_);
-moments_(isnan(moments_))=10^3; % this is pretty arbitrary. is primarily because sometimes the model has now pnw. And I guess I want them?
+moments_(isnan(moments_))=10^4; % this is pretty arbitrary. is primarily because sometimes the model has now pnw. And I guess I want them?
 
 
 end
