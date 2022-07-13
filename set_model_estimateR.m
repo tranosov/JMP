@@ -1,6 +1,6 @@
 
 function [EQS,PARREST]=set_model_estimateR(params,reinitialize)
-
+global VERBOSE
 
 % untransform - separate function before!
 
@@ -125,6 +125,12 @@ pisw_=pish_;
 typeic_=3.5;
 
 toinputs=reinitialize;
+
+params('crrah_','value')={crrah_};
+params('ces_','value')={ces_};
+if VERBOSE
+    params
+end
 [EQS,PARREST]=...
     model_new(toinputs,AS1,A1,AC_sub, AC2,dmin,dminS,d, a,ah,aw,b,bh,bw,timeh,timew,LA0,Jcenter, Jschool,...
     Wcenter, Wschool,Hcenter, Hschool,Jseg,sw,sel,wa,wb,wlinear, cneces,...
@@ -133,8 +139,6 @@ toinputs=reinitialize;
     d21,d31,Sup1,Sup2,Sup3,SupS,addS,out,daddS,aaddS,pophous, Xi,wc, PID,typeic_,pid_,wgap_raw,mm_,lsbar,NLY,THETA,THETAHW,sigmam,MtoF);
 
 
-params('crrah_','value')={crrah_};
-params('ces_','value')={ces_};
 PARREST.('params')=params;
 
 

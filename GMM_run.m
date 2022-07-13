@@ -77,7 +77,7 @@ fclose(io);
     %options.TemperatureFcn=temperature;
     options.ReannealInterval=10; % brought down A LOT so there is more search
 
-    options.MaxStallIterations=100; % not sure if this is not just desperate? why would I want to evaluate that many more times around no change?
+    options.MaxStallIterations=50; % not sure if this is not just desperate? why would I want to evaluate that many more times around no change?
     options.FunctionTolerance=10^(-6);
 
     options.ObjectiveLimit=10^(-6); 

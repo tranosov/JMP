@@ -12,6 +12,11 @@ rng(357)
 global VERBOSE
 mm=mm_;
 typeic=typeic_;
+
+eta=eta*ces;
+etaC=etaC*ceh;
+
+
 %todo: redo as a structure!
 
 %todo: create pih_,piw_ as functions of d? figure out how to make the
