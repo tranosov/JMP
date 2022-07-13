@@ -297,10 +297,10 @@ else
 end
 
 
-CONS=1000;
+CONS=100;
 % prepare equations to solve for mu (only in spacial cases it has a closed form)
 multS_eq=@(Y,p,mu,x) [(- Y + cs(mu) + hdS(mu,p) + qs(mu,x))]; % will solve a system of equations for (mu,x)
-multC_eq=@(Y,p,mu,xh,xw,lambda) CONS*[(- Y + cc(mu,lambda) + hdC(mu,p) + qc(mu,xh,xw))];
+multC_eq=@(Y,p,mu,xh,xw,lambda) 1000*CONS*[(- Y + cc(mu,lambda) + hdC(mu,p) + qc(mu,xh,xw))];
 
 %multS=@(ls,p,ic) (1/ceh)*(Ys(ls,ic).^crra).*(1 + p^(1-1/crra)*(eta/ceh)^(1/crra) )^(-crra); %1/mult!
 %multC=@(lsh,lsw,p,ich,icw) (1/ceh)*((Yc(lsh, lsw,ich,icw)).^crra).*(Z^(1/crra) + p^(1-1/crra)*(etaC/ceh)^(1/crra) )^(-crra);

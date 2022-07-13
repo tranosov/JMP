@@ -28,8 +28,8 @@ if withmm
     params('p0_3','value')={p(3)};
     %params('sstaysingleh','value')={LA};
     %params('sstaysinglew','value')={LA};
-    mf1=exp(0.01);
-    mf2=exp(-0.01);
+    mf1=exp(0.02);
+    mf2=exp(-0.02);
     %{
     [lssh,lssw,p0,LA0]...
     =lss(1,params,0,1)
