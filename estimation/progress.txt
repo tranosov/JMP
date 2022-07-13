@@ -1,0 +1,597 @@
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+GMM function value =        17.06701754
+time =       176.11992200
+ iter: 
+ FLAG: MINIMUM 
+GMM function value =        21.58756964
+time =       163.48427700
+ iter:       0.00000000
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+GMM function value =        17.06701754
+time =       177.54581600
+ iter: 
+ FLAG: MINIMUM 
+GMM function value =        21.58756964
+time =       159.98057500
+ iter:       0.00000000
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+GMM function value =        17.06701754
+time =       176.39576300
+ iter: 
+ FLAG: MINIMUM 
+GMM function value =        21.58756964
+time =       160.74262500
+ iter:       0.00000000
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+GMM function value =        17.44548866
+time =       176.41447200
+ iter: 
+ FLAG: MINIMUM 
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+GMM function value =        17.44548866
+time =       174.43224900
+ iter: 
+ FLAG: MINIMUM 
+GMM function value =        21.84770246
+time =       162.78750900
+ iter:       0.00000000
+GMM function value =                NaN
+time =       276.20345700
+ iter:       1.00000000
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+GMM function value =        17.41637963
+time =       165.98610000
+ iter: 
+ FLAG: MINIMUM 
+GMM function value =        21.84333329
+time =       147.17011300
+ iter:       0.00000000
+GMM function value =   35256949.60169004
+time =       274.16115100
+ iter:       1.00000000
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+GMM function value =        17.41637963
+time =        80.35156700
+ iter: 
+ FLAG: MINIMUM 
+GMM function value =        21.84333329
+time =        71.50792500
+ iter:       0.00000000
+GMM function value =   35256949.60169004
+time =       148.27606900
+ iter:       1.00000000
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+GMM function value =   99999999999999991611392.00000000
+time =       129.48969800
+ iter: 
+ FLAG: MINIMUM 
+GMM function value =        21.90782821
+time =       158.08650200
+ iter:       0.00000000
+GMM function value =   35256465.41489124
+time =       287.18343200
+ iter:       1.00000000
+GMM function value =   99999999999999991611392.00000000
+time =       216.95202500
+ iter:       2.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        89.20076900
+ iter:       3.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        87.68189100
+ iter:       4.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        89.72349400
+ iter:       5.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        91.32665400
+ iter:       6.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        90.76330900
+ iter:       7.00000000
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+GMM function value =   99999999999999991611392.00000000
+time =       129.18525200
+ iter: 
+ FLAG: MINIMUM 
+GMM function value =        22.96063037
+time =       174.86757900
+ iter:       0.00000000
+GMM function value =   35256643.57334413
+time =       183.95486500
+ iter:       1.00000000
+GMM function value =   99999999999999991611392.00000000
+time =       124.40937600
+ iter:       2.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        13.65098300
+ iter:       3.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        13.60772500
+ iter:       4.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        13.03551800
+ iter:       5.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        13.00384700
+ iter:       6.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        12.98256400
+ iter:       7.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        12.94186200
+ iter:       8.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        12.87484800
+ iter:       9.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        12.87451400
+ iter:      10.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        12.87214200
+ iter:      11.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        12.89385700
+ iter:      12.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        12.85046300
+ iter:      13.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        13.53451600
+ iter:      14.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        13.70866200
+ iter:      15.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        13.70591800
+ iter:      16.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        13.27419600
+ iter:      17.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        12.96712200
+ iter:      18.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        12.88784000
+ iter:      19.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        12.88290700
+ iter:      20.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        12.89335500
+ iter:      21.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        12.90935500
+ iter:      22.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        12.87609300
+ iter:      23.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        12.86549600
+ iter:      24.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        12.88133000
+ iter:      25.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        13.06431200
+ iter:      26.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        13.84746700
+ iter:      27.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        13.38782300
+ iter:      28.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        13.46876300
+ iter:      29.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        13.78545900
+ iter:      30.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        13.63436200
+ iter:      31.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        13.66087100
+ iter:      32.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        13.38105700
+ iter:      33.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        13.35623400
+ iter:      34.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        13.34265500
+ iter:      35.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        12.68142100
+ iter:      36.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        12.68356000
+ iter:      37.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        12.77903800
+ iter:      38.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        13.64539400
+ iter:      39.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        13.72240500
+ iter:      40.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        13.41390700
+ iter:      41.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        13.16399100
+ iter:      42.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        13.10256300
+ iter:      43.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        13.04827800
+ iter:      44.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        12.85664900
+ iter:      45.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        12.85207000
+ iter:      46.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        12.83618300
+ iter:      47.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        12.89482800
+ iter:      48.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        13.63892600
+ iter:      49.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        13.19332000
+ iter:      50.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        12.71451400
+ iter:      51.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        12.67094000
+ iter:      52.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        12.68847900
+ iter:      53.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        12.91676200
+ iter:      54.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        12.87299300
+ iter:      55.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        12.66846300
+ iter:      56.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        12.68901700
+ iter:      57.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        12.78519000
+ iter:      58.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        12.82529700
+ iter:      59.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        13.84535200
+ iter:      60.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        17.57662600
+ iter:      61.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        28.58923000
+ iter:      62.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        29.72921500
+ iter:      63.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        28.50632200
+ iter:      64.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        27.68601200
+ iter:      65.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        27.68072400
+ iter:      66.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        33.76445400
+ iter:      67.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        29.11143600
+ iter:      68.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        33.97845600
+ iter:      69.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        27.50371200
+ iter:      70.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        27.51259800
+ iter:      71.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        28.39013900
+ iter:      72.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        28.13722400
+ iter:      73.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        27.98849500
+ iter:      74.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        28.38585800
+ iter:      75.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        27.73252900
+ iter:      76.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        28.02829600
+ iter:      77.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        28.26418200
+ iter:      78.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        27.46816200
+ iter:      79.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        27.45434700
+ iter:      80.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        29.16107900
+ iter:      81.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        29.81198900
+ iter:      82.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        29.19223000
+ iter:      83.00000000
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+GMM function value =        16.63284618
+time =       153.43968200
+ iter: 
+ FLAG: MINIMUM 
+GMM function value =   99999999999999991611392.00000000
+time =       170.07055500
+ iter:       0.00000000
+GMM function value =   99999999999999991611392.00000000
+time =       232.77832400
+ iter:       1.00000000
+GMM function value =   99999999999999991611392.00000000
+time =       303.10570200
+ iter:       2.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        21.90631700
+ iter:       3.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        23.53592900
+ iter:       4.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        22.74762800
+ iter:       5.00000000
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+GMM function value =        16.39060527
+time =       136.15578300
+ iter: 
+ FLAG: MINIMUM 
+GMM function value =   99999999999999991611392.00000000
+time =        92.51624400
+ iter:       0.00000000
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+GMM function value =   99999999999999991611392.00000000
+time =       216.13523900
+ iter: 
+ FLAG: MINIMUM 
+ 
+Rerun routine. 
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+GMM function value =   99999999999999991611392.00000000
+time =       171.49292000
+ iter: 
+ FLAG: MINIMUM 
+GMM function value =   99999999999999991611392.00000000
+time =       192.88619100
+ iter:       0.00000000
+GMM function value =   99999999999999991611392.00000000
+time =       248.81397300
+ iter:       1.00000000
+GMM function value =   99999999999999991611392.00000000
+time =       288.45050600
+ iter:       2.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        51.24757700
+ iter:       3.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        57.30556700
+ iter:       4.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        54.72135600
+ iter:       5.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        51.92253500
+ iter:       6.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        52.30775000
+ iter:       7.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        55.06692500
+ iter:       8.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        54.41829400
+ iter:       9.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        50.82665500
+ iter:      10.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        54.33385000
+ iter:      11.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        59.18287000
+ iter:      12.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        56.14824200
+ iter:      13.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        52.56437500
+ iter:      14.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        56.02770200
+ iter:      15.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        55.80149800
+ iter:      16.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        55.90205900
+ iter:      17.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        52.34478800
+ iter:      18.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        53.37993500
+ iter:      19.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        67.20440100
+ iter:      20.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        54.01683700
+ iter:      21.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        58.04681100
+ iter:      22.00000000
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+GMM function value =   99999999999999991611392.00000000
+time =       186.85668700
+ iter: 
+ FLAG: MINIMUM 
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+GMM function value =   99999999999999991611392.00000000
+time =      2028.63856000
+ iter: 
+ FLAG: MINIMUM 
+GMM function value =   99999999999999991611392.00000000
+time =        52.75959700
+ iter:       0.00000000
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+GMM function value =   99999999999999991611392.00000000
+time =       128.47152800
+ iter: 
+ FLAG: MINIMUM 
+GMM function value =   99999999999999991611392.00000000
+time =         5.94062800
+ iter:       0.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        23.78658100
+ iter:       1.00000000
+GMM function value =   99999999999999991611392.00000000
+time =        23.05524900
+ iter:       2.00000000
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+GMM function value =   99999999999999991611392.00000000
+time =       337.47761600
+ iter: 
+ FLAG: MINIMUM 
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+GMM function value =        16.90823426
+time =       145.24218500
+ iter: 
+ FLAG: MINIMUM 
+GMM function value =        19.37354426
+time =       138.46944700
+ iter:       0.00000000
+GMM function value =   35254383.87937625
+time =       288.38743800
+ iter:       1.00000000
+GMM function value =   99999999999999991611392.00000000
+time =       239.85993800
+ iter:       2.00000000
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+GMM function value =        16.90823426
+time =       146.27292300
+ iter: 
+ FLAG: MINIMUM 
+GMM function value =        19.37354426
+time =       136.78333500
+ iter:       0.00000000
+GMM function value =   35254383.87937625
+time =       284.81925200
+ iter:       1.00000000
+GMM function value =   1000000.00000000
+time =       238.33108300
+ iter:       2.00000000
