@@ -54,6 +54,7 @@ end
 x0=0.05;
 mu0=ces*(1/( Ys(0.23,0)-1))^(crra); 
     
+inputs0_=EQS.('inputsS'); 
 if isempty(INS)  
     if EQS.('inputsS')==0        
         inputs0=zeros(T,I,I,2);
@@ -72,11 +73,14 @@ if isempty(INS)
 else
     inputs0=INS.('inputsS'); % within estimation use last inputs
 end
+inputs=inputs0;
 
 TOL=10^(-15);
-options = optimoptions('fsolve','MaxIter',5000,'MaxFunctionEvaluations',5000,...
-        'FunctionTolerance',TOL,'Display','off','Algorithm','levenberg-marquardt','ScaleProblem','jacobian');
-inputs=zeros(T,I,I,2);
+STEPTOL=10^(-10);
+options = optimoptions('fsolve','MaxIter',500,'MaxFunctionEvaluations',500,...
+        'FunctionTolerance',TOL,'Display','off','Algorithm','levenberg-marquardt','ScaleProblem','jacobian',...
+        'StepTolerance', STEPTOL);
+
 for j=1:I
     for i=1:I
         for t=1:T
@@ -93,16 +97,28 @@ for j=1:I
                     if VERBOSE
                         fprintf('laborS: warning')
                     end
-                    %inputs0(t,j,i,:).*sign(fn(inputs0(t,j,i,:))).*[-1,1]*1.1
-                    [output,FVAL,EXITFLAG,OUTPUT]=fsolve(fn,inputs0(t,j,i,:).*sign(fn(inputs0(t,j,i,:))).*[-1,1]*1.1,options);
+
+                    [output,FVAL,EXITFLAG,OUTPUT]=fsolve(fn,inputs0(t,j,i,:).*sign(fn(inputs0(t,j,i,:))).*[-1,1]*2,options);
+                    
                     if (~isreal(output)) || (output(1)<=0) || ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))|| (numel(output)~=numel(inputs(t,j,i,:)))
-                            [output,FVAL,EXITFLAG,OUTPUT]=fsolve(fn,[mu0,x0],options);
+                               [output,FVAL,EXITFLAG,OUTPUT]=fsolve(fn,inputs0(t,j,i,:).*sign(fn(inputs0(t,j,i,:))).*[-1,1]*0.5,options);
+                               
+                        if (~isreal(output)) || (output(1)<=0) || ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))|| (numel(output)~=numel(inputs(t,j,i,:)))
+                            options0 = optimoptions('fsolve','MaxIter',5000,'MaxFunctionEvaluations',5000,...
+                                'FunctionTolerance',TOL,'Display','off','Algorithm','trust-region','StepTolerance', STEPTOL);
+                            [output,FVAL,EXITFLAG,OUTPUT]=fsolve(fn,[mu0,x0],options0);
+                            
                             if (~isreal(output)) | (output(1)<=0) | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4)) || (numel(output)~=numel(inputs(t,j,i,:)))
                                 fprintf('laborsS:  warning 2')
                                 OUTS=999;
+                                inputs(t,j,i,:)=inputs0_(t,j,i,:);
+                                INS.('inputsS')=real(inputs);
                                 WARNINGS=WARNINGS+1;
                                 return
-                            end      
+                            end  
+                        end
+                        
+                        
                     end
             end
             
