@@ -23,7 +23,7 @@ fprintf(io,"Rerun routine. \n");
 fclose(io);
 
 %%
-forparams =readtable('./input/PREP.xlsx','Sheet','PARSTEST','ReadVariableNames', true,'ReadRowNames',true);
+forparams =readtable('./input/PREP.xlsx','Sheet','PARS','ReadVariableNames', true,'ReadRowNames',true);
 formom =readtable('./input/PREP.xlsx','Sheet','MOMS','ReadVariableNames', true,'ReadRowNames',true);
 forw =readtable('./input/PREP.xlsx','Sheet','W','ReadVariableNames', true,'ReadRowNames',true);
 
@@ -76,11 +76,13 @@ fclose(io);
     rng(357);
     options = optimoptions(@simulannealbnd,'MaxFunctionEvaluations',10000,'Display','diagnose');
     % increase temp to have more acceptence
-    %options.InitialTemperature = 20*max(GG,1); %default is 100, I think should be in scale of objective function (or like jacobian - how params affect obj function)
-    %temperature = @(optimValues,options) options.InitialTemperature.*(0.99.^optimValues.k); % slow down?
-    %options.TemperatureFcn=temperature;
+    options.InitialTemperature = 2*max(GG,1); %no try to bring down, default is 100, I think should be in scale of objective function (or like jacobian - how params affect obj function)
+    temperature = @(optimValues,options) options.InitialTemperature.*(0.999.^optimValues.k); % slow down?
+    options.TemperatureFcn=temperature;
     options.ReannealInterval=1; % brought down A LOT so there is more search? but so far not helping much...
-
+% reannealing is limited IF: temperature already decreased a lot. if
+% initial objective is not crazy high - could be more useful?
+    
     %options.MaxStallIterations=20; % not sure if this is not just desperate? why would I want to evaluate that many more times around no change?
     %options.FunctionTolerance=10^(-6);
 
