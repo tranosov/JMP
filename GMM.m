@@ -30,6 +30,13 @@ io = fopen(filename,'a');
 fprintf(io,"GMM function value =   %16.8f\n",G);
 fprintf(io,"time =   %16.8f\n",time);
 fprintf(io," iter: %16.8f\n",ITER);
+if G<GMIN
+        GMIN=G;
+        fprintf(" \n");
+        fprintf(" FLAG: MINIMUM \n");
+        fprintf(io," FLAG: MINIMUM \n");
+end
+
 fclose(io);
 ITER=ITER+1;
 
@@ -41,9 +48,16 @@ fprintf(io," \n");
 fprintf(io,"time =   %16.8f\n",time);
 
 
+
 if EXITFLAG~=999
     fprintf(" \n");
     fprintf(io," data and simulated moments \n");
+    if G<GMIN
+        GMIN=G;
+        %fprintf(" \n");
+        %fprintf(" FLAG: MINIMUM \n");
+        fprintf(io," FLAG: MINIMUM \n");
+    end
     weightedm=((moments_-table2array(momentest))'*W).*(moments_-table2array(momentest))';
     sum(weightedm)
     % shouldn't this pe positive in all elements???
@@ -62,12 +76,7 @@ if EXITFLAG~=999
         fprintf(io,"%16.8f\n",weightedm(1,jj)) ; 
     end
     
-    if G<GMIN
-        GMIN=G;
-        fprintf(" \n");
-        fprintf(" FLAG: MINIMUM \n");
-        fprintf(io," FLAG: MINIMUM \n");
-    end
+    
     
         
 else

@@ -10,6 +10,8 @@ wa=params{'wa',:};
 wgap_raw=params{'wgap_raw',:};
 crrat_=params{'crrat_',:};
 wc=params{'wc',:};
+pid_=params{'pid_',:};
+
 
 a=1;
 ss_=momentall{'snmarried',:};
@@ -49,7 +51,7 @@ T0= (piw_.*xw0.^(1-piel_)+ (1-piw_).*xh0.^(1-piel_) ).^(1/(1-piel_));
 T0_h=(piw_.*xw0_h.^(1-piel_)+ (1-piw_).*xh0_h.^(1-piel_) ).^(1/(1-piel_));
 
 crrax_=(crrat_*log((Lh0_h)/(Lh0))+piel_*log(T0_h/T0)-piel_*log(xh0_h/xh0) )/(log(T0_h/T0) );
-pi_= (l/pih_).*(T0^(crrax_-piel_))*(xh0^(piel_))/((Lh0_h)^crrat_);
+pi_= (l/pih_).*(T0^(crrax_-piel_))*(xh0^(piel_))/((Lh0)^crrat_); %TR: corrected!
 pish_=(xs0^(crrax_))/((1-a*ls0 -b*d0-xs0)^crrat_);
 
 NLY_=momentall{'NLY_',:};
@@ -57,6 +59,8 @@ NLY=( (1-ss)*((lsh0*w1+lsw0*w2)*spww  + (1-spww)*(lsh0_h*w1)) + ss*ls0*w1*2   )*
 % depends on wage gap. and on wc
 
 %(lsh0*w1+lsw0*w2)*NLY_/(1-NLY_);
+
+piw_=piw_-b*(dh0-dw0)*pid_;
 
 parsc = array2table([NLY,pish_,piel_,crrax_,piw_,pi_]','VariableNames',{'value'}, 'RowNames',...
     {'NLY','pish_','piel_','crrax_','piw_','pi_'}); %'crrat_',log(ce_) %'ces_','crrah_'
