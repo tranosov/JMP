@@ -2,7 +2,7 @@ function [G]=GMM(pars_,pars,momentest,W,momentall,params)
 % set model
 % solve model
 % create moments to compare to daya
-global VERBOSE GMIN ITER %DOWN
+global VERBOSE GMIN ITER IN %DOWN
 
 [moments_,time, EXITFLAG,params_]=GMMmoments(pars_,pars,momentest,momentall,params,1);
 
@@ -10,6 +10,7 @@ global VERBOSE GMIN ITER %DOWN
 if EXITFLAG==999
     params_;
     G=10^(6);
+    clear('global', 'IN')
 else
     G=(moments_-table2array(momentest))'*W*(moments_-table2array(momentest));
 end
