@@ -126,6 +126,8 @@ T=T(2);
 Jw=[1-Jseg,Jseg]; %[0.3,0.7]; % check in the data. Later swich to more groups (adding a vertical dimension)
 Jm=[Jseg,1-Jseg];
 %Jc=Jw'*Jm;
+
+
 Z_=[1,1;1,1];
 Jc=logitmatching(Jw,Jm,Z_); % rows men, columns women
 
