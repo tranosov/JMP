@@ -23,7 +23,7 @@ fprintf(io,"Rerun routine. \n");
 fclose(io);
 
 %%
-forparams =readtable('./input/PREP.xlsx','Sheet','PARSTEST','ReadVariableNames', true,'ReadRowNames',true);
+forparams =readtable('./input/PREP.xlsx','Sheet','PARS','ReadVariableNames', true,'ReadRowNames',true);
 formom =readtable('./input/PREP.xlsx','Sheet','MOMS','ReadVariableNames', true,'ReadRowNames',true);
 forw =readtable('./input/PREP.xlsx','Sheet','W','ReadVariableNames', true,'ReadRowNames',true);
 
@@ -79,7 +79,7 @@ fclose(io);
     options.InitialTemperature = 2*max(GG,1); %no try to bring down, default is 100, I think should be in scale of objective function (or like jacobian - how params affect obj function)
     temperature = @(optimValues,options) options.InitialTemperature.*(0.999.^optimValues.k); % slow down?
     options.TemperatureFcn=temperature;
-    options.ReannealInterval=10; % brought down A LOT so there is more search? but so far not helping much...
+    options.ReannealInterval=1; % brought down A LOT so there is more search? but so far not helping much...
 % reannealing is limited IF: temperature already decreased a lot. if
 % initial objective is not crazy high - could be more useful?
     
