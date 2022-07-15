@@ -45,7 +45,6 @@ ITER=ITER+1;
 filename = "./estimation/progressmoment.txt";
 io = fopen(filename,'a');
 fprintf(io,"GMM function value =   %16.8f\n",G);
-fprintf(io," \n");
 fprintf(io,"time =   %16.8f\n",time);
 
 
@@ -97,6 +96,8 @@ for jj =1:size(pars_,1)
     fprintf(io,"%s",char(pnames2(jj,1)));
     fprintf(io,"%16.8f\n",pars_(jj,1));
 end
+
+fprintf(io," \n");
 fclose(io);
 
 
