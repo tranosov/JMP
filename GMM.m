@@ -4,7 +4,7 @@ function [G]=GMM(pars_,pars,momentest,W,momentall,params)
 % create moments to compare to daya
 global VERBOSE GMIN ITER IN %DOWN
 
-[moments_,time, EXITFLAG,params_]=GMMmoments(pars_,pars,momentest,momentall,params,1);
+[moments_,time, EXITFLAG,params_]=GMMmoments(pars_,pars,momentest,momentall,params,1,1);
 
 
 if EXITFLAG==999
