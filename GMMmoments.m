@@ -1,4 +1,4 @@
-function [moments_,time,EXITFLAG,params_final]=GMMmoments(pars_,pars,momentest,momentall,params,recalibrate)
+function [moments_,time,EXITFLAG,params_final]=GMMmoments(pars_,pars,momentest,momentall,params,recalibrate,withmm)
 
 %recalibrate: 1 - all within estimation recalibration. 0.6 - only THETAHW THETA, 0.5 - only THETAHW
 
@@ -53,7 +53,7 @@ if EXITFLAG==999
 else
     FORCEFIT=(recalibrate>=0.6)+0.5*(recalibrate==0.5); %change THETAs to fit the required marriage behavior?
     [moments_,~,time_,EXITFLAG,params_final]...
-        =moments_withmm(p,LA,params,EQS,PARREST,1,1,FORCEFIT);
+        =moments_withmm(p,LA,params,EQS,PARREST,withmm,1,FORCEFIT);
     time=time+time_;
     if EXITFLAG==999
         return
@@ -63,6 +63,8 @@ else
 
 
 end
+
+
 moments_=table2array(moments_);
 moments_(isnan(moments_))=10^4; % this is pretty arbitrary. is primarily because sometimes the model has now pnw. And I guess I want them?
 

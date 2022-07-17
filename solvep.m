@@ -39,18 +39,21 @@ if VERBOSE
     toc
     cl=cl
 end
-  
+TOL=10^(-3);  
         if WARNINGS>0
             fprintf('ISSUES AT EVALUATION THE CONTINUOUS VARIABLES in solvep.');
             output=[999,999,999];
             EXITFLAG=999;
             return
+        elseif norm(cl)^2 <=TOL
+            output=lp0;
+            EXITFLAG=1;
         else
             tic
             
             WARNINGS=0;
             options = optimoptions('fsolve','MaxIter',50,'MaxFunctionEvaluations',500,...
-                       'FunctionTolerance',10^(-3), 'Display',iter_,...
+                       'FunctionTolerance',TOL, 'Display',iter_,...
                        'FunValCheck','on','Algorithm','levenberg-marquardt'); %'trust-region-dogleg' 'Display','final'
 %'StepTolerance', STEPTOL?
             try
@@ -90,13 +93,13 @@ end
             end
             if (EXITFLAG~=1) && (EXITFLAG~=2) && (EXITFLAG~=3) && (EXITFLAG~=4)
 
-                fprintf('Trying again again');
+                %fprintf('Trying again again');
                 [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,lp0*1.1,options);
 
             end
             if (EXITFLAG~=1) && (EXITFLAG~=2) && (EXITFLAG~=3) && (EXITFLAG~=4)
 
-                fprintf('Trying again again again');
+                %fprintf('Trying again again again');
                 [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,[1,1,1],options);
 
             if (EXITFLAG~=1) && (EXITFLAG~=2) && (EXITFLAG~=3) && (EXITFLAG~=4)              
@@ -115,6 +118,6 @@ end
             
         end
         
-        
+output=round(output,6);        
 end
         

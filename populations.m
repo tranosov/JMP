@@ -138,4 +138,10 @@ DC2=DC2*CONSTC;
 % issue: marriage market does not clear here, if it is not forced to. I
 % should have resolved.
 
+
+% does housing market clear here? shouldn't constants be zero?
+%HSi=reshape(sum(sum(sum(HSingleH,4))),size(HS))+reshape(sum(sum(sum(HSingleW,4))),size(HS));
+%HCi=reshape(sum(sum(sum(sum(sum(sum(HCouple,7),6))))),size(HS)); 
+%clearing=(HSi+HCi-HS);
+
 end

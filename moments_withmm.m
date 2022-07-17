@@ -6,7 +6,7 @@ tic
 [DC, DC1, DC2,HCouple,Pw,hC,VC,cexp1,cexp2,OUTC, DS,HSingle, DSh, DSw, VS,Pws,cexps,OUTS,EQS,PARREST] = ...
     populations(p,LA,EQS,PARREST,FORCEFIT);
 other=99;
-[moments_,~]...
+[moments_,other]...
                 =moments(p,EQS,PARREST, DC, DC1, DC2,HCouple,Pw,hC,VC,cexp1,cexp2,OUTC, DS,HSingle, DSh, DSw, VS,Pws,cexps,OUTS,fast);
 time=toc;
 if VERBOSE
@@ -14,12 +14,12 @@ toc
 end
 
 
-if withmm
+
     %update p0, LA0
     EQS.('inputs')=OUTC.('inputs');
     EQS.('inputsS')=OUTS.('inputs'); % to be sure stuff gets initialized with the  last solution
 
-    clear global IN INS % why?
+    %clear global IN INS % why?
 
     params=PARREST.('params'); % has the updated thetas!- and also to output + updated prices
     params('LA0','value')={LA};
@@ -28,6 +28,10 @@ if withmm
     params('p0_3','value')={p(3)};
     %params('sstaysingleh','value')={LA};
     %params('sstaysinglew','value')={LA};
+    
+if withmm
+    global IN
+    IN_=IN; % store!
     mf1=exp(0.02);
     mf2=exp(-0.02);
     %{
@@ -53,14 +57,17 @@ if withmm
     =lss_function(mf1,params,EQS,PARREST,1,1);
     time=time+time_;
     if EXITFLAG==999
+        IN=IN_;
         return
     end
     
+    IN=IN_; % start from center
     mup=-1;
     [lssh2_,lssw2_,p2_,LA2_,time_,EXITFLAG]...
     =lss_function(mf2,params,EQS,PARREST,1,1);
     time=time+time_;
     if EXITFLAG==999
+        IN=IN_;
         return
     end
         %[lssh,lssw,p0_,LA0_]...
@@ -75,7 +82,12 @@ if withmm
     %derh=(lssh1_-lssh2_)/(mf1-mf2)
     %(LA1_+LA2_)/2
 
-moments_('L',:)={L};
+    IN=IN_;
+    moments_('L',:)={L};
+else
+    EXITFLAG=1;
+    
 end
+
 
 end

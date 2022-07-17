@@ -6,7 +6,7 @@ params('LA0','value')={1/(exp(-params{'LA0',:}) +1)};
 params('deltaw_','value')={1/(exp(-params{'deltaw_',:}) +1)};
 params('plocal_','value')={1/(exp(-params{'plocal_',:}) +1)};
 params('piw_','value')={1/(exp(-params{'piw_',:}) +1)};
-params('Jseg','value')={1/(exp(-params{'Jseg',:}) +1)};
+%params('Jseg','value')={1/(exp(-params{'Jseg',:}) +1)};
 
 
 params('line','value')={(1+ 1/(exp(-(params{'line',:}-1)) +1))  };
@@ -43,5 +43,5 @@ params('wgap_raw','value')={-exp(params{'wgap_raw',:})};
 
 
 params('d','value')={exp(params{'d',:})*10};
-params('gamd_','value')={exp(params{'gamd_',:})*100};
+%params('gamd_','value')={exp(params{'gamd_',:})*100};
 end
