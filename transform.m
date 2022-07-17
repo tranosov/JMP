@@ -4,10 +4,11 @@ function params=transform(params)
 % untransform
 flogit=@(x) -log(1/x -1);
 params('LA0','value')={flogit(params{'LA0',:})};
-params('deltaw_','value')={flogit(params{'deltaw_',:})};
 params('plocal_','value')={flogit(params{'plocal_',:})};
 params('piw_','value')={flogit(params{'piw_',:})};
 %params('Jseg','value')={flogit(params{'Jseg',:})};
+
+params('deltaw_','value')={flogit(params{'deltaw_',:})*1000};
 
 
 params('line','value')={ (1+ flogit((params{'line',:}-1))) };
