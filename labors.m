@@ -89,8 +89,8 @@ end
 inputs=zeros(T,T,I,I,I,3,3);
 vc=zeros(T,T,I,I,I,3); % last - only h, only w, both work
 Hc=zeros(T,T,I,I,I,3);
-TOL=10^(-15);
-STEPTOL=10^(-10); % would need more iterations! plus by melo byt <TOL!
+TOL=10^(-14);
+STEPTOL=10^(-9); % would need more iterations! plus by melo byt <TOL!
 
 % lingering issue: still I have sometimes different guesses reading to
 % slightly differenc cl. And persistently sow.
@@ -285,8 +285,14 @@ for i=1:I
                     end
                 end 
 
+              inputs(th,tw,jh,jw,i,3,:)=output3; % save the precise outputs aslater inputs
               
-              inputs(th,tw,jh,jw,i,3,:)=output3;
+              %ROUNDING for outputs
+              output1=round(output1,6); % to eliminate silly variation in outcomes with different initial guesses but same params
+              output2=round(output2,6);
+              output3=round(output3,6);
+              
+              
               output1(2:3)=output1(2:3)/100;
               output2(2:3)=output2(2:3)/100;
               output3(2:3)=output3(2:3)/100;
@@ -390,13 +396,14 @@ for i=1:I
 end
 
 
-OUTC.('vc') = vc;
+OUTC.('vc') = vc-vc(1,1,1,1,1,1);
 OUTC.('Hc') = Hc;
 OUTC.('lambda') = lambda;
 OUTC.('p') = pp;
 IN.('inputs')=real(inputs);
 
 if alloutput
+    OUTC.('vc_scale') = vc;
     OUTC.('inputs0')=inputs0; 
     OUTC.('inputs')=real(inputs);
     OUTC.('Yc') = Y;

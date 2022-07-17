@@ -126,8 +126,6 @@ T=T(2);
 Jw=[1-Jseg,Jseg]; %[0.3,0.7]; % check in the data. Later swich to more groups (adding a vertical dimension)
 Jm=[Jseg,1-Jseg];
 %Jc=Jw'*Jm;
-
-
 Z_=[1,1;1,1];
 Jc=logitmatching(Jw,Jm,Z_); % rows men, columns women
 
@@ -301,7 +299,7 @@ end
 
 CONS=10;
 % prepare equations to solve for mu (only in spacial cases it has a closed form)
-multS_eq=@(Y,p,mu,x) [(- Y + cs(mu) + hdS(mu,p) + qs(mu,x))]; % will solve a system of equations for (mu,x)
+multS_eq=@(Y,p,mu,x) 100*[(- Y + cs(mu) + hdS(mu,p) + qs(mu,x))]; % will solve a system of equations for (mu,x)
 multC_eq=@(Y,p,mu,xh,xw,lambda) 100*CONS*[(- Y + cc(mu,lambda) + hdC(mu,p) + qc(mu,xh,xw))];
 
 %multS=@(ls,p,ic) (1/ceh)*(Ys(ls,ic).^crra).*(1 + p^(1-1/crra)*(eta/ceh)^(1/crra) )^(-crra); %1/mult!

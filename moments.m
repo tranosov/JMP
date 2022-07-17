@@ -68,7 +68,7 @@ ux=OUTC.('ux') ;
 uho=OUTC.('uho') ;
 ucl=OUTC.('ucl') ; % probably not nec here?
 
-%vc=OUTC.('vc') ;
+%vc=OUTC.('vc') ;- not used!
 
 distS=zeros(I,T,I,W); % offered distance!
 commuteS=zeros(I,T,I,W); %working

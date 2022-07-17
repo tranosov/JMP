@@ -229,7 +229,7 @@ exp(VC(3,2,1,2,:)./sigmal)/sum(exp(VC(3,2,1,2,:)./sigmal)) % those that have aty
 %}
 doubleit=1;
 if doubleit==1
-PC=exp(VC./(repmat(sigmal*2,I,I,T,T,I)))./repmat(sum(exp(VC./(repmat(sigmal*2,I,I,T,T,I))),5),1,1,1,1,I);
+    PC=exp(VC./(repmat(sigmal*2,I,I,T,T,I)))./repmat(sum(exp(VC./(repmat(sigmal*2,I,I,T,T,I))),5),1,1,1,1,I);
 else
     PC=exp(VC./(repmat(sigmal,I,I,T,T,I)))./repmat(sum(exp(VC./(repmat(sigmal,I,I,T,T,I))),5),1,1,1,1,I);
 end

@@ -87,6 +87,9 @@ global VERBOSE
         ssw=1/(1+exp((uwC-uwS)/sigmam)); 
         lssh=log( (1/ssh) -1);
         lssw=log( (1/ssw) -1);
+        
+        lssh=round(lssh,6);
+        lssw=round(lssw,6);
 
         time=time+toc;
         if VERBOSE

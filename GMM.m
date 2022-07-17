@@ -13,6 +13,7 @@ if EXITFLAG==999
     clear('global', 'IN')
 else
     G=(moments_-table2array(momentest))'*W*(moments_-table2array(momentest));
+    G=round(G,6); %last instance - get rid of tiny differences!
 end
 momnames=momentest.Properties.RowNames;
 pnames=params_.Properties.RowNames; % params used
