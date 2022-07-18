@@ -21,7 +21,7 @@ pnames2=pars.Properties.RowNames; % estimation inputs
 
 
 fprintf(" \n");
-fprintf("GMM function value =   %16.8f\n",G);
+fprintf("GMM function value with L =   %16.8f\n",G);
 fprintf(" \n");
 fprintf("time =   %16.8f\n",time);
 fprintf(" \n");
@@ -89,12 +89,13 @@ fprintf(io," \n");
 fprintf(io," parameter value\n");
 for jj =1:size(params,1)
     fprintf(io,"%s",char(pnames(jj,1)));
-    fprintf(io,"%16.15f\n",table2array(params_(jj,1)));
+    fprintf(io,"%16.10f\n",table2array(params_(jj,1)));
 end
 fprintf(io," \n");
 fprintf(io," parameter value - raw inputs\n");
 for jj =1:size(pars_,1)
     fprintf(io,"%s",char(pnames2(jj,1)));
+    fprintf(io,"  ");
     fprintf(io,"%16.15f\n",pars_(jj,1));
 end
 

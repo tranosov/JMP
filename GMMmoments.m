@@ -45,6 +45,9 @@ end
 time=time+time_;
 
 
+if withmm==0
+    momentest('L',:)=[];
+end
 
 if EXITFLAG==999
     moments_=999;
