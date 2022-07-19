@@ -92,7 +92,7 @@ end
 inputs=zeros(T,T,I,I,I,3,3);
 vc=zeros(T,T,I,I,I,3); % last - only h, only w, both work
 Hc=zeros(T,T,I,I,I,3);
-TOL=10^(-15);
+TOL=10^(-14);
 STEPTOL=10^(-9); % would need more iterations! plus by melo byt <TOL!
 
 % lingering issue: still I have sometimes different guesses reading to
@@ -301,9 +301,9 @@ for i=1:I
                             options0 = optimoptions('fsolve','MaxIter',5000,'MaxFunctionEvaluations',5000,...
                                 'FunctionTolerance',TOL,'Display','off','Algorithm','trust-region','StepTolerance', STEPTOL);
                             in_= inputs0_(th,tw,jh,jw,i,3,:);
-                            if lsw(in_(1),in_/100,in_/100,dh,dw,lambda)<=0 
+                            if lsw(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0 
                                 [output3,~,EXITFLAG]=fsolve(fn,[mu0,inputs0_(th,tw,jh,jw,i,3,2)*0.1,inputs0_(th,tw,jh,jw,i,3,3)],options0);
-                            elseif lsh(in_(1),in_/100,in_/100,dh,dw,lambda)<=0
+                            elseif lsh(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0
                                 [output3,~,EXITFLAG]=fsolve(fn,[mu0,inputs0_(th,tw,jh,jw,i,3,2),inputs0_(th,tw,jh,jw,i,3,3)*0.1],options0);
                             else
                             [output3,~,EXITFLAG]=fsolve(fn,[mu0,reshape(inputs0_(th,tw,jh,jw,i,3,2:3),1,2)*1.1],options0);
