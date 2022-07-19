@@ -2,7 +2,7 @@ function OUTC=labors(pp,alloutput,lambda,EQS,PARREST)
 %global EQS JLs AC typeic D betah WARNINGS mm params
 global WARNINGS VERBOSE
 global IN
-rng(357)
+
 
 OUTC = struct();
 
@@ -15,10 +15,15 @@ betah=PARREST.('betah');
 ceh=PARREST.('ceh');
 crra=PARREST.('crra');
 
-
+N=size(JLs);
+I=N(1);
+T=N(2);
 if pp==99
     params=PARREST.('params');
     pp=[params{'p0_1',:},params{'p0_2',:},params{'p0_3',:} ]; 
+    if I==4
+    pp=[params{'p0_1',:},params{'p0_2',:},params{'p0_3',:},params{'p0_4',:} ]; 
+    end
 end
 
 if lambda==99
@@ -59,9 +64,7 @@ xh_fun=EQS.('xh_fun');
 xw_fun=EQS.('xw_fun');
 
 
-N=size(JLs);
-I=N(1);
-T=N(2);
+
 if alloutput
     lh=zeros(T,T,I,I,I,3);
     lw=zeros(T,T,I,I,I,3);
@@ -150,7 +153,7 @@ for i=1:I
                 ich=1-low;
                 [~,~,~,~,~,low]=matchdist(i,jw,tw,0,0,0,0,typeic,D,mm,JLs, betah);
                 icw=1-low;
-          
+                rng(357);
                 if piw_(dh,0)>0 && piw_(dh,0)<1 
                     fn=@(mu,xh,xw) [lsah_eq(mu,xh,xw,p,dh,0,ich,lambda) ,multC_eq(Yc(lsh(mu,xh,xw,dh,0,lambda),0,ich,icw),p,mu,xh,xw,lambda)];
                     fn=@(x) fn(x(1),x(2)/100,x(3)/100);
@@ -197,6 +200,7 @@ for i=1:I
 
                 inputs(th,tw,jh,jw,i,1,:)=output1;
                 
+                rng(357);
                 if piw_(0,dw)>0 && piw_(0,dw)<1 
                     fn=@(mu,xh,xw) [lsaw_eq(mu,xh,xw,p,0,dw,icw,lambda) ,multC_eq(Yc(0,lsw(mu,xh,xw,0,dw,lambda),ich,icw),p,mu,xh,xw,lambda)];
                     fn=@(x) fn(x(1),x(2)/100,x(3)/100);
@@ -241,6 +245,7 @@ for i=1:I
                 
                 inputs(th,tw,jh,jw,i,2,:)=output2;  
                 
+                rng(357);
                 if piw_(dh,dw)>0 && piw_(dh,dw)<1
                     fn=@(mu,xh,xw) [lsb_eq(mu,xh,xw,p,dh,dw,ich,icw,lambda),multC_eq(Yc(lsh(mu,xh,xw,dh,dw,lambda),lsw(mu,xh,xw,dh,dw,lambda),ich,icw),p,mu,xh,xw,lambda)];
                     fn=@(x) fn(x(1),x(2)/100,x(3)/100);
@@ -271,8 +276,15 @@ for i=1:I
                         if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 |  lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  | lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
                             options0 = optimoptions('fsolve','MaxIter',5000,'MaxFunctionEvaluations',5000,...
                                 'FunctionTolerance',TOL,'Display','off','Algorithm','trust-region','StepTolerance', STEPTOL);
-
+                            in_= inputs0_(th,tw,jh,jw,i,3,:);
+                            if lsw(in_(1),in_/100,in_/100,dh,dw,lambda)<=0 
+                                [output3,~,EXITFLAG]=fsolve(fn,[mu0,inputs0_(th,tw,jh,jw,i,3,2)*0.1,inputs0_(th,tw,jh,jw,i,3,3)],options0);
+                            elseif lsh(in_(1),in_/100,in_/100,dh,dw,lambda)<=0
+                                [output3,~,EXITFLAG]=fsolve(fn,[mu0,inputs0_(th,tw,jh,jw,i,3,2),inputs0_(th,tw,jh,jw,i,3,3)*0.1],options0);
+                            else
                             [output3,~,EXITFLAG]=fsolve(fn,[mu0,reshape(inputs0_(th,tw,jh,jw,i,3,2:3),1,2)*1.1],options0);
+                            end
+                            
                             if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 |  lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  | lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
                                 fprintf('labors: Warning2 ww')
                                 WARNINGS=WARNINGS+1;

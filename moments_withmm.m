@@ -66,10 +66,10 @@ if withmm
     [lssh2_,lssw2_,p2_,LA2_,time_,EXITFLAG]...
     =lss_function(mf2,params,EQS,PARREST,1,1);
     time=time+time_;
-    if EXITFLAG==999
-        IN=IN_;
-        return
-    end
+  %  if EXITFLAG==999 | EXITFLAG==991
+  %      IN=IN_;
+  %      return
+  %  end
         %[lssh,lssw,p0_,LA0_]...
         %=lss(1,params,1,1);
 

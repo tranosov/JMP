@@ -2,7 +2,6 @@ function OUTS=laborsS(pp,alloutput,EQS,PARREST)
 %global EQS JLs D AS typeic WARNINGS mm params
 global WARNINGS VERBOSE
 global INS
-rng(357)
 
 typeic=PARREST.('typeic');
 D=PARREST.('D');
@@ -91,6 +90,8 @@ for j=1:I
             ics(t,j,i)=ic;
             fn=@(mu,x) [lssh_eq(mu,x,p,d,ic) ,multS_eq(Ys(lssh(mu,x,d),ic),p,mu,x)];
             fn=@(in) fn(in(1),in(2));
+            
+            rng(357);
             [output,~,EXITFLAG]=fsolve(fn,inputs0(t,j,i,:),options); 
             output_=output;
             if (~isreal(output) ) || (output(1)<=0 )|| ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4)) || (numel(output)~=numel(inputs(t,j,i,:)))

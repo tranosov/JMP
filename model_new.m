@@ -133,8 +133,7 @@ Jc=logitmatching(Jw,Jm,Z_); % rows men, columns women
 % Supply of housing
 Sup2_=Sup2+SupS/2; % actually this should be one or the other!
 Sup3_=Sup3+SupS/2;
-N=size(D);
-I=N(1);
+I=size(D,1);
 HS=[1000*(1+Sup1/100),1000*(1+Sup2_/100),1000*(1+Sup3_/100)]; 
 if I==4
     HS=[1000,1000,1000,1000];
@@ -299,8 +298,8 @@ end
 
 CONS=10;
 % prepare equations to solve for mu (only in spacial cases it has a closed form)
-multS_eq=@(Y,p,mu,x) 100*[(- Y + cs(mu) + hdS(mu,p) + qs(mu,x))]; % will solve a system of equations for (mu,x)
-multC_eq=@(Y,p,mu,xh,xw,lambda) 100*CONS*[(- Y + cc(mu,lambda) + hdC(mu,p) + qc(mu,xh,xw))];
+multS_eq=@(Y,p,mu,x) 1000*[(- Y + cs(mu) + hdS(mu,p) + qs(mu,x))]; % will solve a system of equations for (mu,x)
+multC_eq=@(Y,p,mu,xh,xw,lambda) 1000*CONS*[(- Y + cc(mu,lambda) + hdC(mu,p) + qc(mu,xh,xw))];
 
 %multS=@(ls,p,ic) (1/ceh)*(Ys(ls,ic).^crra).*(1 + p^(1-1/crra)*(eta/ceh)^(1/crra) )^(-crra); %1/mult!
 %multC=@(lsh,lsw,p,ich,icw) (1/ceh)*((Yc(lsh, lsw,ich,icw)).^crra).*(Z^(1/crra) + p^(1-1/crra)*(etaC/ceh)^(1/crra) )^(-crra);
@@ -342,9 +341,12 @@ xw_fun=@(mu,o2,o3,dh,dw) (piw_(dh,dw)>0 && piw_(dh,dw)<1 )*o3 + (piw_(dh,dw)==1)
 
 
 lsb_eq1= @(mu,xh,xw,p,dh,dw,ich,icw,lambda) (mulh(mu,xh,xw,dh,dw,ich,lambda) - w1_d(lsh(mu,xh,xw,dh,dw,lambda),ich)*mu)*(lsh(mu,xh,xw,dh,dw,lambda)<lsbar) +...
-    (lsh(mu,xh,xw,dh,dw,lambda)>lsbar)*(CONS)*(lsh(mu,xh,xw,dh,dw,lambda)-lsbar)^1 +(lsh(mu,xh,xw,dh,dw,lambda)<=0)*10^6;
+    (lsh(mu,xh,xw,dh,dw,lambda)>lsbar)*(CONS)*(lsh(mu,xh,xw,dh,dw,lambda)-lsbar)^1 +(lsh(mu,xh,xw,dh,dw,lambda)<=0)*10^6+...
+    (lsh(mu,xh,xw,dh,dw,lambda)<=0)*((lshY(mu,xh,xw,dh,dw,lambda)-0)^2)*10^6;
 lsb_eq2= @(mu,xh,xw,p,dh,dw,ich,icw,lambda) (mulw(mu,xh,xw,dh,dw,icw,lambda) - w2_d(lsw(mu,xh,xw,dh,dw,lambda),ich)*mu)*(lsw(mu,xh,xw,dh,dw,lambda)<lsbar) + ...
-(lsw(mu,xh,xw,dh,dw,lambda)>lsbar)*(CONS)*(lsw(mu,xh,xw,dh,dw,lambda)-lsbar)^1 + (lsw(mu,xh,xw,dh,dw,lambda)<=0)*10^6;
+(lsw(mu,xh,xw,dh,dw,lambda)>lsbar)*(CONS)*(lsw(mu,xh,xw,dh,dw,lambda)-lsbar)^1 + (lsw(mu,xh,xw,dh,dw,lambda)<=0)*10^6+...
+(lsw(mu,xh,xw,dh,dw,lambda)<=0)*((lswY(mu,xh,xw,dh,dw,lambda)-0)^2)*10^6;
+
 lsb_eq = @(mu,xh,xw,p,dh,dw,ich,icw,lambda) 10*[ lsb_eq1(mu,xh,xw,p,dh,dw,ich,icw,lambda),lsb_eq2(mu,xh,xw,p,dh,dw,ich,icw,lambda)];
 %recently added a bit more precision
 
@@ -394,6 +396,7 @@ if toinputs==1
                 ic=1-low;
                 fn=@(mu,x) [lssh_eq(mu,x,p,d,ic) ,multS_eq(Ys(lssh(mu,x,d),ic),p,mu,x)];
                 fn=@(in) fn(in(1),in(2));
+                rng(357);
                 [output,FVAL,EXITFLAG,OUTPUT]=fsolve(fn,[mu0,x0],options); 
                 output_=output;
                 if (~isreal(output)) | (output(1)<=0) | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
@@ -446,8 +449,12 @@ if toinputs==1
     end
 
     inputs=zeros(T,T,I,I,I,3,3);
-
-    p0=[1.1,1,1];    
+    
+    if addS==1
+        p0=[1.1,1,1,1];    
+    else
+        p0=[1.1,1,1];    
+    end
 
     for jh=1:I
         for jw=1:I 
@@ -462,6 +469,7 @@ if toinputs==1
                         [~,~,~,~,~,low]=matchdist(i,jw,tw,0,0,0,0,typeic,D,mm,JLs,betah);
                         icw=1-low;
                   
+                        rng(357);
                         if piw_(dh,0)>0 && piw_(dh,0)<1 
                             fn=@(mu,xh,xw) [lsah_eq(mu,xh,xw,p,dh,0,ich,lambda) ,multC_eq(Yc(lsh(mu,xh,xw,dh,0,lambda),0,ich,icw),p,mu,xh,xw,lambda)];
                             fn=@(x) fn(x(1),x(2)/100,x(3)/100);
@@ -511,7 +519,7 @@ if toinputs==1
                         
                         inputs(th,tw,jh,jw,i,1,:)=real(output1);
 
-                        
+                        rng(357);
                         if piw_(0,dw)>0 && piw_(0,dw)<1 
                             fn=@(mu,xh,xw) [lsaw_eq(mu,xh,xw,p,0,dw,icw,lambda) ,multC_eq(Yc(0,lsw(mu,xh,xw,0,dw,lambda),ich,icw),p,mu,xh,xw,lambda)];
                             fn=@(x) fn(x(1),x(2)/100,x(3)/100);
@@ -551,7 +559,7 @@ if toinputs==1
                         end
                         inputs(th,tw,jh,jw,i,2,:)=real(output2); 
 
-
+                        rng(357);
                         if piw_(dh,dw)>0 && piw_(dh,dw)<1
                             fn=@(mu,xh,xw) [lsb_eq(mu,xh,xw,p,dh,dw,ich,icw,lambda),...
                                 multC_eq(Yc(lsh(mu,xh,xw,dh,dw,lambda),lsw(mu,xh,xw,dh,dw,lambda),ich,icw),p,mu,xh,xw,lambda)];

@@ -8,8 +8,10 @@ global VERBOSE GMIN ITER IN %DOWN
 
 
 if EXITFLAG==999
-    params_;
     G=10^(6);
+    clear('global', 'IN')
+elseif EXITFLAG==991
+    G=10^(3) + (moments_-table2array(momentest))'*W*(moments_-table2array(momentest));
     clear('global', 'IN')
 else
     G=(moments_-table2array(momentest))'*W*(moments_-table2array(momentest));

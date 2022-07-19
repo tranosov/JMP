@@ -16,6 +16,7 @@ WARNINGS=0;
     cl0=F(lp0);
     cl=cl0;
     kk=1;
+    I=size(lp0,2);
         if WARNINGS==0
             while (sum(abs(cl))>15) && (kk<5)
                     A=800*table2array(params('crrah_','value'));
@@ -23,9 +24,9 @@ WARNINGS=0;
                         cl=cl
                     end
                     if WARNINGS>0
-                        lp0=lp0+cl0./(A*[1,1,1]); % go back
+                        lp0=lp0+cl0./(A*ones(1,I)); % go back
                     else
-                        lp0=lp0+cl./(A*[1,1,1]); % roughly correct initial guess
+                        lp0=lp0+cl./(A*ones(1,I)); % roughly correct initial guess
                     end
 
                 kk=kk+1;

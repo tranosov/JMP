@@ -70,7 +70,7 @@ if norm(Fm(x0(end)))^2 >tol
             catch
                 fprintf('Failed to resolve for lambda in solve');
                 output=[999,999,999,999];
-                EXITFLAG=999;
+                EXITFLAG=991;
                 time=time+toc;
                 return
             end
@@ -94,7 +94,27 @@ tol=1;
 options = optimoptions('fsolve','MaxIter',500,'MaxFunctionEvaluations',5000,...
            'FunctionTolerance',tol*10^(-1), 'Display',iter_,...
            'Algorithm','trust-region'); 
-if norm(Fp(x0(1:end-1)))^2 >tol*10^(-1)   
+cl=Fp(x0(1:end-1));       
+if norm(cl)^2 >tol*10^(-1)   
+    kk=1;
+    lp0=x0(1:end-1);
+    while (sum(abs(cl))>15) && (kk<5)
+                    A=800*table2array(params('crrah_','value'));
+                    if VERBOSE
+                        cl=cl
+                    end
+                    if WARNINGS>0
+                        lp0=lp0+cl0./(A*[1,1,1]); % go back
+                    else
+                        lp0=lp0+cl./(A*[1,1,1]); % roughly correct initial guess
+                    end
+
+                kk=kk+1;
+                WARNINGS=0;
+                cl=Fp(lp0);
+     end
+    
+    x0(1:end-1)=lp0; 
     x0(1:end-1)=fsolve(Fp,x0(1:end-1),options);
 end
 params('LA0','value')=LA0_;
