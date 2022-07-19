@@ -109,10 +109,12 @@ end
 
 clmm=  F*(exp((uwC-uwS)/sigmam)/(1+exp((uwC-uwS)/sigmam)))  - M*(exp((uhC-uhS)/sigmam)/(1+exp((uhC-uhS)/sigmam)));
 if clmm>10^(-2)
-    fprintf('Marrriage market uncleared - on purpose?')
+    fprintf('Marrriage market uncleared - on purpose? I am not recomputing quantities')
     FORCEFIT=FORCEFIT
     clmm=clmm
-end
+    
+else
+    
 ssh=1/(1+exp((uhC-uhS)/sigmam)) ;
 ssw=1/(1+exp((uwC-uwS)/sigmam)) ;
 %log((1-0.15)/0.15)*sigmam = dU
@@ -144,4 +146,8 @@ DC2=DC2*CONSTC;
 %HCi=reshape(sum(sum(sum(sum(sum(sum(HCouple,7),6))))),size(HS)); 
 %clearing=(HSi+HCi-HS);
 
+PARREST.('sstaysingleh')=ssh;
+PARREST.('sstaysinglew')=ssw;
 end
+
+ end
