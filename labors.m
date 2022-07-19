@@ -92,7 +92,7 @@ end
 inputs=zeros(T,T,I,I,I,3,3);
 vc=zeros(T,T,I,I,I,3); % last - only h, only w, both work
 Hc=zeros(T,T,I,I,I,3);
-TOL=10^(-14);
+TOL=10^(-15);
 STEPTOL=10^(-9); % would need more iterations! plus by melo byt <TOL!
 
 % lingering issue: still I have sometimes different guesses reading to
@@ -111,7 +111,31 @@ mu0=  (lambda*ceh)*((1+((1-lambda)/lambda)^(1/crra))/(Yc(0.26,0.2,ich0,icw0)-2.1
 mu00= (lambda*ceh)*((1+((1-lambda)/lambda)^(1/crra))/(Yc(0.2672,0,ich0,icw0)-1.4))^(crra); %l*(1/(w1_d(0.26,0)))*(1/(0.6856)^crrat) ; %0.45; %0.3885; 
 mu000=  (lambda*ceh)*((1+((1-lambda)/lambda)^(1/crra))/(Yc(0,0.2672,ich0,icw0)-1.4))^(crra); %l*(1/(w1_d(0.26,0)))*(1/(0.6856)^crrat) ; %0.45; %0.3885; 
 
-inputs0_=EQS.('inputs'); % substitutes       
+
+if isempty(EQS.('inputs'))| (EQS.('inputs')==0)  
+    fprintf('Creating own backup inputs')
+        
+        inputs0=zeros(T,T,I,I,I,3,3);
+        for i=1:I
+            for jh=1:I
+                for jw=1:I 
+                    for th=1:T
+                        for tw=1:T
+                             inputs0(th,tw,jh,jw,i,1,:)=[mu00,0.03*100,0.1890*100];
+                             inputs0(th,tw,jh,jw,i,2,:)=[mu000,0.13*100,0.06*100];
+                             inputs0(th,tw,jh,jw,i,3,:)=[mu0,0.04*100,0.11*100];
+                        end
+                    end
+                end
+            end
+        end
+        inputs0_=inputs0;
+        
+else
+    inputs0_=EQS.('inputs'); % substitutes 
+end
+
+     
 if isempty(IN)        
     if EQS.('inputs')==0 % should be irrelevant
         fprintf('Creating own inputs')

@@ -52,23 +52,23 @@ end
 
 x0=0.05;
 mu0=ces*(1/( Ys(0.23,0)-1))^(crra); 
-    
-inputs0_=EQS.('inputsS'); 
-if isempty(INS)  
-    if EQS.('inputsS')==0        
-        inputs0=zeros(T,I,I,2);
+
+if EQS.('inputsS')==0        
+        inputs0_=zeros(T,I,I,2);
         for j=1:I
             for i=1:I
                 for t=1:T
-                    inputs0(t,j,i,:)=[mu0,x0];
+                    inputs0_(t,j,i,:)=[mu0,x0];
 
                 end
             end
         end
 
     else 
-        inputs0=EQS.('inputsS');
-    end
+        inputs0_=EQS.('inputsS');
+end
+if isempty(INS)  
+    inputs0=inputs0_;
 else
     inputs0=INS.('inputsS'); % within estimation use last inputs
 end
