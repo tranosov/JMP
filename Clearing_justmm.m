@@ -83,6 +83,13 @@ DC2_agr=sum(sum(DC2,7),6);
 
 uhC=sum(sum(sum(sum(sum(DC1_agr.*uhC)))))./sum(sum(sum(sum(sum(DC1_agr)))))+sum(sum(sum(sum(sum(DC2_agr.*uhC)))))./sum(sum(sum(sum(sum(DC2_agr)))));
 uwC=sum(sum(sum(sum(sum(DC1_agr.*uwC)))))./sum(sum(sum(sum(sum(DC1_agr)))))+sum(sum(sum(sum(sum(DC2_agr.*uwC)))))./sum(sum(sum(sum(sum(DC2_agr)))));
+uhC=round(uhC,6);
+uwC=round(uwC,6);
+uhS=round(uhS,6);
+uwS=round(uws,6);
+
+
+
 % no - need to do it separately for DC1 and DC2! check if same?
 
 % Notice - the distribution does not depend on the share that gets married
