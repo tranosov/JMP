@@ -86,7 +86,7 @@ uwC=sum(sum(sum(sum(sum(DC1_agr.*uwC)))))./sum(sum(sum(sum(sum(DC1_agr)))))+sum(
 uhC=round(uhC,6);
 uwC=round(uwC,6);
 uhS=round(uhS,6);
-uwS=round(uws,6);
+uwS=round(uwS,6);
 
 
 
