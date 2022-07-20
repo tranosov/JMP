@@ -886,7 +886,7 @@ other_=[hVMAR ,wVMAR, leisurehC_raw,leisurewC_raw,hourshC_raw,hourswC_raw,xhC_ra
     distowC_raw,distowC_raw-distohC_raw,distwC_raw-disthC_raw,YncomeC, hC,p];
 
 if I==4
-    Keyso=Keyso+['p4'];
+    Keyso{end+1}='p4'
 end
 moments_= array2table([model_m]', 'RowNames',Keys);
 other_= array2table([model_m_add,other_], 'VariableNames',Keyso);
