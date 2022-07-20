@@ -40,7 +40,8 @@ if VERBOSE
     toc
     cl=cl
 end
-TOL=10^(-3);  
+TOL=10^(0); 
+STEPTOL=10^(-6);
 
         if WARNINGS>0
             fprintf('ISSUES AT EVALUATION THE CONTINUOUS VARIABLES in solvep.');
@@ -55,7 +56,7 @@ TOL=10^(-3);
             
             WARNINGS=0;
             options = optimoptions('fsolve','MaxIter',50,'MaxFunctionEvaluations',500,...
-                       'FunctionTolerance',TOL, 'Display',iter_,...
+                       'FunctionTolerance',TOL,  'StepTolerance',STEPTOL, 'Display',iter_,...
                        'FunValCheck','on','Algorithm','levenberg-marquardt'); %'trust-region-dogleg' 'Display','final'
 %'StepTolerance', STEPTOL?
             try
