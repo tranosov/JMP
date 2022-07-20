@@ -18,7 +18,7 @@ WARNINGS=0;
     kk=1;
     I=size(lp0,2);
         if WARNINGS==0
-            while (sum(abs(cl))>15) && (kk<5)
+            while (sum(abs(cl))>15) && (kk<10)
                     A=800*table2array(params('crrah_','value'));
                     if VERBOSE
                         cl=cl
@@ -41,6 +41,7 @@ if VERBOSE
     cl=cl
 end
 TOL=10^(-3);  
+
         if WARNINGS>0
             fprintf('ISSUES AT EVALUATION THE CONTINUOUS VARIABLES in solvep.');
             output=[999,999,999];
@@ -63,6 +64,7 @@ TOL=10^(-3);
                 EXITFLAG=999;
                 output=lp0;
             end
+
             if (EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3) && (EXITFLAG~=4)
 
                 %fprintf('Trying again');
