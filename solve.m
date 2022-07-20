@@ -104,7 +104,7 @@ if norm(cl)^2 >tol*10^(-1)
                         cl=cl
                     end
                     if WARNINGS>0
-                        lp0=lp0+cl0./(A*[1,1,1]); % go back
+                        lp0=lp0+cl./(A*[1,1,1]); % go back
                     else
                         lp0=lp0+cl./(A*[1,1,1]); % roughly correct initial guess
                     end

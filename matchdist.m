@@ -81,11 +81,68 @@ if type==3.5 % slide + for the constant as well - to be above 0!
     
     mI1_=mI+mm*(1-low);
     mA1_=mA+mm*(1-low);
-    L_low=betah*d(i)+1-betah*19.1400; % make it so it is all positive here...
+    L_low=betah*d(i)+1-betah*19.1400; % make it so it is all positive here... but it totally arbitrary. longer distances - all matches worse!
     
     mIL1_=mI+mm*(1-L_low); %+ic*mm
     mAL1_=mA+mm*(1-L_low);
 end
+
+if type==3.6 % slide + max
+    I=size(JLs);
+    I=I(1);
+    %T=s(2);
+    for u=1:I
+        d(u)=Do(u,JLs(:,t),D);
+    end
+    low=betah*d(j)+1-betah*max(d); % characteristic - longer distance - city has BETTER matches, suburbs same
+    
+    
+    mI1_=mI+mm*(1-low);
+    mA1_=mA+mm*(1-low);
+    L_low=betah*d(i)+1-betah*max(d); % make it so it is all positive here...
+    
+    mIL1_=mI+mm*(1-L_low); %+ic*mm
+    mAL1_=mA+mm*(1-L_low);
+end
+
+
+if type==3.7 % slide + average 
+    I=size(JLs);
+    I=I(1);
+    %T=s(2);
+    for u=1:I
+        d(u)=Do(u,JLs(:,t),D);
+    end
+    davg= sum(JLs(:,t).*d');
+    low=betah*d(j)+1-betah*davg; % average 'productivity' stay the same. but issue - is negative ic in suburbs. bad for husbands
+    
+    
+    mI1_=mI+mm*(1-low);
+    mA1_=mA+mm*(1-low);
+    L_low=betah*d(i)+1-betah*davg; % make it so it is all positive here...
+    
+    mIL1_=mI+mm*(1-L_low); %+ic*mm
+    mAL1_=mA+mm*(1-L_low);
+end
+
+if type==6 % slide + average + super positive!
+    I=size(JLs);
+    I=I(1);
+    %T=s(2);
+    for u=1:I
+        d(u)=Do(u,JLs(:,t),D);
+    end
+    davg= sum(JLs(:,t).*d');
+    low=betah*d(j)-betah*davg; % average 'productivity' stay the same. 
+    
+    mI1_=mI+mm*(1-low);
+    mA1_=mA+mm*(1-low);
+    L_low=betah*d(i)-betah*davg; % make it so it is all positive here...
+    
+    mIL1_=mI+mm*(1-L_low); %+ic*mm
+    mAL1_=mA+mm*(1-L_low);
+end
+
 
 if type==4
     const=500;

@@ -63,6 +63,7 @@ pi_=params{'pi_',:};
 THETA=params{'THETA',:}; % but gets adjusted later!
 THETAHW=params{'THETAHW',:};
 
+typeic_=params{'typeic',:};
 
 %AC3=0;
 %dmin=0;
@@ -122,7 +123,7 @@ swL=sw;
 pih_=1-piw_;
 pisw_=pish_;
 
-typeic_=3.5;
+%typeic_=3.5;
 
 toinputs=reinitialize;
 
