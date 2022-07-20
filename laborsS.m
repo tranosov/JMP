@@ -51,7 +51,7 @@ if alloutput
 end
 
 x0=0.05;
-mu0=ces*(1/( Ys(0.23,0)-1))^(crra); 
+mu0=ces*(1/( Ys(lssh(1,x0,8),0)-1))^(crra);
 
 if EQS.('inputsS')==0        
         inputs0_=zeros(T,I,I,2);

@@ -98,38 +98,56 @@ STEPTOL=10^(-9); % would need more iterations! plus by melo byt <TOL!
 % lingering issue: still I have sometimes different guesses reading to
 % slightly differenc cl. And persistently sow.
 options = optimoptions('fsolve','MaxIter',500,'MaxFunctionEvaluations',500,...
-        'FunctionTolerance',TOL,'Display','off','Algorithm','levenberg-marquardt','ScaleProblem','jacobian',...
+        'FunctionTolerance',TOL,'Display','off','Algorithm','levenberg-marquardt',...
         'StepTolerance', STEPTOL); %,'StepTolerance', STEPTOL); %'trust-region') ;%,...
         %'StepTolerance', 10^(-20)); %'ScaleProblem','jacobian'
         %options = optimoptions('fsolve','MaxIter',5000,'MaxFunctionEvaluations',5000,...
          %   'FunctionTolerance',TOL,'Display','off','Algorithm','levenberg-marquardt'); 
          % it seems to me that 'levenberg-marquardt' is just faster?
+
+options0 = optimoptions('fsolve','MaxIter',5000,'MaxFunctionEvaluations',5000,...
+                 'FunctionTolerance',TOL,'Display','off','Algorithm','trust-region','StepTolerance', STEPTOL);
          
-ich0=0.0135;
+ich0=0.0135; % also adjust! 
 icw0=0.0135;
-mu0=  (lambda*ceh)*((1+((1-lambda)/lambda)^(1/crra))/(Yc(0.26,0.2,ich0,icw0)-2.1))^(crra); %l*(1/(w1_d(0.258,0)))*(1/(0.69)^crrat); %0.42; %0.3902;0.6856
-mu00= (lambda*ceh)*((1+((1-lambda)/lambda)^(1/crra))/(Yc(0.2672,0,ich0,icw0)-1.4))^(crra); %l*(1/(w1_d(0.26,0)))*(1/(0.6856)^crrat) ; %0.45; %0.3885; 
-mu000=  (lambda*ceh)*((1+((1-lambda)/lambda)^(1/crra))/(Yc(0,0.2672,ich0,icw0)-1.4))^(crra); %l*(1/(w1_d(0.26,0)))*(1/(0.6856)^crrat) ; %0.45; %0.3885; 
+xh0_2=0.03;
+xh0_3=0.13;
+xh0_1=0.04;
+xw0_2=0.189;
+xw0_3=0.06;
+xw0_1=0.11;
 
+mu00= (lambda*ceh)*((1+((1-lambda)/lambda)^(1/crra))/(Yc(lsh(1,xh0_2,xw0_2,10,8,lambda),0,ich0,icw0)-1.4))^(crra); %l*(1/(w1_d(0.26,0)))*(1/(0.6856)^crrat) ; %0.45; %0.3885; 
+mu000=  (lambda*ceh)*((1+((1-lambda)/lambda)^(1/crra))/(Yc(0,lsw(1,xh0_3,xw0_3,10,8,lambda),ich0,icw0)-1.4))^(crra); %l*(1/(w1_d(0.26,0)))*(1/(0.6856)^crrat) ; %0.45; %0.3885; 
+mu0=  (lambda*ceh)*((1+((1-lambda)/lambda)^(1/crra))/(Yc(lsh(1,xh0_1,xw0_1,10,8,lambda),lsw(1,xh0_1,xw0_1,10,8,lambda),ich0,icw0)-2.1))^(crra); %l*(1/(w1_d(0.258,0)))*(1/(0.69)^crrat); %0.42; %0.3902;0.6856
 
-if isempty(EQS.('inputs'))| (EQS.('inputs')==0)  
+for ii=1:10
+    mu00= (lambda*ceh)*((1+((1-lambda)/lambda)^(1/crra))/(Yc(lsh(1,xh0_2,xw0_2,10,8,lambda),0,ich0,icw0)-hdC(mu00,1)))^(crra); %l*(1/(w1_d(0.26,0)))*(1/(0.6856)^crrat) ; %0.45; %0.3885; 
+    mu000=  (lambda*ceh)*((1+((1-lambda)/lambda)^(1/crra))/(Yc(0,lsw(1,xh0_3,xw0_3,10,8,lambda),ich0,icw0)-hdC(mu000,1)))^(crra); %l*(1/(w1_d(0.26,0)))*(1/(0.6856)^crrat) ; %0.45; %0.3885; 
+    mu0=  (lambda*ceh)*((1+((1-lambda)/lambda)^(1/crra))/(Yc(lsh(1,xh0_1,xw0_1,10,8,lambda),lsw(1,xh0_1,xw0_1,10,8,lambda),ich0,icw0)-hdC(mu0,1)))^(crra); %l*(1/(w1_d(0.258,0)))*(1/(0.69)^crrat); %0.42; %0.3902;0.6856
+end
+
+if (EQS.('inputs')==0)  
     fprintf('Creating own backup inputs')
         
-        inputs0=zeros(T,T,I,I,I,3,3);
-        for i=1:I
-            for jh=1:I
-                for jw=1:I 
-                    for th=1:T
-                        for tw=1:T
-                             inputs0(th,tw,jh,jw,i,1,:)=[mu00,0.03*100,0.1890*100];
-                             inputs0(th,tw,jh,jw,i,2,:)=[mu000,0.13*100,0.06*100];
-                             inputs0(th,tw,jh,jw,i,3,:)=[mu0,0.04*100,0.11*100];
-                        end
+    
+
+    inputs0=zeros(T,T,I,I,I,3,3);
+    for i=1:I
+        for jh=1:I
+            for jw=1:I 
+                for th=1:T
+                    for tw=1:T
+
+                         inputs0(th,tw,jh,jw,i,1,:)=[mu00,xh0_2*100,xw0_2*100];
+                         inputs0(th,tw,jh,jw,i,2,:)=[mu000,xh0_3*100,xw0_3*100];
+                         inputs0(th,tw,jh,jw,i,3,:)=[mu0,xh0_1*100,xw0_1*100];
                     end
                 end
             end
         end
-        inputs0_=inputs0;
+    end
+    inputs0_=inputs0;
         
 else
     inputs0_=EQS.('inputs'); % substitutes 
@@ -137,28 +155,7 @@ end
 
      
 if isempty(IN)        
-    if EQS.('inputs')==0 % should be irrelevant
-        fprintf('Creating own inputs')
-        
-        inputs0=zeros(T,T,I,I,I,3,3);
-        for i=1:I
-            for jh=1:I
-                for jw=1:I 
-                    for th=1:T
-                        for tw=1:T
-                             dh=D(i,jh);
-                             dw=D(i,jw);
-                             inputs0(th,tw,jh,jw,i,1,:)=[mu00,0.03*100,0.1890*100];
-                             inputs0(th,tw,jh,jw,i,2,:)=[mu000,0.13*100,0.06*100];
-                             inputs0(th,tw,jh,jw,i,3,:)=[mu0,0.04*100,0.11*100];
-                        end
-                    end
-                end
-            end
-        end
-    else 
-        inputs0=EQS.('inputs');
-    end
+    inputs0=inputs0_;
 else
     inputs0=IN.('inputs');
     
@@ -200,15 +197,18 @@ for i=1:I
                         fprintf('Warning w0');    
                     end
                     
-                    [output1,~,EXITFLAG]=fsolve(fn,[inputs0(th,tw,jh,jw,i,1,:)*2],options);  
+                    [output1,~,EXITFLAG]=fsolve(fn,[inputs0(th,tw,jh,jw,i,1,:)*2],options0);  
                     if ~isreal(output1) | output1(1)<=0 | output1(2)<=0 | lsh(output1(1),output1(2)/100,output1(3)/100,dh,0,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                        [output1,~,EXITFLAG]=fsolve(fn,[inputs0(th,tw,jh,jw,i,1,:)*0.5],options);  
+                        if VERBOSE
+                            fprintf('Warning w0 2');    
+                        end
+                        [output1,~,EXITFLAG]=fsolve(fn,[inputs0(th,tw,jh,jw,i,1,:)*0.5],options0);  
                         
                         if ~isreal(output1) | output1(1)<=0 | output1(2)<=0 | lsh(output1(1),output1(2)/100,output1(3)/100,dh,0,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                            options0 = optimoptions('fsolve','MaxIter',5000,'MaxFunctionEvaluations',5000,...
-                                'FunctionTolerance',TOL,'Display','off','Algorithm','trust-region','StepTolerance', STEPTOL);
                             
-                            
+                            if VERBOSE
+                                fprintf('Warning w0 3');    
+                            end                            
                             [output1,~,EXITFLAG]=fsolve(fn,[mu00,reshape(inputs0_(th,tw,jh,jw,i,1,2:3),1,2)*1.1],options0);
                             if ~isreal(output1) | output1(1)<=0 | output1(2)<=0 | lsh(output1(1),output1(2)/100,output1(3)/100,dh,0,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
                                 fprintf('labors: Warning w0')
@@ -247,14 +247,20 @@ for i=1:I
                         fprintf('Warning 0w');    
                     end
                     
-                    [output2,~,EXITFLAG]=fsolve(fn,[inputs0(th,tw,jh,jw,i,2,:)*2],options);
+                    [output2,~,EXITFLAG]=fsolve(fn,[inputs0(th,tw,jh,jw,i,2,:)*2],options0);
+
                     if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                        [output2,~,EXITFLAG]=fsolve(fn,[inputs0(th,tw,jh,jw,i,2,:)*0.5],options);
+                        if VERBOSE
+                            fprintf('Warning 0w 2');    
+                        end
+                        [output2,~,EXITFLAG]=fsolve(fn,[inputs0(th,tw,jh,jw,i,2,:)*0.5],options0);
                     
                         if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))                       
-                            options0 = optimoptions('fsolve','MaxIter',5000,'MaxFunctionEvaluations',5000,...
-                                'FunctionTolerance',TOL,'Display','off','Algorithm','trust-region','StepTolerance', STEPTOL);
+                            if VERBOSE
+                                fprintf('Warning 0w 3');    
+                            end 
                             [output2,~,EXITFLAG]=fsolve(fn,[mu000,reshape(inputs0_(th,tw,jh,jw,i,2,2:3),1,2)*1.1],options0);
+                            
                             if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
                                 fprintf('labors: Warning 0w')
                                 WARNINGS=WARNINGS+1;
@@ -299,19 +305,21 @@ for i=1:I
                     elseif lsh(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0
                         [output3,~,EXITFLAG]=fsolve(fn,[mu0,inputs0(th,tw,jh,jw,i,3,2),inputs0(th,tw,jh,jw,i,3,3)*0.1],options0);
                     else
-                    [output3,~,EXITFLAG]=fsolve(fn,[mu0,reshape(inputs0_(th,tw,jh,jw,i,3,2:3),1,2)*1.1],options0);
+                        [output3,~,EXITFLAG]=fsolve(fn,[mu0,reshape(inputs0_(th,tw,jh,jw,i,3,2:3),1,2)*1.01],options0);
                     end
                         
                     if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 |  lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  | lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                        options0 = optimoptions('fsolve','MaxIter',5000,'MaxFunctionEvaluations',5000,...
-                            'FunctionTolerance',TOL,'Display','off','Algorithm','trust-region','StepTolerance', STEPTOL);
+                        if VERBOSE
+                            fprintf('Warning 2');
+                        end
+
                         in_= inputs0_(th,tw,jh,jw,i,3,:);
                         if lsw(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0 
                             [output3,~,EXITFLAG]=fsolve(fn,[mu0,inputs0_(th,tw,jh,jw,i,3,2)*0.1,inputs0_(th,tw,jh,jw,i,3,3)],options0);
                         elseif lsh(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0
                             [output3,~,EXITFLAG]=fsolve(fn,[mu0,inputs0_(th,tw,jh,jw,i,3,2),inputs0_(th,tw,jh,jw,i,3,3)*0.1],options0);
                         else
-                        [output3,~,EXITFLAG]=fsolve(fn,[mu0,reshape(inputs0_(th,tw,jh,jw,i,3,2:3),1,2)*1.1],options0);
+                            [output3,~,EXITFLAG]=fsolve(fn,[mu0,reshape(inputs0_(th,tw,jh,jw,i,3,2:3),1,2)*1.1],options0);
                         end
 
                         if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 |  lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  | lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
