@@ -97,7 +97,7 @@ STEPTOL=10^(-9); % would need more iterations! plus by melo byt <TOL!
 
 % lingering issue: still I have sometimes different guesses reading to
 % slightly differenc cl. And persistently sow.
-options = optimoptions('fsolve','MaxIter',500,'MaxFunctionEvaluations',500,...
+options0 = optimoptions('fsolve','MaxIter',1000,'MaxFunctionEvaluations',1000,...
         'FunctionTolerance',TOL,'Display','off','Algorithm','levenberg-marquardt',...
         'StepTolerance', STEPTOL); %,'StepTolerance', STEPTOL); %'trust-region') ;%,...
         %'StepTolerance', 10^(-20)); %'ScaleProblem','jacobian'
@@ -105,8 +105,9 @@ options = optimoptions('fsolve','MaxIter',500,'MaxFunctionEvaluations',500,...
          %   'FunctionTolerance',TOL,'Display','off','Algorithm','levenberg-marquardt'); 
          % it seems to me that 'levenberg-marquardt' is just faster?
 
-options0 = optimoptions('fsolve','MaxIter',5000,'MaxFunctionEvaluations',5000,...
+options = optimoptions('fsolve','MaxIter',500,'MaxFunctionEvaluations',500,...
                  'FunctionTolerance',TOL,'Display','off','Algorithm','trust-region','StepTolerance', STEPTOL);
+         
          
 ich0=0.0135; % also adjust! 
 icw0=0.0135;
@@ -305,7 +306,7 @@ for i=1:I
                     elseif lsh(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0
                         [output3,~,EXITFLAG]=fsolve(fn,[mu0,inputs0(th,tw,jh,jw,i,3,2),inputs0(th,tw,jh,jw,i,3,3)*0.1],options0);
                     else
-                        [output3,~,EXITFLAG]=fsolve(fn,[mu0,reshape(inputs0_(th,tw,jh,jw,i,3,2:3),1,2)*1.01],options0);
+                        [output3,~,EXITFLAG]=fsolve(fn,[mu0,reshape(inputs0_(th,tw,jh,jw,i,3,2:3),1,2)*1.1],options0);
                     end
                         
                     if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 |  lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  | lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
@@ -313,13 +314,12 @@ for i=1:I
                             fprintf('Warning 2');
                         end
 
-                        in_= inputs0_(th,tw,jh,jw,i,3,:);
                         if lsw(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0 
-                            [output3,~,EXITFLAG]=fsolve(fn,[mu0,inputs0_(th,tw,jh,jw,i,3,2)*0.1,inputs0_(th,tw,jh,jw,i,3,3)],options0);
+                            [output3,~,EXITFLAG]=fsolve(fn,[mu0,inputs0(th,tw,jh,jw,i,3,2),inputs0(th,tw,jh,jw,i,3,3)*0.1],options0);
                         elseif lsh(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0
-                            [output3,~,EXITFLAG]=fsolve(fn,[mu0,inputs0_(th,tw,jh,jw,i,3,2),inputs0_(th,tw,jh,jw,i,3,3)*0.1],options0);
+                            [output3,~,EXITFLAG]=fsolve(fn,[mu0,inputs0(th,tw,jh,jw,i,3,2)*0.1,inputs0(th,tw,jh,jw,i,3,3)],options0);
                         else
-                            [output3,~,EXITFLAG]=fsolve(fn,[mu0,reshape(inputs0_(th,tw,jh,jw,i,3,2:3),1,2)*1.1],options0);
+                            [output3,~,EXITFLAG]=fsolve(fn,[mu0,reshape(inputs0_(th,tw,jh,jw,i,3,2:3),1,2)*0.9],options0);
                         end
 
                         if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 |  lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  | lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
