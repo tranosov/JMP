@@ -194,11 +194,17 @@ for i=1:I
                     [output1,~,EXITFLAG]=fsolve(fn,inputs0(th,tw,jh,jw,i,1,:),options) ;
                 end
                 if ~isreal(output1) | output1(1)<=0 | output1(2)<=0 | lsh(output1(1),output1(2)/100,output1(3)/100,dh,0,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                    if VERBOSE
-                        fprintf('Warning w0');    
-                    end
+                   
                     
-                    [output1,~,EXITFLAG]=fsolve(fn,[inputs0(th,tw,jh,jw,i,1,:)*2],options0);  
+                    if (i>1) || (jh>1) || (jw>1) || (th>1) || (tw>1)
+                        [output1,~,EXITFLAG]=fsolve(fn, output1__,options0);
+                    else 
+                        if VERBOSE
+                            fprintf('Warning w0');    
+                        end
+                        [output1,~,EXITFLAG]=fsolve(fn,[inputs0(th,tw,jh,jw,i,1,:)*2],options0);  
+                    end
+
                     if ~isreal(output1) | output1(1)<=0 | output1(2)<=0 | lsh(output1(1),output1(2)/100,output1(3)/100,dh,0,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
                         if VERBOSE
                             fprintf('Warning w0 2');    
@@ -222,7 +228,8 @@ for i=1:I
                         end
                     end
                 end
-
+                 
+                output1__=output1;
                 inputs(th,tw,jh,jw,i,1,:)=output1;
                 
                 rng(357);
@@ -244,11 +251,15 @@ for i=1:I
                     [output2,~,EXITFLAG]=fsolve(fn,inputs0(th,tw,jh,jw,i,2,:),options); 
                 end
                 if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                    if VERBOSE
-                        fprintf('Warning 0w');    
-                    end
                     
-                    [output2,~,EXITFLAG]=fsolve(fn,[inputs0(th,tw,jh,jw,i,2,:)*2],options0);
+                    if (i>1) || (jh>1) || (jw>1) || (th>1) || (tw>1)
+                        [output2,~,EXITFLAG]=fsolve(fn, output2__,options0);
+                    else 
+                        if VERBOSE
+                            fprintf('Warning 0w');    
+                        end
+                        [output2,~,EXITFLAG]=fsolve(fn,[inputs0(th,tw,jh,jw,i,2,:)*2],options0);
+                    end
 
                     if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
                         if VERBOSE
@@ -274,6 +285,8 @@ for i=1:I
                     end
                 end
                 
+                
+                output2__=output2;
                 inputs(th,tw,jh,jw,i,2,:)=output2;  
                 
                 rng(357);
@@ -296,43 +309,52 @@ for i=1:I
                 end
 
                 if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 |  lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  | lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 
-                    if VERBOSE
-                        fprintf('Warning');
-                    end
                     
-                    in_= inputs0(th,tw,jh,jw,i,3,:);
-                    if lsw(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0 
-                        [output3,~,EXITFLAG]=fsolve(fn,[mu0,inputs0(th,tw,jh,jw,i,3,2)*0.1,inputs0(th,tw,jh,jw,i,3,3)],options0);
-                    elseif lsh(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0
-                        [output3,~,EXITFLAG]=fsolve(fn,[mu0,inputs0(th,tw,jh,jw,i,3,2),inputs0(th,tw,jh,jw,i,3,3)*0.1],options0);
-                    else
-                        [output3,~,EXITFLAG]=fsolve(fn,[mu0,reshape(inputs0_(th,tw,jh,jw,i,3,2:3),1,2)*1.1],options0);
-                    end
-                        
-                    if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 |  lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  | lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                        if VERBOSE
-                            fprintf('Warning 2');
-                        end
+                    
+                    if (i>1) || (jh>1) || (jw>1) || (th>1) || (tw>1)
+                        [output3,~,EXITFLAG]=fsolve(fn, output3__,options0);
+                    end 
 
+                    if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 |  lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  | lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 
+                        if VERBOSE
+                            fprintf('Warning');
+                        end
+                        in_= inputs0(th,tw,jh,jw,i,3,:);
                         if lsw(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0 
-                            [output3,~,EXITFLAG]=fsolve(fn,[mu0,inputs0(th,tw,jh,jw,i,3,2),inputs0(th,tw,jh,jw,i,3,3)*0.1],options0);
-                        elseif lsh(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0
                             [output3,~,EXITFLAG]=fsolve(fn,[mu0,inputs0(th,tw,jh,jw,i,3,2)*0.1,inputs0(th,tw,jh,jw,i,3,3)],options0);
+                        elseif lsh(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0
+                            [output3,~,EXITFLAG]=fsolve(fn,[mu0,inputs0(th,tw,jh,jw,i,3,2),inputs0(th,tw,jh,jw,i,3,3)*0.1],options0);
                         else
-                            [output3,~,EXITFLAG]=fsolve(fn,[mu0,reshape(inputs0_(th,tw,jh,jw,i,3,2:3),1,2)*0.9],options0);
+                            [output3,~,EXITFLAG]=fsolve(fn,[mu0,reshape(inputs0_(th,tw,jh,jw,i,3,2:3),1,2)*1.1],options0);
                         end
 
                         if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 |  lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  | lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                            fprintf('labors: Warning2 ww')
-                            WARNINGS=WARNINGS+1;
-                            OUTC=999;
-                            inputs(th,tw,jh,jw,i,3,:)=inputs0_(th,tw,jh,jw,i,3,:);
-                            IN.('inputs')=real(inputs);
-                            return
+                            if VERBOSE
+                                fprintf('Warning 2');
+                            end
+
+                            if lsw(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0 
+                                [output3,~,EXITFLAG]=fsolve(fn,[mu0,inputs0(th,tw,jh,jw,i,3,2),inputs0(th,tw,jh,jw,i,3,3)*0.1],options0);
+                            elseif lsh(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0
+                                [output3,~,EXITFLAG]=fsolve(fn,[mu0,inputs0(th,tw,jh,jw,i,3,2)*0.1,inputs0(th,tw,jh,jw,i,3,3)],options0);
+                            else
+                                [output3,~,EXITFLAG]=fsolve(fn,[mu0,reshape(inputs0_(th,tw,jh,jw,i,3,2:3),1,2)*0.9],options0);
+                            end
+
+                            if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 |  lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  | lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
+                                fprintf('labors: Warning2 ww')
+                                WARNINGS=WARNINGS+1;
+                                OUTC=999;
+                                inputs(th,tw,jh,jw,i,3,:)=inputs0_(th,tw,jh,jw,i,3,:);
+                                IN.('inputs')=real(inputs);
+                                return
+                            end
                         end
+
                     end
                 end 
-
+                
+              output3__=output3;
               inputs(th,tw,jh,jw,i,3,:)=output3; % save the precise outputs aslater inputs
               
               %ROUNDING for outputs
