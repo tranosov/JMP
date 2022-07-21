@@ -31,7 +31,7 @@ elseif psolve==1 && msolve==0.5 % not lambda, but share of married overall can c
     p=exp(x(1:3));
     LA=LA0;    
 elseif psolve && (~msolve)
-    [x,EXITFLAG,time]=solvep(log(p0),EQS,PARREST);
+    [x,EXITFLAG,time]=solvep(log(p0),EQS,PARREST,1);
     p=exp(x);
     LA=LA0;
 elseif (~psolve) && msolve

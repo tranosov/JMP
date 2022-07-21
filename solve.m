@@ -58,14 +58,13 @@ tol=10^(-2); % stricter than overall
 if norm(Fm(x0(end)))^2 >tol 
     optionsz = optimset('TolX',tol,'Display',iter_);
     try
-        out=fzero(Fm,x0_,optionsz); % something is off here...
+        out=fzero(Fm,x0_,optionsz); 
     catch
-        stop=1;
+        fprintf('unexpected behavior at solving for lambda in solve')
         try
             out=fzero(Fm,x02_,optionsz); 
         catch
              try
-                fprintf('unexpected behavior at solving for lambda in solve')
                 out=fzero(Fm,x03_,optionsz); 
             catch
                 fprintf('Failed to resolve for lambda in solve');
@@ -91,35 +90,17 @@ end
 tic
 Fp=@(x) Clearing(x,EQS,PARREST); 
 tol=1;
-options = optimoptions('fsolve','MaxIter',500,'MaxFunctionEvaluations',5000,...
-           'FunctionTolerance',tol*10^(-1), 'Display',iter_,...
-           'Algorithm','trust-region'); 
 cl=Fp(x0(1:end-1));       
-if norm(cl)^2 >tol*10^(-1)   
-    kk=1;
-    lp0=x0(1:end-1);
-    while (sum(abs(cl))>15) && (kk<5)
-                    A=800*table2array(params('crrah_','value'));
-                    if VERBOSE
-                        cl=cl
-                    end
-                    if WARNINGS>0
-                        lp0=lp0+cl./(A*[1,1,1]); % go back
-                    else
-                        lp0=lp0+cl./(A*[1,1,1]); % roughly correct initial guess
-                    end
-
-                kk=kk+1;
-                WARNINGS=0;
-                cl=Fp(lp0);
-     end
-    
-    x0(1:end-1)=lp0; 
-    x0(1:end-1)=fsolve(Fp,x0(1:end-1),options);
+if norm(cl)^2 >10^(-1)*tol
+    tolmult=10^(-1);
+    [x0(1:end-1),EXITFLAG,time_]=solvep(x0(1:end-1),EQS,PARREST,tolmult);
+    time=time+time_;
 end
+
 params('LA0','value')=LA0_;
 PARREST.('params')=params;
 time=time+toc;
+
 if VERBOSE
 toc
 end
@@ -134,17 +115,27 @@ if WARNINGS>0
     fprintf('ISSUES AT EVALUATION THE CONTINUOUS VARIABLES in solve.');
 
 else 
+    
     if norm(cl)^2 >tol  
                 tic
-if VERBOSE
-fprintf('Have to do joint solution...')
-end
+        if VERBOSE
+        fprintf('Have to do joint solution...')
+        end
+
+    TOL=tol; 
+    %STEPTOL=10^(-8);
+    options = optimoptions('fsolve','MaxIter',50,'MaxFunctionEvaluations',500,...
+                           'FunctionTolerance',TOL,   'Display',iter_,...
+                           'FunValCheck','on','Algorithm','trust-region'); 
+                   
                 [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,x0,options);
                 % does not really work - check whether I can help it somehow?
 
                 % first solve lambda and only then solve prices? the feedback
                 % seems to be mostly from lambda to prices and not the other
                 % way around
+                
+                
                 if (EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3) && (EXITFLAG~=4)
                     fprintf('Lowering standards in solve...');
                     kkk=1;
