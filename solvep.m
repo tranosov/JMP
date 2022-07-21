@@ -8,7 +8,7 @@ else
     iter_="off";
 end
 
-
+TOL=10^(-1)*tolmult; 
 F=@(x) Clearing(x,EQS,PARREST); 
 params=PARREST.('params');
 tic
@@ -18,7 +18,7 @@ WARNINGS=0;
     kk=1;
     I=size(lp0,2);
         if WARNINGS==0
-            while (kk<15) %(sum(abs(cl))>15) && 
+            while (kk<15) && (sum(abs(cl))>TOL) 
                     A=800*table2array(params('crrah_','value'));
                     if VERBOSE
                         cl=cl
@@ -40,7 +40,7 @@ if VERBOSE
     toc
     cl=cl
 end
-TOL=10^(-1)*tolmult; 
+
 %STEPTOL=10^(-8);
 
         if WARNINGS>0
