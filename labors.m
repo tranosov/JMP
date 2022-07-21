@@ -97,6 +97,10 @@ STEPTOL=10^(-9); % would need more iterations! plus by melo byt <TOL!
 
 % lingering issue: still I have sometimes different guesses reading to
 % slightly differenc cl. And persistently sow.
+
+options = optimoptions('fsolve','MaxIter',500,'MaxFunctionEvaluations',500,...
+                 'FunctionTolerance',TOL,'Display','off','Algorithm','trust-region','StepTolerance', STEPTOL); %better for when your guess is already good
+             
 options0 = optimoptions('fsolve','MaxIter',1000,'MaxFunctionEvaluations',1000,...
         'FunctionTolerance',TOL,'Display','off','Algorithm','levenberg-marquardt',...
         'StepTolerance', STEPTOL); %,'StepTolerance', STEPTOL); %'trust-region') ;%,...
@@ -105,9 +109,10 @@ options0 = optimoptions('fsolve','MaxIter',1000,'MaxFunctionEvaluations',1000,..
          %   'FunctionTolerance',TOL,'Display','off','Algorithm','levenberg-marquardt'); 
          % it seems to me that 'levenberg-marquardt' is just faster?
 
-options = optimoptions('fsolve','MaxIter',500,'MaxFunctionEvaluations',500,...
-                 'FunctionTolerance',TOL,'Display','off','Algorithm','trust-region','StepTolerance', STEPTOL);
-         
+
+             
+options1 = optimoptions('fsolve','MaxIter',5000,'MaxFunctionEvaluations',5000,...
+                 'FunctionTolerance',TOL,'Display','off','Algorithm','trust-region','StepTolerance', STEPTOL);         
          
 ich0=0.0135; % also adjust! 
 icw0=0.0135;
@@ -253,7 +258,7 @@ for i=1:I
                 if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
                     
                     if (i>1) || (jh>1) || (jw>1) || (th>1) || (tw>1)
-                        [output2,~,EXITFLAG]=fsolve(fn, output2__,options0);
+                        [output2,~,EXITFLAG]=fsolve(fn, output2__,options);
                     else 
                         if VERBOSE
                             fprintf('Warning 0w');    
@@ -271,7 +276,7 @@ for i=1:I
                             if VERBOSE
                                 fprintf('Warning 0w 3');    
                             end 
-                            [output2,~,EXITFLAG]=fsolve(fn,[mu000,reshape(inputs0_(th,tw,jh,jw,i,2,2:3),1,2)*1.1],options0);
+                            [output2,~,EXITFLAG]=fsolve(fn,[mu000,reshape(inputs0_(th,tw,jh,jw,i,2,2:3),1,2)*1.1],options1);
                             
                             if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
                                 fprintf('labors: Warning 0w')
@@ -312,7 +317,7 @@ for i=1:I
                     
                     
                     if (i>1) || (jh>1) || (jw>1) || (th>1) || (tw>1)
-                        [output3,~,EXITFLAG]=fsolve(fn, output3__,options0);
+                        [output3,~,EXITFLAG]=fsolve(fn, output3__,options);
                     end 
 
                     if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 |  lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  | lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 
@@ -334,11 +339,11 @@ for i=1:I
                             end
 
                             if lsw(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0 
-                                [output3,~,EXITFLAG]=fsolve(fn,[mu0,inputs0(th,tw,jh,jw,i,3,2),inputs0(th,tw,jh,jw,i,3,3)*0.1],options0);
+                                [output3,~,EXITFLAG]=fsolve(fn,[mu0,inputs0(th,tw,jh,jw,i,3,2),inputs0(th,tw,jh,jw,i,3,3)*0.1],options1);
                             elseif lsh(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0
-                                [output3,~,EXITFLAG]=fsolve(fn,[mu0,inputs0(th,tw,jh,jw,i,3,2)*0.1,inputs0(th,tw,jh,jw,i,3,3)],options0);
+                                [output3,~,EXITFLAG]=fsolve(fn,[mu0,inputs0(th,tw,jh,jw,i,3,2)*0.1,inputs0(th,tw,jh,jw,i,3,3)],options1);
                             else
-                                [output3,~,EXITFLAG]=fsolve(fn,[mu0,reshape(inputs0_(th,tw,jh,jw,i,3,2:3),1,2)*0.9],options0);
+                                [output3,~,EXITFLAG]=fsolve(fn,[mu0,reshape(inputs0_(th,tw,jh,jw,i,3,2:3),1,2)*0.9],options1);
                             end
 
                             if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 |  lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  | lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
