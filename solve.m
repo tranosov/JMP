@@ -38,43 +38,53 @@ time=toc;
          
 tic
 global mup
-if isempty(mup)
-    x0_=x0(end);
-else
-    if mup==1
-        x0_=[max(0.001*RESC,x0(end)*0.99),x0(end)*1.05]; % more men in mm, clm(x0(end)) should be<0, lambda down to incite women
-        x02_=[max(0.001*RESC,x0(end)*0.5),x0(end)*1.05];
-        x03_=[max(0.001*RESC,x0(end)*0.5),x0(end)*1.1];
-    end
-    if mup==(-1)
-        x0_=[0.95*x0(end),min(x0(end)*1.01,0.999*RESC)]; % less men in mm, clm(x0(end)) should be>0, lambda up to incite men
-        x02_=[0.95*x0(end),min(x0(end)*1.5,0.999*RESC)];
-        x03_=[0.9*x0(end),min(x0(end)*1.5,0.999*RESC)];
-    end
-end 
+
+if mup==1
+    x0_=[max(0.001*RESC,x0(end)*0.9),x0(end)*1.01]; % more men in mm, clm(x0(end)) should be<0, lambda down to incite women
+    x02_=[max(0.001*RESC,x0(end)*0.5),x0(end)*1.05];
+    %x03_=[max(0.001*RESC,x0(end)*0.5),x0(end)*1.1];
+end
+if mup==(-1)
+    x0_=[0.99*x0(end),min(x0(end)*1.1,0.999*RESC)]; % less men in mm, clm(x0(end)) should be>0, lambda up to incite men
+    x02_=[0.95*x0(end),min(x0(end)*1.5,0.999*RESC)];
+    %x03_=[0.9*x0(end),min(x0(end)*1.5,0.999*RESC)];
+end
 
 Fm=@(x) Clearing_justmm(x,EQS,PARREST); 
 tol=10^(-2); % stricter than overall
 if norm(Fm(x0(end)))^2 >tol 
     optionsz = optimset('TolX',tol,'Display',iter_);
-    try
-        out=fzero(Fm,x0_,optionsz); 
-    catch
-        fprintf('unexpected behavior at solving for lambda in solve')
+    if isempty(mup)
         try
-            out=fzero(Fm,x02_,optionsz); 
+           out=fzero(Fm,x0(end),optionsz); 
         catch
-             try
-                out=fzero(Fm,x03_,optionsz); 
+            fprintf('Failed to resolve for lambda in solve');
+            output=reshape(999,size(x0));
+            EXITFLAG=991;
+            time=time+toc;
+        end
+        
+    else
+        if Fm(x0_(1))*Fm(x0_(2))<0
+            out=fzero(Fm,x0_,optionsz);
+        else
+            fprintf('unexpected behavior at solving for lambda in solve')
+            try
+                out=fzero(Fm,x02_,optionsz); 
             catch
-                fprintf('Failed to resolve for lambda in solve');
-                output=[999,999,999,999];
-                EXITFLAG=991;
-                time=time+toc;
-                return
+                try    
+                    out=fzero(Fm,x0(end),optionsz); 
+                catch
+                    fprintf('Failed to resolve for lambda in solve');
+                    output=[999,999,999,999];
+                    EXITFLAG=991;
+                    time=time+toc;
+                    return
+                end
             end
         end
     end
+    
     x0(end)=out;
 end 
 
@@ -90,7 +100,7 @@ end
 tic
 Fp=@(x) Clearing(x,EQS,PARREST); 
 tol=1;
-cl=Fp(x0(1:end-1));       
+cl=Fp(x0(1:end-1));    
 if norm(cl)^2 >10^(-1)*tol
     tolmult=10^(-1);
     [x0(1:end-1),EXITFLAG,time_]=solvep(x0(1:end-1),EQS,PARREST,tolmult);
@@ -110,7 +120,7 @@ WARNINGS=0;
 F=@(x) Clearing_withmm(x,EQS,PARREST); 
 cl=F(x0); 
 if WARNINGS>0
-    output=[999,999,999,999];
+    output=reshape(999,size(x0));
     EXITFLAG=999;
     fprintf('ISSUES AT EVALUATION THE CONTINUOUS VARIABLES in solve.');
 
@@ -142,7 +152,7 @@ else
                     while (sum(abs(cl))>0.5) && (kkk<3)
                         kk=1;
                         while (sum(abs(cl(end)))>0.1) && (kk<10)
-                            x0=x0 +cl.*([0,0,0,(RESC)*PARREST.('sigmam')/(300*kk)]);
+                            x0=x0 +cl.*([zeros(size(x0(1:end-1),2)),(RESC)*PARREST.('sigmam')/(300*kk)]);
                             cl=F(x0);
                             if VERBOSE
                                 cl
@@ -152,7 +162,7 @@ else
                         kk=1;
                         while (sum(abs(cl(1:end-1)))>0.4) && (kk<10)
                             A=1/(1000*kk);
-                            x0=x0 +cl.*(A*[1,1,1,0]);
+                            x0=x0 +cl.*(A*[ones(size(x0(1:end-1))),0]);
                             [cl]=F(x0); 
                             if VERBOSE
                                 cl
@@ -174,6 +184,7 @@ else
                     [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,x0*0.9,options);
 
                 end
+                %{
                 if (EXITFLAG~=1) && (EXITFLAG~=2) && (EXITFLAG~=3) && (EXITFLAG~=4)
 
                     fprintf('Trying again again');
@@ -190,6 +201,7 @@ else
                     end
 
                 end
+                %}
                 
                 if VERBOSE
                 toc
