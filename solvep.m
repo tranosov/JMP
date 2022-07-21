@@ -1,5 +1,5 @@
 
-function [output,EXITFLAG,time]=solvep(lp0,EQS,PARREST)
+function [output,EXITFLAG,time]=solvep(lp0,EQS,PARREST,tolmult)
 global WARNINGS VERBOSE
 rng(357);
 if VERBOSE
@@ -18,7 +18,7 @@ WARNINGS=0;
     kk=1;
     I=size(lp0,2);
         if WARNINGS==0
-            while (sum(abs(cl))>15) && (kk<10)
+            while (kk<15) %(sum(abs(cl))>15) && 
                     A=800*table2array(params('crrah_','value'));
                     if VERBOSE
                         cl=cl
@@ -40,8 +40,8 @@ if VERBOSE
     toc
     cl=cl
 end
-TOL=10^(0); 
-STEPTOL=10^(-6);
+TOL=10^(-1)*tolmult; 
+%STEPTOL=10^(-8);
 
         if WARNINGS>0
             fprintf('ISSUES AT EVALUATION THE CONTINUOUS VARIABLES in solvep.');
@@ -56,7 +56,7 @@ STEPTOL=10^(-6);
             
             WARNINGS=0;
             options = optimoptions('fsolve','MaxIter',50,'MaxFunctionEvaluations',500,...
-                       'FunctionTolerance',TOL,  'StepTolerance',STEPTOL, 'Display',iter_,...
+                       'FunctionTolerance',TOL,   'Display',iter_,...
                        'FunValCheck','on','Algorithm','levenberg-marquardt'); %'trust-region-dogleg' 'Display','final'
 %'StepTolerance', STEPTOL?
             try
@@ -83,9 +83,13 @@ STEPTOL=10^(-6);
                     end
 
                 options = optimoptions('fsolve','MaxIter',500,'Display',iter_,'MaxFunctionEvaluations',5000,...
-                'FunctionTolerance',10^(0), 'Algorithm', 'trust-region');
-                
-                [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,lp0,options);
+                'FunctionTolerance',   TOL, 'Algorithm', 'trust-region');
+                if norm(cl)^2 <=TOL
+                    output=lp0;
+                    EXITFLAG=1;
+                else
+                    [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,lp0,options);
+                end
 
             end
             if (EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3) && (EXITFLAG~=4)
