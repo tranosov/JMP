@@ -68,33 +68,34 @@ if norm(Fm(x0(end)))^2 >tol
         if Fm(x0_(1))*Fm(x0_(2))<0
             out=fzero(Fm,x0_,optionsz);
             if Fm(out)<-0.01
-                try
-                out=fzero(Fm,[out,x0_(2)],optionsz);
-                catch
-                    fprintf('Cant match Fm precisely');
+                if Fm(out)*Fm(x0_(2))<0
+                    out=fzero(Fm,[out,x0_(2)],optionsz);
                 end
             elseif Fm(out)>0.01
-                try
+                if Fm(out)*Fm(x0_(1))<0
                 out=fzero(Fm,[x0_(1),out],optionsz);
-                catch
-                    fprintf('Cant match Fm precisely');
                 end
             end
         else
-            fprintf('unexpected behavior at solving for lambda in solve')
-            try
+            fprintf('Wider nest on lambda?')
+            if Fm(x02_(1))*Fm(x02_(2))<0
                 out=fzero(Fm,x02_,optionsz); 
-            catch
-                try    
-                    out=fzero(Fm,x0(end),optionsz); 
-                catch
+                if Fm(out)<-0.01
+                    if Fm(out)*Fm(x02_(2))<0
+                        out=fzero(Fm,[out,x0_(2)],optionsz);
+                    end
+                elseif Fm(out)>0.01
+                    if Fm(out)*Fm(x02_(1))<0
+                    out=fzero(Fm,[x02_(1),out],optionsz);
+                    end
+                end
+            else
                     fprintf('Failed to resolve for lambda in solve');
                     output=[999,999,999,999];
                     EXITFLAG=991;
                     time=time+toc;
                     return
-                end
-            end
+           end
         end
     end
     
@@ -147,8 +148,8 @@ else
 
     TOL=tol; 
     %STEPTOL=10^(-8);
-    options = optimoptions('fsolve','MaxIter',50,'MaxFunctionEvaluations',500,...
-                           'FunctionTolerance',TOL,   'Display',iter_,...
+    options = optimoptions('fsolve','MaxIter',500,'MaxFunctionEvaluations',500,...
+                           'FunctionTolerance',TOL,   'Display','iter',...
                            'FunValCheck','on','Algorithm','trust-region'); 
                    
                 [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,x0,options);
@@ -195,6 +196,9 @@ else
                     WARNINGS=WARNINGS+0.5; % had to lower standards
                     fprintf('Trying again');
                     [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,x0*0.9,options);
+                    if (EXITFLAG~=1) && (EXITFLAG~=2) && (EXITFLAG~=3) && (EXITFLAG~=4)              
+                        WARNINGS=WARNINGS+1;
+                    end
 
                 end
                 %{
