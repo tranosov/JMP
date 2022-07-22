@@ -19,7 +19,7 @@ WARNINGS=0;
     I=size(lp0,2);
         if WARNINGS==0
             while (kk<15) && (sum(abs(cl))>TOL) 
-                    A=800*table2array(params('crrah_','value'));
+                    A=800/table2array(params('crrah_','value'));
                     if VERBOSE
                         cl=cl
                     end
@@ -45,7 +45,7 @@ end
 
         if WARNINGS>0
             fprintf('ISSUES AT EVALUATION THE CONTINUOUS VARIABLES in solvep.');
-            output=[999,999,999];
+            output=reshape(999, size(lp0));
             EXITFLAG=999;
             return
         elseif norm(cl)^2 <=TOL
@@ -72,7 +72,7 @@ end
                 cl=F(output);
                 kk=1;
                     while (sum(abs(cl))>0.5) && (kk<10)
-                        A=1000*table2array(params('crrah_','value'));
+                        A=1000/table2array(params('crrah_','value'));
                         lp0=lp0+cl./(A*[1,1,1]); % roughly correct initial guess
                         kk=kk+1;
                         cl=F(lp0);
@@ -108,7 +108,7 @@ end
             if (EXITFLAG~=1) && (EXITFLAG~=2) && (EXITFLAG~=3) && (EXITFLAG~=4)
 
                 %fprintf('Trying again again again');
-                [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,[1,1,1],options);
+                [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,ones(size(lp0)),options);
 
             if (EXITFLAG~=1) && (EXITFLAG~=2) && (EXITFLAG~=3) && (EXITFLAG~=4)              
                 WARNINGS=WARNINGS+1;
