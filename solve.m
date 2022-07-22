@@ -152,7 +152,7 @@ else
                     while (sum(abs(cl))>0.5) && (kkk<3)
                         kk=1;
                         while (sum(abs(cl(end)))>0.1) && (kk<10)
-                            x0=x0 +cl.*([zeros(size(x0(1:end-1),2)),(RESC)*PARREST.('sigmam')/(300*kk)]);
+                            x0=x0 +cl.*([zeros(size(x0(1:end-1))),(RESC)*PARREST.('sigmam')/(300*kk)]);
                             cl=F(x0);
                             if VERBOSE
                                 cl
