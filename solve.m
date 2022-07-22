@@ -51,7 +51,7 @@ if mup==(-1)
 end
 
 Fm=@(x) Clearing_justmm(x,EQS,PARREST); 
-tol=10^(-2); % stricter than overall
+tol=10^(-8); % stricter than overall
 if norm(Fm(x0(end)))^2 >tol 
     optionsz = optimset('TolX',tol,'Display',iter_);
     if isempty(mup)
