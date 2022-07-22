@@ -99,6 +99,8 @@ end
                 [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,lp0*0.9,options);
 
             end
+            
+            %{
             if (EXITFLAG~=1) && (EXITFLAG~=2) && (EXITFLAG~=3) && (EXITFLAG~=4)
 
                 %fprintf('Trying again again');
@@ -117,7 +119,7 @@ end
             end
 
             end
-
+%}
             time=time+toc;
             if VERBOSE
                 toc
