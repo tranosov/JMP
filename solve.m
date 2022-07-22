@@ -166,11 +166,11 @@ else
                     while (sum(abs(cl))>0.5) && (kkk<3)
                         kk=1;
                         while (sum(abs(cl(end)))>0.1) && (kk<10)
-                            x0=x0 +cl.*([zeros(size(x0(1:end-1))),(RESC)*PARREST.('sigmam')/(300*kk)]);
+                            x0=x0 +cl.*([zeros(size(x0(1:end-1))),(RESC)*PARREST.('sigmam')/(300*kk)])
                             cl=F(x0);
-                            if VERBOSE
+                            %if VERBOSE
                                 cl
-                            end
+                            %end
                             kk=kk+1;
                         end
                         kk=1;
@@ -193,14 +193,19 @@ else
                 end
                 if (EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3) && (EXITFLAG~=4)
 
-                    WARNINGS=WARNINGS+0.5; % had to lower standards
+                    %WARNINGS=WARNINGS+0.5; % had to lower standards
                     fprintf('Trying again');
                     [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,x0*0.9,options);
-                    if (EXITFLAG~=1) && (EXITFLAG~=2) && (EXITFLAG~=3) && (EXITFLAG~=4)              
-                        WARNINGS=WARNINGS+1;
-                    end
+                   
 
                 end
+                if (EXITFLAG~=1) && (EXITFLAG~=2) && (EXITFLAG~=3) && (EXITFLAG~=4)              
+                    %WARNINGS=WARNINGS+1;
+                    fprintf('Solve failed');
+                    FVAL=FVAL
+                    OUTPUT
+                    EXITFLAG=991;
+                 end
                 %{
                 if (EXITFLAG~=1) && (EXITFLAG~=2) && (EXITFLAG~=3) && (EXITFLAG~=4)
 
