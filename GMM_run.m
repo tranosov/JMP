@@ -73,11 +73,9 @@ fprintf(io," FLAG: MINIMUM \n");
 fclose(io);
 
     ObjectiveFunction=@(x)GMM(x,pars,momentest,W_,momentall,paramsall); % pars has the list!
-    rng(357);
-    rng(358);
+    rng(359);
     options = optimoptions(@simulannealbnd,'MaxFunctionEvaluations',10000,'Display','diagnose');
     % increase temp to have more acceptence
-    options.InitialTemperature = 1.5*max(GG,1); %no try to bring down, default is 100, I think should be in scale of objective function (or like jacobian - how params affect obj function)
     options.InitialTemperature = 1*max(GG,1); %no try to bring down, default is 100, I think should be in scale of objective function (or like jacobian - how params affect obj function)
     temperature = @(optimValues,options) options.InitialTemperature.*(0.999.^optimValues.k); % slow down?
     options.TemperatureFcn=temperature;
