@@ -67,6 +67,11 @@ if norm(Fm(x0(end)))^2 >tol
     else
         if Fm(x0_(1))*Fm(x0_(2))<0
             out=fzero(Fm,x0_,optionsz);
+            if Fm(out)<-0.01
+                out=fzero(Fm,[out,x0_(2)],optionsz);
+            elseif Fm(out)>0.01
+                out=fzero(Fm,[x0_(1),out],optionsz);
+            end
         else
             fprintf('unexpected behavior at solving for lambda in solve')
             try
