@@ -62,39 +62,62 @@ if norm(Fm(x0(end)))^2 >tol
             output=reshape(999,size(x0));
             EXITFLAG=991;
             time=time+toc;
+            return
         end
         
     else
-        if Fm(x0_(1))*Fm(x0_(2))<0
+        fmx2=Fm(x0_(2));
+        fmx1=Fm(x0_(1));
+        if fmx2*fmx1<0
             out=fzero(Fm,x0_,optionsz);
-            if Fm(out)<-0.01
-                if Fm(out)*Fm(x0_(2))<-10^6
+            fmout=Fm(out);
+            if fmout<-0.01
+                if fmout*fmx2<-10^6
                     out=fzero(Fm,[out,x0_(2)],optionsz);
+                else
+                    fpritf('Fm(out) %d <0 , fmx2 %d>0 \n',fmout,fmx2)
+                    frpintf('Yet somehow I cannot solve\n')
                 end
-            elseif Fm(out)>0.01
-                if Fm(out)*Fm(x0_(1))<-10^6
-                out=fzero(Fm,[x0_(1),out],optionsz);
+            elseif fmout>0.01
+                if fmout*fmx1<-10^6
+                    out=fzero(Fm,[x0_(1),out],optionsz);
+                else
+                    fpritf('Fm(out) %d >0 , fmx1 %d>0 \n',fmout,fmx1)
+                    frpintf('Yet somehow I cannot solve\n')
                 end
             end
         else
             fprintf('Wider nest on lambda?')
-            if Fm(x02_(1))*Fm(x02_(2))<-(10^(-8))
+            fmx2=Fm(x02_(2));
+            fmx1=Fm(x02_(1));
+            if fmx2*fmx1<-(10^(-8))
                 out=fzero(Fm,x02_,optionsz); 
-                if Fm(out)<-0.01
-                    if Fm(out)*Fm(x02_(2))<-10^6
+                fmout=Fm(out);
+                if fmout<-0.01
+                    if fmout*fmx2<-10^6
                         out=fzero(Fm,[out,x0_(2)],optionsz);
+                    else
+                        fpritf('Fm(out) %d <0 , fmx2 %d>0 \n',fmout,fmx2)
+                        frpintf('Yet somehow I cannot solve\n')
                     end
-                elseif Fm(out)>0.01
-                    if Fm(out)*Fm(x02_(1))<-10^6
-                    out=fzero(Fm,[x02_(1),out],optionsz);
+                elseif fmout>0.01
+                    if fmout*fmx1<-10^6
+                        out=fzero(Fm,[x02_(1),out],optionsz);
+                    else
+                        fpritf('Fm(out) %d >0 , fmx1 %d>0 \n',fmout,fmx1)
+                        frpintf('Yet somehow I cannot solve\n')
                     end
                 end
             else
+                try
+                   out=fzero(Fm,x0(end),optionsz); 
+                catch
                     fprintf('Failed to resolve for lambda in solve');
-                    output=[999,999,999,999];
+                    output=reshape(999,size(x0));
                     EXITFLAG=991;
                     time=time+toc;
                     return
+                end
            end
         end
     end
