@@ -1,4 +1,5 @@
-function [DC, DC1, DC2,HCouple,Pw,hC,VC,cexp1,cexp2,OUTC, DS,HSingle, DSh, DSw, VS,Pws,cexps,OUTS,EQS,PARREST] = populations(p,LA,EQS,PARREST,FORCEFIT)
+function [DC, DC1, DC2,HCouple,Pw,hC,VC,cexp1,cexp2,...
+    OUTC, DS,HSingle, DSh, DSw, VS,Pws,cexps,OUTS,EQS,PARREST] = populations(p,LA,EQS,PARREST,FORCEFIT)
 
 
 HS=PARREST.('HS');
@@ -81,7 +82,7 @@ if FORCEFIT==1 % recalibrate THETA and THETAHW (for within estimation routine)
     else
         smarried=1-ssw_;
     end
-    dTHETA= log((smarried)/(1-smarried))*sigmam - (uwC-uwS);
+    dTHETA= log((smarried)/(1-smarried))*sigmam - (uwC-uwS)
     params{'THETA',:}=THETA + dTHETA;
     
     PARREST.('params')=params;
@@ -108,10 +109,12 @@ if FORCEFIT==0.5 % only THETAHW, not THETA - just so I can treat lambda as a par
 end
 
 clmm=  F*(exp((uwC-uwS)/sigmam)/(1+exp((uwC-uwS)/sigmam)))  - M*(exp((uhC-uhS)/sigmam)/(1+exp((uhC-uhS)/sigmam)));
-if clmm>10^(-2)
+if norm(clmm)>10^(-2)
     fprintf('Marrriage market uncleared - on purpose? I am not recomputing quantities')
     FORCEFIT=FORCEFIT
     clmm=clmm
+    ssh=1/(1+exp((uhC-uhS)/sigmam)) 
+    ssw=1/(1+exp((uwC-uwS)/sigmam))
     
 else
     
@@ -122,6 +125,9 @@ ssw=1/(1+exp((uwC-uwS)/sigmam)) ;
 CONSTSH=(ssh*M*(2/3)+(1/3)*M  )/(sum(sum(sum(DSh_agr))));
 CONSTSW=(ssw*F*(2/3)+(1/3)*F  )/(sum(sum(sum(DSw_agr))));
 CONSTC=(1/2)*(M*(2/3)*(1-ssh)+F*(2/3)*(1-ssw))/(sum(sum(sum(sum(sum(DC_agr)))))) ;
+if norm([CONSTSH-1,CONSTSW-1,CONSTC-1])^2>0.1
+    fprintf('Adjusting quantities?')
+end
 % it should be true that M*(2)*(1-ssh) = F*(2)*(1-ssw)
 
 HSingleH=HSingle.*DSh*CONSTSH ;

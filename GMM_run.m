@@ -77,9 +77,9 @@ fclose(io);
     options = optimoptions(@simulannealbnd,'MaxFunctionEvaluations',10000,'Display','diagnose');
     % increase temp to have more acceptence
     options.InitialTemperature = 1*max(GG,1); %no try to bring down, default is 100, I think should be in scale of objective function (or like jacobian - how params affect obj function)
-    temperature = @(optimValues,options) options.InitialTemperature.*(0.999.^optimValues.k); % slow down?
+    %temperature = @(optimValues,options) options.InitialTemperature.*(0.999.^optimValues.k); % slow down?
     options.TemperatureFcn=temperature;
-    options.ReannealInterval=1; % brought down A LOT so there is more search? but so far not helping much...
+    %options.ReannealInterval=1; % brought down A LOT so there is more search? but so far not helping much...
 % reannealing is limited IF: temperature already decreased a lot. if
 % initial objective is not crazy high - could be more useful?
     

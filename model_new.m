@@ -9,18 +9,22 @@ function [EQS,PARREST]=...
     d21,d31,Sup1,Sup2,Sup3,SupS,addS,out,daddS,aaddS,pophous,...
     XI,wc, PID,typeic_,pid_,wgap_raw,mm_,lsbar, NLY,THETA,THETAHW,sigmam,MtoF) 
 rng(357)
-global VERBOSE
+global VERBOSE ic0
 mm=mm_;
 typeic=typeic_;
 
 eta=eta*ces;
 etaC=etaC*ceh;
+pi_=pi_*leffecth;
+pish_=pish_*leffecth;
+pisw_=pisw_*leffecth;
 
 
-%todo: redo as a structure!
-
-%todo: create pih_,piw_ as functions of d? figure out how to make the
-%dependence not obviously gendered but turn out to be gendered?
+if typeic==7 | typeic==71
+    fxi=@(a) exp(a);
+else
+    fxi=@(a) a;
+end
 
 if wlinear==1 % derivative of w(ls)*ls
     w1=@(ls,ic) wa+wb.*ls+ic.*wc;
@@ -308,26 +312,26 @@ multC_eq=@(Y,p,mu,xh,xw,lambda) 1000*CONS*[(- Y + cc(mu,lambda) + hdC(mu,p) + qc
 
 % singles 
 Leissh= @(mu,x) (1./((1-pitheta_)*pish_*(qs(mu,x).^(pitheta_*(1-crrax)))*x.^((1-pitheta_)*(1-crrax)-1) )).^(1/crrat); %note - this is not leisure this is leisure-tih
-mulSh=@(mu,x,ic) alphas.*leffecth./(Leissh(mu,x).^crrat) -XI*ic; % - der wrt h
+mulSh=@(mu,x,ic) alphas.*leffecth./(Leissh(mu,x).^crrat) -fxi(XI*ic); % - der wrt h
 lssh=@(mu,x,d) 1-betah*d -x - Leissh(mu,x)-tih;
 lssh_eq=  @(mu,x,p,d,ic) (mulSh(mu,x,ic) - mu*w1_d(lssh(mu,x,d) ,ic))*(lssh(mu,x,d)<lsbar)+(lssh(mu,x,d)==1)*0 + (lssh(mu,x,d)>lsbar)*(CONS)*(lssh(mu,x,d)-lsbar)^1;
-%mulSw=@(ls,d,ic) alphas.*leffecth./((1-alphas.*ls -betas*d+tih -xsw_fun(ls,d)).^crrat) -XI*ic; % - der wrt h
+%mulSw=@(ls,d,ic) alphas.*leffecth./((1-alphas.*ls -betas*d+tih -xsw_fun(ls,d)).^crrat) -fxi(XI*ic);; % - der wrt h
 %lssw_eq=  @(ls,p,d,ic) multS(ls,p,ic).*mulSw(ls,d,ic) - w1_d(ls,ic); % to solve for ls (d)
 
 
 % couples - both work
 %Leish_= @(q,xh,xw) (    lambda./( (1-pitheta_)*pi_*(           q^(pitheta_*(1-crrax)))*(PGT_(xh,xw)^((1-pitheta_)*(1-crrax)-1))*(pih_*(xh^(-piel_))*(PGT_(xh,xw)^piel_)) ) ).^(1/crrat);  
 
-Leish= @(mu,xh,xw,dh,dw,lambda) (    lambda./( pi_*PGT_(xh,xw,dh,dw)^(-crrax)*(max(1-piw_(dh,dw),0.0000001))*...
+Leish= @(mu,xh,xw,dh,dw,lambda) (    (leffecth*lambda)./( pi_*PGT_(xh,xw,dh,dw)^(-crrax)*(max(1-piw_(dh,dw),0.0000001))*...
     (xh^(-piel_))*(PGT_(xh,xw,dh,dw)^piel_) ) ).^(1/crrat);  
 %(    lambda./( (1-pitheta_)*pi_*(qc(mu,xh,xw)^(pitheta_*(1-crrax)))*(PGT_(xh,xw,dh,dw)^((1-pitheta_)*(1-crrax)-1))*((max(1-piw_(dh,dw),0.0000001))*...
 %    (xh^(-piel_))*(PGT_(xh,xw,dh,dw)^piel_)) ) ).^(1/crrat);  
-Leisw= @(mu,xh,xw,dh,dw,lambda) (    (1-lambda)./( pi_*PGT_(xh,xw,dh,dw)^(-crrax)*(max(piw_(dh,dw),0.0000001))*...
+Leisw= @(mu,xh,xw,dh,dw,lambda) (    (leffectw*(1-lambda))./( pi_*PGT_(xh,xw,dh,dw)^(-crrax)*(max(piw_(dh,dw),0.0000001))*...
     (xw^(-piel_))*(PGT_(xh,xw,dh,dw)^piel_) ) ).^(1/crrat);  
 %((1-lambda)./( (1-pitheta_)*pi_*(qc(mu,xh,xw)^(pitheta_*(1-crrax)))*(PGT_(xh,xw,dh,dw)^((1-pitheta_)*(1-crrax)-1))*(max(piw_(dh,dw),0.0000001)*...
 %    (xw^(-piel_))*(PGT_(xh,xw,dh,dw)^piel_)) ) ).^(1/crrat); 
-mulh=@(mu,xh,xw,dh,dw,ic,lambda) lambda*alphah.*leffecth./((Leish(mu,xh,xw,dh,dw,lambda)).^crrat) -XI*ic;
-mulw=@(mu,xh,xw,dh,dw,ic,lambda) (1-lambda)*alphaw.*leffectw./((Leisw(mu,xh,xw,dh,dw,lambda)).^crrat) -XI*ic;
+mulh=@(mu,xh,xw,dh,dw,ic,lambda) lambda*alphah.*leffecth./((Leish(mu,xh,xw,dh,dw,lambda)).^crrat) -fxi(XI*ic);
+mulw=@(mu,xh,xw,dh,dw,ic,lambda) (1-lambda)*alphaw.*leffectw./((Leisw(mu,xh,xw,dh,dw,lambda)).^crrat) -fxi(XI*ic);
 
 lsh=@(mu,o2,o3,dh,dw,lambda) (piw_(dh,dw)>0 && piw_(dh,dw)<1 )*(max(0,1-betah*dh -o2 - Leish(mu,o2,o3,dh,dw,lambda)-tih)) + (piw_(dh,dw)==1)*(1-betah*dh -o2)+ (piw_(dh,dw)==0)*(1-betah*dh -o2 -Leish(mu,o2,0.000001,dh,dw,lambda)-tih);
 lsw=@(mu,o2,o3,dh,dw,lambda) (piw_(dh,dw)>0 && piw_(dh,dw)<1 )*(max(0,1-betaw*dw -o3 - Leisw(mu,o2,o3,dh,dw,lambda)-tiw)) + (piw_(dh,dw)==0)*(1-betah*dh -o3)+ (piw_(dh,dw)==1)*(1-betah*dh -o3 -Leisw(mu,0.000001,o3,dh,dw,lambda)-tiw); 
@@ -362,19 +366,19 @@ lsaw_eq= @(mu,xh,xw,p,dh,dw,ic,lambda) [(mulw(mu,xh,xw,dh,dw,ic,lambda)  - w2_d(
 %xx=xw/xh
 
 % for piw=0 or piw=1: 
-lsb_eq_xh0= @(mu,Lh,xw,p,dh,dw,ich,icw,lambda) [(lambda*alphah.*leffecth./((Lh-tih).^crrat) - XI*ich - w1_d(1-betah*dh - Lh,ich)*mu)*(1-betah*dh - Lh<lsbar)  + (1-betah*dh - Lh <=0)*10^6 + (1-betah*dh - Lh >lsbar)*(CONS)*(1-betah*dh - Lh -lsbar)^1,...
+lsb_eq_xh0= @(mu,Lh,xw,p,dh,dw,ich,icw,lambda) [(lambda*alphah.*leffecth./((Lh-tih).^crrat) - fxi(XI*ich) - w1_d(1-betah*dh - Lh,ich)*mu)*(1-betah*dh - Lh<lsbar)  + (1-betah*dh - Lh <=0)*10^6 + (1-betah*dh - Lh >lsbar)*(CONS)*(1-betah*dh - Lh -lsbar)^1,...
     (mulw(mu,0,xw,dh,dw,icw,lambda) - w2_d(lsw(mu,0,xw,dh,dw,lambda),ich)*mu)*(lsw(mu,0,xw,dh,dw,lambda)<lsbar) + (lsw(mu,0,xw,dh,dw,lambda)<=0)*10^6 + (lsw(mu,0,xw,dh,dw,lambda)>lsbar)*(CONS)*(lsw(mu,0,xw,dh,dw,lambda)-lsbar)^1];
 lsb_eq_xw0= @(mu,xh,Lw,p,dh,dw,ich,icw,lambda) [(mulh(mu,xh,0,dh,dw,ich,lambda) - w1_d(lsh(mu,xh,0,dh,dw,lambda),ich)*mu)*(lsh(mu,xh,0,dh,dw,lambda)<lsbar) +  (lsh(mu,xh,0,dh,dw,lambda)<=0)*10^6 + (lsh(mu,xh,0,dh,dw,lambda)>lsbar)*(CONS)*(lsh(mu,xh,0,dh,dw,lambda)-lsbar)^1, ...
-    ((1-lambda)*alphah.*leffecth./((Lw-tiw).^crrat) - XI*icw - w2_d(1-betah*dw - Lw,icw)*mu)*(1-betah*dw - Lw<lsbar) + (1-betah*dw - Lw<=0)*10^6 + (1-betah*dw - Lw>lsbar)*(CONS)*(1-betah*dw - Lw - lsbar)^1];
+    ((1-lambda)*alphah.*leffectw./((Lw-tiw).^crrat) - fxi(XI*icw) - w2_d(1-betah*dw - Lw,icw)*mu)*(1-betah*dw - Lw<lsbar) + (1-betah*dw - Lw<=0)*10^6 + (1-betah*dw - Lw>lsbar)*(CONS)*(1-betah*dw - Lw - lsbar)^1];
 
-lsah_eq_xh0= @(mu,Lh,xw,p,dh,dw,ic,lambda) [(lambda*alphah.*leffecth./((Lh-tih).^crrat)  - XI*ic - w1_d(1-betah*dh - Lh,ic)*mu)*(1-betah*dh - Lh<lsbar) + (1-betah*dh - Lh>lsbar)*(CONS)*(1-betah*dh - Lh-lsbar)^1 + (1-betah*dh - Lh<=0)*10^6 ,...
+lsah_eq_xh0= @(mu,Lh,xw,p,dh,dw,ic,lambda) [(lambda*alphah.*leffecth./((Lh-tih).^crrat)  - fxi(XI*ic) - w1_d(1-betah*dh - Lh,ic)*mu)*(1-betah*dh - Lh<lsbar) + (1-betah*dh - Lh>lsbar)*(CONS)*(1-betah*dh - Lh-lsbar)^1 + (1-betah*dh - Lh<=0)*10^6 ,...
     (Leisw(mu,0,xw,dh,dw,lambda)  - (1-xw)+tiw)*CONS];
 lsah_eq_xw0= @(mu,xh,xw,p,dh,dw,ic,lambda) [(mulh(mu,xh,0,dh,dw,ic,lambda)  - w1_d(lsh(mu,xh,0,dh,dw,lambda),ic)*mu)*(lsh(mu,xh,0,dh,dw,lambda)<lsbar) + (lsh(mu,xh,0,dh,dw,lambda)>lsbar)*(CONS)*(lsh(mu,xh,0,dh,dw,lambda) - lsbar)^1 + (lsh(mu,xh,0,dh,dw,lambda)<=0)*10^6,...
     xw*CONS];
 
 lsaw_eq_xh0= @(mu,xh,xw,p,dh,dw,ic,lambda) [(mulw(mu,0,xw,dh,dw,ic,lambda)  - w2_d(lsw(mu,0,xw,dh,dw,lambda),ic)*mu)*(lsw(mu,0,xw,dh,dw,lambda)<lsbar) + (lsw(mu,0,xw,dh,dw,lambda)>lsbar)*(CONS)*(lsw(mu,0,xw,dh,dw,lambda) - lsbar)^1 + (lsw(mu,0,xw,dh,dw,lambda)<=0)*10^6, ...
     xh*CONS];
-lsaw_eq_xw0= @(mu,xh,Lw,p,dh,dw,ic,lambda) [ ((1-lambda)*alphah.*leffecth./((Lw-tiw).^crrat) -XI*ic - w2_d(1-betah*dw - Lw,ic)*mu)*(1-betah*dw - Lw<lsbar)+ (1-betah*dw - Lw>lsbar)*(CONS)*(1-betah*dw - Lw-lsbar)^1 + (1-betah*dw - Lw<=0)*10^6, ...
+lsaw_eq_xw0= @(mu,xh,Lw,p,dh,dw,ic,lambda) [ ((1-lambda)*alphah.*leffectw./((Lw-tiw).^crrat) -fxi(XI*ic) - w2_d(1-betah*dw - Lw,ic)*mu)*(1-betah*dw - Lw<lsbar)+ (1-betah*dw - Lw>lsbar)*(CONS)*(1-betah*dw - Lw-lsbar)^1 + (1-betah*dw - Lw<=0)*10^6, ...
     (Leish(mu,xh,0,dh,dw,lambda)  - (1-xh)+tih)*CONS];
 
 
@@ -384,8 +388,8 @@ if toinputs==1
             'FunctionTolerance',10^(-6),'Display','off','Algorithm','levenberg-marquardt',...
             'StepTolerance', 10^(-12)); %,'ScaleProblem','jacobian'); %'trust-region'); %'StepTolerance',10^(-15),'ScaleProblem','jacobian',
     x0=0.05;
-    mu0=ces*(1/( Ys(lssh(1,x0,8),0)-1))^(crra); %0.7402; % figure out!
-    mu0=ces*(1/( Ys(lssh(1,x0,8),0)-hdS(mu0,1)))^(crra);
+    mu0=ces*(1/( Ys(lssh(1,x0,8),ic0)-1))^(crra); %0.7402; % figure out!
+    mu0=ces*(1/( Ys(lssh(1,x0,8),ic0)-hdS(mu0,1)))^(crra);
     p=1;
     inputs0S=zeros(T,I,I,2);
 
@@ -433,8 +437,8 @@ if toinputs==1
         end
     end
 
-    ich0=0.0135; % also adjust! 
-    icw0=0.0135;
+    ich0=ic0; % also adjust! 
+    icw0=ic0;
     xh0_2=0.03;
     xh0_3=0.13;
     xh0_1=0.04;
@@ -654,7 +658,7 @@ if toinputs==1
                             if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 |  lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  |...
                                 lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
                                 if VERBOSE
-                                    fprintf('INIT: Warning');
+                                    fprintf('INIT: Warning 2');
                                 end
                                 in_=inputs0(th,tw,jh,jw,i,3,:);
                                 mu0_=  in_(1); %(lambda*ceh)*((1+((1-lambda)/lambda)^(1/crra))/(Yc(lsh(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda),lsw(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda),ich0,icw0)-hdC(output3_(1),1)))^(crra); %l*(1/(w1_d(0.258,0)))*(1/(0.69)^crrat); %0.42; %0.3902;0.6856
@@ -669,7 +673,7 @@ if toinputs==1
 
                                 if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 | lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  |...
                                     lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                                    fprintf('INIT: Warning ww 2')
+                                    fprintf('INIT: Warning ww 3')
                                     output3=output3_;
                                 else
                                     %fprintf('Solved');
@@ -751,7 +755,7 @@ EQS.('leis') = @(ls,x,d) 1-x-ls*alphas - (ls>0)*d*betas-tih ;
 EQS.('w1') = w1;
 EQS.('w2') = w2;
 EQS.('piw') = piw_;
-EQS.('uXi')= @(ls,ic) XI*ls*ic;
+EQS.('uXi')= @(ls,ic) ls*fxi(XI*ic);
 
 EQS.('mu0') = @(ls,l) 0.5*(1/(w1_d(ls,0)))*(1/(l)^crrat); %ignore
 if toinputs==1

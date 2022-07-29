@@ -64,6 +64,12 @@ THETA=params{'THETA',:}; % but gets adjusted later!
 THETAHW=params{'THETAHW',:};
 
 typeic_=params{'typeic',:};
+global ic0
+ic0=params{'ic0_',:};
+
+le_=params{'le_',:};
+%params('ces_','value')={ces_};
+
 
 %AC3=0;
 %dmin=0;
@@ -109,8 +115,8 @@ crrah_=crra_;
 
 ceh_=ce_;
 cew_=ce_;
-leh=1;
-lew=1;
+leh=le_;
+lew=le_;
 etaC_=eta_; % fixed
 
 
@@ -126,9 +132,9 @@ pisw_=pish_;
 %typeic_=3.5;
 
 toinputs=reinitialize;
-
 params('crrah_','value')={crrah_};
 params('ces_','value')={ces_};
+
 if VERBOSE
     params
 end

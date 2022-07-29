@@ -18,6 +18,7 @@ params('PHID_','value')={log(params{'PHID_',:})};
 params('eta_','value')={log(params{'eta_',:})};
 params('ce_','value')={log(params{'ce_',:})};
 params('ces_','value')={log(params{'ces_',:})}; 
+params('le_','value')={log(params{'le_',:})};
 
 params('sel','value')={log(params{'sel',:})};
 params('Jcenter','value')={log(params{'Jcenter',:})};
