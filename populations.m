@@ -82,7 +82,7 @@ if FORCEFIT==1 % recalibrate THETA and THETAHW (for within estimation routine)
     else
         smarried=1-ssw_;
     end
-    dTHETA= log((smarried)/(1-smarried))*sigmam - (uwC-uwS)
+    dTHETA= log((smarried)/(1-smarried))*sigmam - (uwC-uwS);
     params{'THETA',:}=THETA + dTHETA;
     
     PARREST.('params')=params;
