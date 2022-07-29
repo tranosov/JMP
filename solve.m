@@ -68,11 +68,11 @@ if norm(Fm(x0(end)))^2 >tol
         if Fm(x0_(1))*Fm(x0_(2))<0
             out=fzero(Fm,x0_,optionsz);
             if Fm(out)<-0.01
-                if Fm(out)*Fm(x0_(2))<0
+                if Fm(out)*Fm(x0_(2))<-10^6
                     out=fzero(Fm,[out,x0_(2)],optionsz);
                 end
             elseif Fm(out)>0.01
-                if Fm(out)*Fm(x0_(1))<0
+                if Fm(out)*Fm(x0_(1))<-10^6
                 out=fzero(Fm,[x0_(1),out],optionsz);
                 end
             end
@@ -81,11 +81,11 @@ if norm(Fm(x0(end)))^2 >tol
             if Fm(x02_(1))*Fm(x02_(2))<-(10^(-8))
                 out=fzero(Fm,x02_,optionsz); 
                 if Fm(out)<-0.01
-                    if Fm(out)*Fm(x02_(2))<0
+                    if Fm(out)*Fm(x02_(2))<-10^6
                         out=fzero(Fm,[out,x0_(2)],optionsz);
                     end
                 elseif Fm(out)>0.01
-                    if Fm(out)*Fm(x02_(1))<0
+                    if Fm(out)*Fm(x02_(1))<-10^6
                     out=fzero(Fm,[x02_(1),out],optionsz);
                     end
                 end
