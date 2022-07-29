@@ -1,5 +1,5 @@
 function [mIL1_,mAL1_,mI1_,mA1_,L_low,low]=matchdist(i,j,t,mA,mI,mAL,mIL,type,D,mm,JLs, betah) % local first!
-
+global Davg
 if isempty(mm)
     mm=0;
 end
@@ -106,12 +106,41 @@ if type==3.6 % slide + max
 end
 
 
-if type==3.7 % slide + average 
+if (type==3.7) || (type==7) % slide + average  - for hours can also be filled in with an exp!
     I=size(JLs);
     I=I(1);
     %T=s(2);
     for u=1:I
         d(u)=Do(u,JLs(:,t),D);
+    end
+    davg= sum(JLs(:,t).*d');
+    low=betah*d(j)+1-betah*davg; % average 'productivity' stay the same. but issue - is negative ic in suburbs. bad for husbands
+    
+    
+    mI1_=mI+mm*(1-low);
+    mA1_=mA+mm*(1-low);
+    L_low=betah*d(i)+1-betah*davg; % make it so it is all positive here...
+    
+    mIL1_=mI+mm*(1-L_low); %+ic*mm
+    mAL1_=mA+mm*(1-L_low);
+end
+
+if (type==3.71) || (type==71) % slide + average  - for hours can also be filled in with an exp!
+    I=size(JLs);
+    I=I(1);
+    %T=s(2);
+    for u=1:I
+        d(u)=Do(u,JLs(:,t),D);
+    end
+    if isempty(Davg) 
+        davg= sum(JLs(:,t).*d');
+        Davg=zeros(2,1);
+        Davg(t)=davg;
+    elseif Davg(t)==0
+        davg= sum(JLs(:,t).*d');
+        Davg(t)=davg;
+    else
+        davg=Davg(t);
     end
     davg= sum(JLs(:,t).*d');
     low=betah*d(j)+1-betah*davg; % average 'productivity' stay the same. but issue - is negative ic in suburbs. bad for husbands

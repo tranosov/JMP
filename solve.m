@@ -78,7 +78,7 @@ if norm(Fm(x0(end)))^2 >tol
             end
         else
             fprintf('Wider nest on lambda?')
-            if Fm(x02_(1))*Fm(x02_(2))<0
+            if Fm(x02_(1))*Fm(x02_(2))<-(10^(-8))
                 out=fzero(Fm,x02_,optionsz); 
                 if Fm(out)<-0.01
                     if Fm(out)*Fm(x02_(2))<0
