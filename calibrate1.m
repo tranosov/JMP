@@ -80,11 +80,11 @@ w1_exp=@(ls)wa.*exp(wc*ic0_);
 wd1=@(ls)wa.*exp(wc*ic0_);
 w2_exp=@(ls)wa.*exp(wgap_raw+wc*ic0_);
 Y0=(lsh0*w1_exp(lsh0)+lsw0*w2_exp(lsw0)) + NLY;
-mucouple=((l^(1/crra_)+(1-l)^(1/crra_))^crra_)/((Y0- 2)^crra_)
-le_=(1/l)*(mucouple*(wd1(lsh0))+fxi(Xi*ic0_))*(1-a*lsh0 -b*dh0-xh0)^crrat_
+mucouple=((l^(1/crra_)+(1-l)^(1/crra_))^crra_)/((Y0- 2)^crra_);
+le_=(1/l)*(mucouple*(wd1(lsh0))+fxi(Xi*ic0_))*(1-a*lsh0 -b*dh0-xh0)^crrat_;
 
 
-mucouple_check=(1/(wd1(lsh0)))*((l*le_)/(1-a*lsh0 -b*dh0-xh0)^crrat_-fxi(Xi*ic0_)) 
+mucouple_check=(1/(wd1(lsh0)))*((l*le_)/(1-a*lsh0 -b*dh0-xh0)^crrat_-fxi(Xi*ic0_)) ;
 if mucouple<0
     fprintf('IMPLIES IMPOSSIBLE MUS')
 end
