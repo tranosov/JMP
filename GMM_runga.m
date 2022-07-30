@@ -8,9 +8,12 @@ clear; clc;
 clear global;
 %cd 'C:\Users\ranos\OneDrive - Umich\Documents\D\Michigan\Res\Female careers in location\Codes\matlab'
 rng(357)
-fprintf('Running GMM estimation.\n');
+fprintf('Running GMM estimation - ga algorithm.\n');
 
-
+global filename1 filename2
+filename1 = "./estimation/progress.txt";
+filename2 = "./estimation/progressmoment.txt";
+io = fopen(filename1,'a');
 filename = "./estimation/progressmoment.txt";
 io = fopen(filename,'a');
 fprintf(io," \n");
@@ -59,10 +62,7 @@ pars=paramsest;
 global RESC
 RESC=10^3;
 global VERBOSE
-VERBOSE=1;
-global filename1 filename2
-filename1 = "./estimation/progress_ga.txt";
-filename2 = "./estimation/progressmoment_ga.txt";
+VERBOSE=0;
 
 %fopt=10^(-6); % no idea
 x0=table2array(paramsest);
