@@ -9,7 +9,7 @@ function [moments_,time,EXITFLAG,params_final]=GMMmoments(pars_,pars,momentest,m
 global VERBOSE
 
 tic
-params(pars.Properties.RowNames,:)= array2table(pars_, 'RowNames',pars.Properties.RowNames);
+params(pars.Properties.RowNames,:)= array2table( reshape(pars_,max(size(pars_)),1), 'RowNames',pars.Properties.RowNames);
 params=untransform(params);
 
 %params(pars.Properties.RowNames,:) % already untransformed
