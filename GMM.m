@@ -29,8 +29,9 @@ fprintf("time =   %16.8f\n",time);
 fprintf(" \n");
 fprintf(" iter: %16.8f\n",ITER);
 
-filename = "./estimation/progress.txt";
-io = fopen(filename,'a');
+%filename1 = "./estimation/progress.txt";
+global filename1 filename2
+io = fopen(filename1,'a');
 fprintf(io,"GMM function value =   %16.8f\n",G);
 fprintf(io,"time =   %16.8f\n",time);
 fprintf(io," iter: %16.8f\n",ITER);
@@ -45,8 +46,8 @@ fclose(io);
 ITER=ITER+1;
 
 
-filename = "./estimation/progressmoment.txt";
-io = fopen(filename,'a');
+%filename2 = "./estimation/progressmoment.txt";
+io = fopen(filename2,'a');
 fprintf(io,"GMM function value =   %16.8f\n",G);
 fprintf(io,"time =   %16.8f\n",time);
 
