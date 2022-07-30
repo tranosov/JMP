@@ -83,7 +83,7 @@ fclose(io);
 
     ObjectiveFunction=@(x)GMM(x,pars,momentest,W_,momentall,paramsall); % pars has the list!
     rng(359);
-    options = optimoptions(@ga,'MaxFunctionEvaluations',10000,'Display','iter');
+    options = optimoptions(@ga,'Display','iter');
     % increase temp to have more acceptence
 
     options.ObjectiveLimit=10^(-6); 
