@@ -203,19 +203,19 @@ else
                         end
                         kk=1;
                         while (sum(abs(cl(1:end-1)))>0.4) && (kk<10)
-                            A=1/(1000);
+                            A=1/(800);
                             x0=x0 +cl.*(A*[ones(size(x0(1:end-1))),0]);
                             fprintf('Helping p...');
                             [cl]=F(x0); 
-                            if VERBOSE
+                            %if VERBOSE
                                 cl
-                            end
+                            %end
                             kk=kk+1;
                         end  
                         WARNINGS=0;
                         kkk=kkk+1;
                     end
-                    options = optimoptions('fsolve','MaxIter',500,'Display',iter_,'MaxFunctionEvaluations',5000,...
+                    options = optimoptions('fsolve','MaxIter',500,'Display','iter','MaxFunctionEvaluations',5000,...
                     'FunctionTolerance',10^(0), 'Algorithm', 'trust-region');
                     [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,x0,options);
 
