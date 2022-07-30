@@ -91,7 +91,7 @@ A = [];
 b = [];
 Aeq = [];
 beq = [];   
-[x,fval,exitFlag,output] = ga(ObjectiveFunction,x0,A,b,Aeq,beq,LB,UB,nonlcon,intcon,options)
+[x,fval,exitFlag,output] = ga(ObjectiveFunction,size(x0,1),A,b,Aeq,beq,LB,UB,nonlcon,intcon,options)
 %simulannealbnd(ObjectiveFunction,x0,LB,UB,options);
 output
 
