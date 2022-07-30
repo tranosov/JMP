@@ -19,6 +19,7 @@ fprintf(io," \n");
 fprintf(io,"Rerun routine. \n");
 fclose(io);
 
+io = fopen(filename2,'a');
 fprintf(io," \n");
 fprintf(io,"Rerun routine. \n");
 fclose(io);
@@ -50,7 +51,7 @@ W_=(DOWN.*table2array(forw( momentest.Properties.RowNames, momentest.Properties.
 %[SEs]=SEs(x0,pars,momentest,W,momentall,paramsall);
 
 
-momentest_noL=momentest
+momentest_noL=momentest;
 momentest_noL('L',:)=[];
 W_noL=(DOWN.*table2array(forw( momentest_noL.Properties.RowNames, momentest_noL.Properties.RowNames)))\eye(size(momentest_noL.Properties.RowNames,1));
 

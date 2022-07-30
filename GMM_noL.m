@@ -6,7 +6,7 @@ global VERBOSE GMIN ITER IN %DOWN
 
 [moments_,time, EXITFLAG,params_]=GMMmoments(pars_,pars,momentest,momentall,params,1,0);
 
-momentest('L',:)=[];
+momentest('L',:)=[]; % do not compute L moment
 if EXITFLAG==999
     params_;
     G=10^(6);
@@ -15,6 +15,8 @@ else
     G=(moments_-table2array(momentest))'*W*(moments_-table2array(momentest));
     G=round(G,6); %last instance - get rid of tiny differences!
 end
+
+
 momnames=momentest.Properties.RowNames;
 pnames=params_.Properties.RowNames; % params used
 pnames2=pars.Properties.RowNames; % estimation inputs
@@ -28,9 +30,9 @@ fprintf("time =   %16.8f\n",time);
 fprintf(" \n");
 fprintf(" iter: %16.8f\n",ITER);
 
-filename = "./estimation/progress.txt";
-io = fopen(filename,'a');
-fprintf(io,"GMM function value =   %16.8f\n",G);
+global filename1 filename2
+io = fopen(filename1,'a');
+fprintf(io,"GMM function value no L =   %16.8f\n",G);
 fprintf(io,"time =   %16.8f\n",time);
 fprintf(io," iter: %16.8f\n",ITER);
 if G<GMIN
@@ -44,8 +46,8 @@ fclose(io);
 ITER=ITER+1;
 
 
-filename = "./estimation/progressmoment.txt";
-io = fopen(filename,'a');
+%filename2 = "./estimation/progressmoment.txt";
+io = fopen(filename2,'a');
 fprintf(io,"GMM function value =   %16.8f\n",G);
 fprintf(io,"time =   %16.8f\n",time);
 
@@ -90,13 +92,13 @@ fprintf(io," \n");
 fprintf(io," parameter value\n");
 for jj =1:size(params,1)
     fprintf(io,"%s",char(pnames(jj,1)));
-    fprintf(io,"%16.15f\n",table2array(params_(jj,1)));
+    fprintf(io,"%16.10f\n",table2array(params_(jj,1)));
 end
 fprintf(io," \n");
 fprintf(io," parameter value - raw inputs\n");
 for jj =1:size(pars_,1)
     fprintf(io,"%s",char(pnames2(jj,1)));
-    fprintf(io,"   ");
+    fprintf(io,"  ");
     fprintf(io,"%16.15f\n",pars_(jj,1));
 end
 
