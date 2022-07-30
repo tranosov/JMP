@@ -8,7 +8,7 @@ clear; clc;
 clear global;
 %cd 'C:\Users\ranos\OneDrive - Umich\Documents\D\Michigan\Res\Female careers in location\Codes\matlab'
 rng(357)
-fprintf('Running GMM estimation.\n');
+fprintf('Running GMM estimation -  SA.\n');
 
 
 global filename1 filename2
@@ -32,7 +32,7 @@ forw =readtable('./input/PREP.xlsx','Sheet','W','ReadVariableNames', true,'ReadR
 
 fprintf('Inputs loaded.\n');
 
-
+forparams
 paramsall=forparams(:,'value');
 paramsest=forparams(forparams.('toestimateR')==1,'value');
 momentall=formom(:,'value');
