@@ -84,11 +84,11 @@ fclose(io);
 % options
 options = optimset('Display','iter');
     ObjectiveFunction=@(x)GMM_noL(x,pars,momentest,W_noL,momentall,paramsall); % pars has the list!
-    rng(359);
+    rng(358);
     options.TolFun=10^(-3);
     options.TolX=10^(-3);
     %options.MaxFunctionEvaluations
-
+    
     %Unlike other solvers, fminsearch stops when it satisfies both TolFun and TolX.
 [x,fval,exitFlag,output] = fminsearch(ObjectiveFunction,x0,options);
 output

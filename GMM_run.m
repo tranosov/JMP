@@ -92,7 +92,7 @@ fclose(io);
 % reannealing is limited IF: temperature already decreased a lot. if
 % initial objective is not crazy high - could be more useful?
     
-    options.MaxStallIterations=20; 
+    options.MaxStallIterations=150; 
     % not sure if this is not just desperate? why would I want to evaluate that many more times around no change?
     options.FunctionTolerance=10^(-3);
     %options.HybridFcn='fminsearch';

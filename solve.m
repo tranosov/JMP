@@ -72,18 +72,18 @@ if norm(Fm(x0(end)))^2 >tol
             out=fzero(Fm,x0_,optionsz);
             fmout=Fm(out);
             if fmout<-0.01
-                if fmout*fmx2<-10^6
+                if fmout*fmx2<-10^(-6)
                     out=fzero(Fm,[out,x0_(2)],optionsz);
-                elseif  fmout*fmx1<-10^6
+                elseif  fmout*fmx1<-10^(-6)
                     out=fzero(Fm,[out,x0_(1)],optionsz);
                 else
                     fprintf('Fm(out) %d <0 , fmx2 %d>0 or fmx1 %d>0\n',fmout,fmx2,fmx1)
                     fprintf('Yet somehow I cannot solve\n')
                 end
             elseif fmout>0.01
-                if fmout*fmx1<-10^6
+                if fmout*fmx1<-10^(-6)
                     out=fzero(Fm,[x0_(1),out],optionsz);
-                elseif fmout*fmx2<-10^6
+                elseif fmout*fmx2<-10^(-6)
                     out=fzero(Fm,[out,x0_(2)],optionsz);
                 else
                     fprintf('Fm(out) %d >0 , fmx1 %d>0 or fmx2 %d>0 \n',fmout,fmx1,fmx2)
@@ -98,14 +98,14 @@ if norm(Fm(x0(end)))^2 >tol
                 out=fzero(Fm,x02_,optionsz); 
                 fmout=Fm(out);
                 if fmout<-0.01
-                    if fmout*fmx2<-10^6
+                    if fmout*fmx2<-10^(-6)
                         out=fzero(Fm,[out,x0_(2)],optionsz);
                     else
                         fprintf('Fm(out) %d <0 , fmx2 %d>0 \n',fmout,fmx2)
                         fprintf('Yet somehow I cannot solve\n')
                     end
                 elseif fmout>0.01
-                    if fmout*fmx1<-10^6
+                    if fmout*fmx1<-10^(-6)
                         out=fzero(Fm,[x02_(1),out],optionsz);
                     else
                         fprintf('Fm(out) %d >0 , fmx1 %d>0 \n',fmout,fmx1)
