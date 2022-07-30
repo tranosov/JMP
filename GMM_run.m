@@ -95,7 +95,7 @@ fclose(io);
     options.MaxStallIterations=20; 
     % not sure if this is not just desperate? why would I want to evaluate that many more times around no change?
     options.FunctionTolerance=10^(-3);
-    options.HybridFcn='fminsearch';
+    %options.HybridFcn='fminsearch';
 
     %options.ObjectiveLimit=10^(-6); 
     %options.MaxFunctionEvaluations
