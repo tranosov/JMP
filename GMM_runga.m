@@ -82,7 +82,7 @@ fprintf(io," FLAG: MINIMUM \n");
 fclose(io);
 
     ObjectiveFunction=@(x)GMM(x,pars,momentest,W_,momentall,paramsall); % pars has the list!
-    rng(356);
+    rng(355);
     options = optimoptions(@ga,'Display','iter');
     % increase temp to have more acceptence
 intcon = 1;
