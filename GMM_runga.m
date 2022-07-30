@@ -85,10 +85,6 @@ fclose(io);
     rng(359);
     options = optimoptions(@ga,'Display','iter');
     % increase temp to have more acceptence
-
-    options.ObjectiveLimit=10^(-6); 
-    %options.MaxFunctionEvaluations
-
 intcon = 1;
 nonlcon = [];
 A = [];
