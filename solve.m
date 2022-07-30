@@ -75,14 +75,14 @@ if norm(Fm(x0(end)))^2 >tol
                 if fmout*fmx2<-10^6
                     out=fzero(Fm,[out,x0_(2)],optionsz);
                 else
-                    fpritf('Fm(out) %d <0 , fmx2 %d>0 \n',fmout,fmx2)
+                    fprintf('Fm(out) %d <0 , fmx2 %d>0 \n',fmout,fmx2)
                     frpintf('Yet somehow I cannot solve\n')
                 end
             elseif fmout>0.01
                 if fmout*fmx1<-10^6
                     out=fzero(Fm,[x0_(1),out],optionsz);
                 else
-                    fpritf('Fm(out) %d >0 , fmx1 %d>0 \n',fmout,fmx1)
+                    fprintf('Fm(out) %d >0 , fmx1 %d>0 \n',fmout,fmx1)
                     frpintf('Yet somehow I cannot solve\n')
                 end
             end
@@ -97,14 +97,14 @@ if norm(Fm(x0(end)))^2 >tol
                     if fmout*fmx2<-10^6
                         out=fzero(Fm,[out,x0_(2)],optionsz);
                     else
-                        fpritf('Fm(out) %d <0 , fmx2 %d>0 \n',fmout,fmx2)
+                        fprintf('Fm(out) %d <0 , fmx2 %d>0 \n',fmout,fmx2)
                         frpintf('Yet somehow I cannot solve\n')
                     end
                 elseif fmout>0.01
                     if fmout*fmx1<-10^6
                         out=fzero(Fm,[x02_(1),out],optionsz);
                     else
-                        fpritf('Fm(out) %d >0 , fmx1 %d>0 \n',fmout,fmx1)
+                        fprintf('Fm(out) %d >0 , fmx1 %d>0 \n',fmout,fmx1)
                         frpintf('Yet somehow I cannot solve\n')
                     end
                 end

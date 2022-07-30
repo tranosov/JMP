@@ -20,7 +20,7 @@ sigmam=PARREST.('sigmam');
 ssh_=PARREST.('sstaysingleh');
 ssw_=PARREST.('sstaysinglew');
 
-lp=x(1:3);
+lp=x(1:end-1);
 LA0=x(end);
 p=exp(lp);
 LA=LA0/(RESC);

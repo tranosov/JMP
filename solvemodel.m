@@ -23,12 +23,12 @@ end
 
 if psolve==1 && msolve==1
     [x,EXITFLAG,time]=solve([log(p0),LA0*(RESC)],EQS,PARREST);
-    p=exp(x(1:3));
+    p=exp(x(1:end-1));
     LA=x(end)/(RESC);
     
 elseif psolve==1 && msolve==0.5 % not lambda, but share of married overall can change
     [x,EXITFLAG,time]=solve_halfmm([log(p0)],EQS,PARREST);
-    p=exp(x(1:3));
+    p=exp(x(1:end-1));
     LA=LA0;    
 elseif psolve && (~msolve)
     [x,EXITFLAG,time]=solvep(log(p0),EQS,PARREST,1);

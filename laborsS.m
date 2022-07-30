@@ -12,9 +12,15 @@ betah=PARREST.('betah');
 crra=PARREST.('crra');
 ces=PARREST.('ces');
 
+N=size(JLs);
+I=N(1);
+T=N(2);
 if pp==99
     params=PARREST.('params');
-    pp=[params{'p0_1',:},params{'p0_2',:},params{'p0_3',:} ];  % what was this for?
+    pp=[params{'p0_1',:},params{'p0_2',:},params{'p0_3',:} ]; 
+    if I==4
+    pp=[params{'p0_1',:},params{'p0_2',:},params{'p0_3',:},params{'p0_4',:} ]; 
+    end
 end
 
 lssh_eq=EQS.('lssh_eq');  
