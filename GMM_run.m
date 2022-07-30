@@ -32,7 +32,6 @@ forw =readtable('./input/PREP.xlsx','Sheet','W','ReadVariableNames', true,'ReadR
 
 fprintf('Inputs loaded.\n');
 
-forparams
 paramsall=forparams(:,'value');
 paramsest=forparams(forparams.('toestimateR')==1,'value');
 momentall=formom(:,'value');
