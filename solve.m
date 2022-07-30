@@ -101,19 +101,24 @@ if norm(Fm(x0(end)))^2 >tol
                 if fmout<-0.01
                     if fmout*fmx2<-10^(-3)
                         out=fzero(Fm,[out,x0_(2)],optionsz);
+                    elseif fmout*fmx2<-10^(-3)
+                        out=fzero(Fm,[out,x0_(2)],optionsz);
                     else
-                        fprintf('Fm(out) %d <0 , fmx2 %d>0 \n',fmout,fmx2)
+                        fprintf('Fm(out) %d >0 , fmx1 %d>0 or fmx2 %d>0 \n',fmout,fmx1,fmx2)
                         fprintf('Yet somehow I cannot solve\n')
                     end
                 elseif fmout>0.01
                     if fmout*fmx1<-10^(-3)
-                        out=fzero(Fm,[x02_(1),out],optionsz);
+                        out=fzero(Fm,[x0_(1),out],optionsz);
+                    elseif fmout*fmx2<-10^(-3)
+                        out=fzero(Fm,[out,x0_(2)],optionsz);
                     else
-                        fprintf('Fm(out) %d >0 , fmx1 %d>0 \n',fmout,fmx1)
+                        fprintf('Fm(out) %d >0 , fmx1 %d>0 or fmx2 %d>0 \n',fmout,fmx1,fmx2)
                         fprintf('Yet somehow I cannot solve\n')
                     end
                 end
             else
+                fprintf('Unexpected behavior for lambda in solve');
                 try
                    out=fzero(Fm,x0(end),optionsz); 
                 catch
@@ -177,25 +182,18 @@ else
 
     TOL=tol; 
     %STEPTOL=10^(-8);
-    %options = optimoptions('fsolve','MaxIter',500,'MaxFunctionEvaluations',500,...
-    %                       'FunctionTolerance',TOL,   'Display','iter',...
-    %                       'FunValCheck','on','Algorithm','trust-region'); % switch to fminsearch?
+    options = optimoptions('fsolve','MaxIter',500,'MaxFunctionEvaluations',500,...
+                           'FunctionTolerance',TOL,   'Display','iter',...
+                           'FunValCheck','on','Algorithm','trust-region'); % switch to fminsearch? not yet.
     
-    options = optimset('Display','iter');
-    options.TolFun=TOL;
-    options.TolX=TOL;
-    F_ob=@(x) norm(F(x))^2; 
     
-                [output,FVAL,EXITFLAG,OUTPUT]= fminsearch(F_ob,x0,options);
+    
+                %[output,FVAL,EXITFLAG,OUTPUT]= fminsearch(F_ob,x0,options);
                 % does not really work - check whether I can help it somehow?
 
                 % first solve lambda and only then solve prices? the feedback
                 % seems to be mostly from lambda to prices and not the other
                 % way around
-                
-                
-                if (EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3) && (EXITFLAG~=4)
-                    fprintf('Lowering standards in solve...');
                     kkk=1;
                     while (sum(abs(cl))>0.5) && (kkk<3)
                         kk=1;
@@ -224,15 +222,19 @@ else
                     end
                     %options = optimoptions('fsolve','MaxIter',500,'Display','iter','MaxFunctionEvaluations',5000,...
                     %'FunctionTolerance',10^(0), 'Algorithm', 'trust-region');
-                    %[output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,x0,options);
-                    [output,FVAL,EXITFLAG,OUTPUT]= fminsearch(F_ob,x0,options);
+                    [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,x0,options);
+                    %[output,FVAL,EXITFLAG,OUTPUT]= fminsearch(F_ob,x0,options);
 
-                end
+
                 if (EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3) && (EXITFLAG~=4)
 
                     %WARNINGS=WARNINGS+0.5; % had to lower standards
-                    fprintf('Trying again');
+                    fprintf('Trying again - with fminsearch');
                     %[output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,x0*0.9,options);
+                    options = optimset('Display','iter');
+                    options.TolFun=TOL;
+                    options.TolX=TOL;
+                    F_ob=@(x) norm(F(x))^2; 
                     [output,FVAL,EXITFLAG,OUTPUT]= fminsearch(F_ob,x0,options);
                    
 
