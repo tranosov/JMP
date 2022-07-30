@@ -45,7 +45,7 @@ end
 
         if WARNINGS>0
             fprintf('ISSUES AT EVALUATION THE CONTINUOUS VARIABLES in solvep.');
-            output=reshape(999, size(lp0));
+            output=repmat(999, size(lp0));
             EXITFLAG=999;
             return
         elseif norm(cl)^2 <=TOL
@@ -99,14 +99,6 @@ end
                 [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,lp0*0.9,options);
 
             end
-            if (EXITFLAG~=1) && (EXITFLAG~=2) && (EXITFLAG~=3) && (EXITFLAG~=4)              
-                WARNINGS=WARNINGS+1;
-                fprintf('Solvep failed many times.')
-                FVAL=FVAL
-                OUTPUT
-                EXITFLAG=999;
-            end
-            
             
             %{
             if (EXITFLAG~=1) && (EXITFLAG~=2) && (EXITFLAG~=3) && (EXITFLAG~=4)
@@ -120,7 +112,11 @@ end
                 %fprintf('Trying again again again');
                 [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,ones(size(lp0)),options);
 
-            
+            if (EXITFLAG~=1) && (EXITFLAG~=2) && (EXITFLAG~=3) && (EXITFLAG~=4)              
+                WARNINGS=WARNINGS+1;
+                fprintf('Solvep failed many times.')
+                EXITFLAG=999;
+            end
 
             end
 %}

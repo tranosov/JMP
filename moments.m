@@ -886,7 +886,7 @@ other_=[hVMAR ,wVMAR, leisurehC_raw,leisurewC_raw,hourshC_raw,hourswC_raw,xhC_ra
     distowC_raw,distowC_raw-distohC_raw,distwC_raw-disthC_raw,YncomeC, hC,p];
 
 if I==4
-    Keyso{end+1}='p4'
+    Keyso{end+1}='p4';
 end
 moments_= array2table([model_m]', 'RowNames',Keys);
 other_= array2table([model_m_add,other_], 'VariableNames',Keyso);
@@ -904,5 +904,5 @@ outcomes_=[workhC_raw,workwC_raw,...
     matchhC_raw,matchwC_raw,matchhS_raw,matchwS_raw,...
     uhousC_raw,uhoushS_raw,uhouswS_raw,...
     publicC_raw,closeC_raw,closehS_raw,closewS_raw,publichS_raw,publicwS_raw,...
-    aC_raw,ahS_raw,awS_raw,shnmarried];
+    aC_raw,ahS_raw,awS_raw,(shnmarried+swnmarried)/2];
 end
