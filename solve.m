@@ -91,6 +91,7 @@ if norm(Fm(x0(end)))^2 >tol
                 end
             end
         else
+            optionsz = optimset('TolX',tol,'Display','iter')
             fprintf('Wider net on lambda?')
             fmx2=Fm(x02_(2));
             fmx1=Fm(x02_(1));
@@ -164,22 +165,28 @@ if WARNINGS>0
     output=reshape(999,size(x0));
     EXITFLAG=999;
     fprintf('ISSUES AT EVALUATION THE CONTINUOUS VARIABLES in solve.');
-
+    return
 else 
     
     if norm(cl)^2 >tol  
                 tic
-        if VERBOSE
+        %if VERBOSE
         fprintf('Have to do joint solution...')
-        end
+        cl
+        %end
 
     TOL=tol; 
     %STEPTOL=10^(-8);
-    options = optimoptions('fsolve','MaxIter',500,'MaxFunctionEvaluations',500,...
-                           'FunctionTolerance',TOL,   'Display','iter',...
-                           'FunValCheck','on','Algorithm','trust-region'); 
-                   
-                [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,x0,options);
+    %options = optimoptions('fsolve','MaxIter',500,'MaxFunctionEvaluations',500,...
+    %                       'FunctionTolerance',TOL,   'Display','iter',...
+    %                       'FunValCheck','on','Algorithm','trust-region'); % switch to fminsearch?
+    
+    options = optimset('Display','iter');
+    options.TolFun=TOL;
+    options.TolX=TOL;
+    F_ob=@(x) norm(F(x))^2; 
+    
+                [output,FVAL,EXITFLAG,OUTPUT]= fminsearch(F_ob,x0,options);
                 % does not really work - check whether I can help it somehow?
 
                 % first solve lambda and only then solve prices? the feedback
@@ -202,10 +209,10 @@ else
                             kk=kk+1;
                         end
                         kk=1;
+                        fprintf('Helping p...');
                         while (sum(abs(cl(1:end-1)))>0.4) && (kk<10)
                             A=1/(800);
                             x0=x0 +cl.*(A*[ones(size(x0(1:end-1))),0]);
-                            fprintf('Helping p...');
                             [cl]=F(x0); 
                             %if VERBOSE
                                 cl
@@ -215,16 +222,18 @@ else
                         WARNINGS=0;
                         kkk=kkk+1;
                     end
-                    options = optimoptions('fsolve','MaxIter',500,'Display','iter','MaxFunctionEvaluations',5000,...
-                    'FunctionTolerance',10^(0), 'Algorithm', 'trust-region');
-                    [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,x0,options);
+                    %options = optimoptions('fsolve','MaxIter',500,'Display','iter','MaxFunctionEvaluations',5000,...
+                    %'FunctionTolerance',10^(0), 'Algorithm', 'trust-region');
+                    %[output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,x0,options);
+                    [output,FVAL,EXITFLAG,OUTPUT]= fminsearch(F_ob,x0,options);
 
                 end
                 if (EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3) && (EXITFLAG~=4)
 
                     %WARNINGS=WARNINGS+0.5; % had to lower standards
                     fprintf('Trying again');
-                    [output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,x0*0.9,options);
+                    %[output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,x0*0.9,options);
+                    [output,FVAL,EXITFLAG,OUTPUT]= fminsearch(F_ob,x0,options);
                    
 
                 end
