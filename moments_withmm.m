@@ -32,8 +32,8 @@ end
 if withmm
     global IN
     IN_=IN; % store!
-    mf1=exp(0.01);
-    mf2=exp(-0.01);
+    mf1=exp(0.005);
+    mf2=exp(-0.005);
     %{
     [lssh,lssw,p0,LA0]...
     =lss(1,params,0,1)
