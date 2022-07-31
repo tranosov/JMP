@@ -91,7 +91,7 @@ if norm(Fm(x0(end)))^2 >tol
                 end
             end
         else
-            optionsz = optimset('TolX',tol,'Display','iter')
+            optionsz = optimset('TolX',tol,'Display','iter');
             fprintf('Wider net on lambda?')
             fmx2=Fm(x02_(2));
             fmx1=Fm(x02_(1));
