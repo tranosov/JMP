@@ -199,7 +199,7 @@ else
                         kk=1;
                         fprintf('Helping lambda...');
                         while (sum(abs(cl(end)))>0.1) && (kk<15)
-                            x0=x0 +cl.*([zeros(size(x0(1:end-1))),(RESC)*PARREST.('sigmam')/(250*kk)])
+                            x0=x0 +cl.*([zeros(size(x0(1:end-1))),(RESC)*PARREST.('sigmam')/(150*kk)])
                             cl=F(x0);
                             %if VERBOSE
                                 cl
