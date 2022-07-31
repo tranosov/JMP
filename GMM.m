@@ -4,7 +4,18 @@ function [G]=GMM(pars_,pars,momentest,W,momentall,params)
 % create moments to compare to daya
 global VERBOSE GMIN ITER IN %DOWN
 
-[moments_,time, EXITFLAG,params_]=GMMmoments(pars_,pars,momentest,momentall,params,1,1);
+    try
+       %Error-maker
+       [moments_,time, EXITFLAG,params_]=GMMmoments(pars_,pars,momentest,momentall,params,1,1);
+    catch e %e is an MException struct
+        fprintf(1,'The identifier was:\n%s',e.identifier);
+        fprintf(1,'There was an error! The message was:\n%s',e.message);
+        % more error handling...
+        EXITFLAG=999;
+        time=0;
+        params_=params;
+    end
+
 
 
 if EXITFLAG==999
