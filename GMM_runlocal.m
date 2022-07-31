@@ -84,7 +84,7 @@ fclose(io);
 % options
 options = optimset('Display','iter');
     ObjectiveFunction=@(x)GMM_noL(x,pars,momentest,W_noL,momentall,paramsall); % pars has the list!
-    rng(358);
+    rng(354);
     options.TolFun=10^(-3);
     options.TolX=10^(-3);
     %options.MaxFunctionEvaluations
