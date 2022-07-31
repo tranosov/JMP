@@ -198,8 +198,8 @@ else
                     while (sum(abs(cl))>0.5) && (kkk<3)
                         kk=1;
                         fprintf('Helping lambda...');
-                        while (sum(abs(cl(end)))>0.1) && (kk<10)
-                            x0=x0 +cl.*([zeros(size(x0(1:end-1))),(RESC)*PARREST.('sigmam')/(300*kk)])
+                        while (sum(abs(cl(end)))>0.1) && (kk<15)
+                            x0=x0 +cl.*([zeros(size(x0(1:end-1))),(RESC)*PARREST.('sigmam')/(250*kk)])
                             cl=F(x0);
                             %if VERBOSE
                                 cl
@@ -226,19 +226,19 @@ else
                     %[output,FVAL,EXITFLAG,OUTPUT]= fminsearch(F_ob,x0,options);
 
 
-                if (EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3) && (EXITFLAG~=4)
+                %if (EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3) && (EXITFLAG~=4)
 
                     %WARNINGS=WARNINGS+0.5; % had to lower standards
-                    fprintf('Trying again - with fminsearch');
+                 %   fprintf('Trying again - with fminsearch');
                     %[output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,x0*0.9,options);
-                    options = optimset('Display','iter');
-                    options.TolFun=TOL;
-                    options.TolX=TOL;
-                    F_ob=@(x) norm(F(x))^2; 
-                    [output,FVAL,EXITFLAG,OUTPUT]= fminsearch(F_ob,x0,options);
+                  %  options = optimset('Display','iter');
+                   % options.TolFun=TOL;
+                    %options.TolX=TOL;
+                    %F_ob=@(x) norm(F(x))^2; 
+                    %[output,FVAL,EXITFLAG,OUTPUT]= fminsearch(F_ob,x0,options);
                    
 
-                end
+               % end
                 if (EXITFLAG~=1) && (EXITFLAG~=2) && (EXITFLAG~=3) && (EXITFLAG~=4)              
                     %WARNINGS=WARNINGS+1;
                     fprintf('Solve failed');
