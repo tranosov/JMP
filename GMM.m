@@ -3,14 +3,20 @@ function [G]=GMM(pars_,pars,momentest,W,momentall,params)
 % solve model
 % create moments to compare to daya
 global VERBOSE GMIN ITER IN %DOWN
+global filename1 filename2
+
 
     try
        %Error-maker
        [moments_,time, EXITFLAG,params_]=GMMmoments(pars_,pars,momentest,momentall,params,1,1);
     catch e %e is an MException struct
-        fprintf(1,'The identifier was:\n%s',e.identifier);
-        fprintf(1,'There was an error! The message was:\n%s',e.message);
-        % more error handling...
+        fprintf('The identifier was:\n%s',e.identifier);
+        fprintf('There was an error! The message was:\n%s',e.message);
+            io = fopen(filename1,'a');
+            fprintf(io,'The identifier was:\n%s',e.identifier);
+            fprintf(io,'There was an error! The message was:\n%s',e.message);
+            % more error handling...
+            fclose(io);
         EXITFLAG=999;
         time=0;
         params_=params;
@@ -41,7 +47,6 @@ fprintf(" \n");
 fprintf(" iter: %16.8f\n",ITER);
 
 %filename1 = "./estimation/progress.txt";
-global filename1 filename2
 io = fopen(filename1,'a');
 fprintf(io,"GMM function value =   %16.8f\n",G);
 fprintf(io,"time =   %16.8f\n",time);
