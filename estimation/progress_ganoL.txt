@@ -1,0 +1,325 @@
+ 
+Rerun routine. 
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+GMM function value =         7.91613000
+time =        81.15662300
+ iter:                 
+ FLAG: MINIMUM 
+GMM function value no L =        42.81341900
+time =        55.42219200
+ iter:       0.00000000
+GMM function value no L =       261.78622600
+time =        49.84551700
+ iter:       1.00000000
+GMM function value no L =       287.00224200
+time =        28.00696000
+ iter:       2.00000000
+GMM function value no L =      3470.02323200
+time =        41.30420300
+ iter:       3.00000000
+GMM function value no L =      3314.45395500
+time =        12.39804800
+ iter:       4.00000000
+GMM function value no L =        59.35875600
+time =        17.70434200
+ iter:       5.00000000
+GMM function value no L =      3321.38044400
+time =        15.76289100
+ iter:       6.00000000
+GMM function value no L =       177.61483300
+time =        18.49665300
+ iter:       7.00000000
+GMM function value no L =        77.17552700
+time =        39.70838800
+ iter:       8.00000000
+GMM function value no L =      3334.29233700
+time =        39.44966900
+ iter:       9.00000000
+GMM function value no L =        29.39052200
+time =        17.39817300
+ iter:      10.00000000
+GMM function value no L =        46.27722800
+time =        43.85058500
+ iter:      11.00000000
+GMM function value no L =      3419.34450900
+time =        51.11685900
+ iter:      12.00000000
+GMM function value no L =      3398.77395400
+time =        31.17539600
+ iter:      13.00000000
+GMM function value no L =      3335.38233900
+time =        29.57989400
+ iter:      14.00000000
+GMM function value no L =      3297.90647800
+time =        12.42248700
+ iter:      15.00000000
+GMM function value no L =      3334.83186800
+time =        15.44772700
+ iter:      16.00000000
+GMM function value no L =     12413.84026000
+time =        72.11668200
+ iter:      17.00000000
+GMM function value no L =     12488.80386100
+time =        33.82709800
+ iter:      18.00000000
+GMM function value no L =       194.53277300
+time =        47.11691500
+ iter:      19.00000000
+GMM function value no L =        21.44600600
+time =        25.42764400
+ iter:      20.00000000
+GMM function value no L =        11.44815100
+time =        20.86990100
+ iter:      21.00000000
+GMM function value no L =       104.96777700
+time =        28.26475100
+ iter:      22.00000000
+GMM function value no L =       336.79083400
+time =        25.47307200
+ iter:      23.00000000
+GMM function value no L =      3284.21908000
+time =        66.02470600
+ iter:      24.00000000
+GMM function value no L =        42.98954700
+time =        29.01548800
+ iter:      25.00000000
+GMM function value no L =        42.31406800
+time =        34.50951500
+ iter:      26.00000000
+GMM function value no L =       100.52485300
+time =        47.44081800
+ iter:      27.00000000
+GMM function value no L =       150.38638800
+time =        30.25002100
+ iter:      28.00000000
+GMM function value no L =        65.72155900
+time =        38.81351600
+ iter:      29.00000000
+GMM function value no L =        24.22341200
+time =        24.59244600
+ iter:      30.00000000
+GMM function value no L =        63.48692300
+time =        35.40777600
+ iter:      31.00000000
+GMM function value no L =      3592.01013200
+time =        76.61169900
+ iter:      32.00000000
+GMM function value no L =      3414.82293200
+time =        24.63590200
+ iter:      33.00000000
+GMM function value no L =      3443.56520600
+time =        31.90250800
+ iter:      34.00000000
+GMM function value no L =      3419.77620300
+time =        20.16208600
+ iter:      35.00000000
+GMM function value no L =        28.21371600
+time =        52.58657100
+ iter:      36.00000000
+GMM function value no L =      3417.57710800
+time =        31.98374200
+ iter:      37.00000000
+GMM function value no L =        28.26966100
+time =        24.75344200
+ iter:      38.00000000
+GMM function value no L =       133.67089500
+time =        33.62426800
+ iter:      39.00000000
+GMM function value no L =      3358.63940900
+time =        25.55285400
+ iter:      40.00000000
+GMM function value no L =        24.39782300
+time =        24.77900100
+ iter:      41.00000000
+GMM function value no L =        52.56871600
+time =        19.52665200
+ iter:      42.00000000
+GMM function value no L =      3403.09249000
+time =        28.87985300
+ iter:      43.00000000
+GMM function value no L =        54.29210400
+time =        21.05799500
+ iter:      44.00000000
+GMM function value no L =       327.84595500
+time =        27.91453300
+ iter:      45.00000000
+GMM function value no L =      3347.25678000
+time =        45.15564200
+ iter:      46.00000000
+GMM function value no L =        30.93923500
+time =        29.26023900
+ iter:      47.00000000
+GMM function value no L =       149.34566400
+time =        32.91266800
+ iter:      48.00000000
+GMM function value no L =        31.39140500
+time =        22.81469100
+ iter:      49.00000000
+GMM function value no L =       284.83611800
+time =        99.74028500
+ iter:      50.00000000
+GMM function value no L =       268.45432500
+time =        65.93752200
+ iter:      51.00000000
+GMM function value no L =      3360.55364400
+time =        21.01032100
+ iter:      52.00000000
+GMM function value no L =        53.08292900
+time =        32.71282400
+ iter:      53.00000000
+GMM function value no L =        39.13549500
+time =        50.26219300
+ iter:      54.00000000
+GMM function value no L =        44.72650200
+time =        22.40591000
+ iter:      55.00000000
+GMM function value no L =       128.58254700
+time =        95.61407200
+ iter:      56.00000000
+GMM function value no L =      3387.75996300
+time =        52.37679500
+ iter:      57.00000000
+GMM function value no L =        64.55792000
+time =        29.48902500
+ iter:      58.00000000
+GMM function value no L =       175.82486200
+time =        47.85260900
+ iter:      59.00000000
+GMM function value no L =      3474.95345100
+time =        27.82604600
+ iter:      60.00000000
+GMM function value no L =      3484.18944200
+time =        39.34100600
+ iter:      61.00000000
+GMM function value no L =       158.07886000
+time =        23.98244200
+ iter:      62.00000000
+GMM function value no L =      3328.95992700
+time =        15.28609300
+ iter:      63.00000000
+GMM function value no L =        21.35509700
+time =        18.16746600
+ iter:      64.00000000
+GMM function value no L =      3324.82245000
+time =        23.05415600
+ iter:      65.00000000
+GMM function value no L =        49.72623500
+time =        70.98625800
+ iter:      66.00000000
+GMM function value no L =        35.82526400
+time =        25.95175300
+ iter:      67.00000000
+GMM function value no L =      3412.80276500
+time =        30.83646400
+ iter:      68.00000000
+GMM function value no L =        66.12803800
+time =        19.56785500
+ iter:      69.00000000
+GMM function value no L =        61.60186500
+time =        23.44157600
+ iter:      70.00000000
+GMM function value no L =      3431.47330100
+time =        20.01961500
+ iter:      71.00000000
+GMM function value no L =        14.89682000
+time =        25.19101600
+ iter:      72.00000000
+GMM function value no L =     12485.59821500
+time =        24.05905100
+ iter:      73.00000000
+GMM function value no L =      3306.54548200
+time =        26.48810800
+ iter:      74.00000000
+GMM function value no L =        20.69167400
+time =        29.10205200
+ iter:      75.00000000
+GMM function value no L =      3423.86478900
+time =        33.87420100
+ iter:      76.00000000
+GMM function value no L =        56.21945200
+time =        21.95886400
+ iter:      77.00000000
+GMM function value no L =      3503.62475200
+time =        22.05304200
+ iter:      78.00000000
+GMM function value no L =      3318.18767300
+time =        18.90175000
+ iter:      79.00000000
+GMM function value no L =        56.15594400
+time =        40.20378400
+ iter:      80.00000000
+GMM function value no L =      3250.43683900
+time =        21.95377400
+ iter:      81.00000000
+GMM function value no L =       124.10242400
+time =        30.99300500
+ iter:      82.00000000
+GMM function value no L =       139.02604200
+time =        20.51498200
+ iter:      83.00000000
+GMM function value no L =        30.89018000
+time =        19.94647300
+ iter:      84.00000000
+GMM function value no L =        21.29146000
+time =        20.06623900
+ iter:      85.00000000
+GMM function value no L =        90.81328800
+time =        24.00930100
+ iter:      86.00000000
+GMM function value no L =        21.93603500
+time =        27.93652300
+ iter:      87.00000000
+GMM function value no L =     12430.40952900
+time =        20.87064400
+ iter:      88.00000000
+GMM function value no L =        23.60683500
+time =        32.52025100
+ iter:      89.00000000
+GMM function value no L =      3400.40720000
+time =        50.36214200
+ iter:      90.00000000
+GMM function value no L =        80.12515400
+time =        41.11700000
+ iter:      91.00000000
+GMM function value no L =      3324.77716300
+time =        23.39379500
+ iter:      92.00000000
+GMM function value no L =      3352.40209400
+time =        38.10267700
+ iter:      93.00000000
+GMM function value no L =      3269.41218300
+time =        18.83128200
+ iter:      94.00000000
+GMM function value no L =       142.19889300
+time =        37.41276300
+ iter:      95.00000000
+GMM function value no L =     12474.78371100
+time =        37.10083500
+ iter:      96.00000000
+GMM function value no L =        31.05070400
+time =        39.95297600
+ iter:      97.00000000
+GMM function value no L =      3329.64106300
+time =        19.99524300
+ iter:      98.00000000
+GMM function value no L =        18.10649200
+time =        22.00403600
+ iter:      99.00000000
+GMM function value no L =        11.45869200
+time =        28.06143100
+ iter:     100.00000000
+GMM function value no L =        14.90902700
+time =        29.77761800
+ iter:     101.00000000
+GMM function value no L =        18.10647900
+time =        22.01554000
+ iter:     102.00000000
+GMM function value no L =        20.69175300
+time =        20.24239500
+ iter:     103.00000000
+GMM function value no L =        21.29146400
+time =        28.75283600
+ iter:     104.00000000
