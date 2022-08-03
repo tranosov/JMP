@@ -12,8 +12,8 @@ fprintf('Running GMM estimation.\n');
 
 
 global filename1 filename2
-filename1 = "./estimation/progress.txt";
-filename2 = "./estimation/progressmoment.txt";
+filename1 = "./estimation/progress_ganoL.txt";
+filename2 = "./estimation/progressmoment_ganoL.txt";
 io = fopen(filename1,'a');
 fprintf(io," \n");
 fprintf(io,"Rerun routine. \n");
@@ -39,8 +39,8 @@ momentest=formom(formom.('toestimate')==1,'value');
 global DOWN
 DOWN=10^3; % scale down W. it is reallyhigh.
 
-filename = "./estimation/progress.txt";
-io = fopen(filename,'a');
+%filename = "./estimation/progress.txt";
+io = fopen(filename1,'a');
 fprintf(io," \n");
 fprintf(io,"Scaling down weighting matrix by a factor %16.8f\n",DOWN);
 fclose(io);
@@ -50,13 +50,13 @@ W_=(DOWN.*table2array(forw( momentest.Properties.RowNames, momentest.Properties.
 %[SEs]=SEs(x0,pars,momentest,W,momentall,paramsall);
 
 
-momentest_noL=momentest;
-momentest_noL('L',:)=[];
-W_noL=(DOWN.*table2array(forw( momentest_noL.Properties.RowNames, momentest_noL.Properties.RowNames)))\eye(size(momentest_noL.Properties.RowNames,1));
+%momentest_noL=momentest;
+%momentest('L',:)=[];
+%W_noL=(DOWN.*table2array(forw( momentest_noL.Properties.RowNames, momentest_noL.Properties.RowNames)))\eye(size(momentest_noL.Properties.RowNames,1));
 
 fprintf('W inverted.\n');
 
-paramsest('LA0',:)=[];
+%paramsest('LA0',:)=[];
 pars=paramsest;
 global RESC
 RESC=10^3;
@@ -82,7 +82,7 @@ fprintf(io," FLAG: MINIMUM \n");
 fclose(io);
 
 
-    ObjectiveFunction=@(x)GMM_noL(x,pars,momentest,W_noL,momentall,paramsall); % pars has the list!
+    ObjectiveFunction=@(x)GMM_noL(x,pars,momentest,W_,momentall,paramsall,1); % pars has the list!
     rng(353);
     options = optimoptions(@ga,'Display','iter');
     % increase temp to have more acceptence

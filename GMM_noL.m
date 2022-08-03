@@ -1,4 +1,4 @@
-function [G]=GMM_noL(pars_,pars,momentest,W,momentall,params)
+function [G]=GMM_noL(pars_,pars,momentest,W,momentall,params,Lpar)
 % set model
 % solve model
 % create moments to compare to daya
@@ -21,8 +21,11 @@ global filename1 filename2
             time=0;
             params_=params;
     end
-        
-momentest('L',:)=[]; % do not compute L moment
+if Lpar
+    moments_(end+1,1)=params_{'LA0',:};
+else
+    momentest('L',:)=[]; % do not compute L moment
+end
 
 if EXITFLAG==999
     params_;
@@ -48,7 +51,11 @@ fprintf(" \n");
 fprintf(" iter: %16.8f\n",ITER);
 
 io = fopen(filename1,'a');
-fprintf(io,"GMM function value no L =   %16.8f\n",G);
+if Lpar
+    fprintf(io,"GMM function value, L not recomputed=   %16.8f\n",G);
+else
+    fprintf(io,"GMM function value no L =   %16.8f\n",G);
+end
 fprintf(io,"time =   %16.8f\n",time);
 fprintf(io," iter: %16.8f\n",ITER);
 if G<GMIN
@@ -64,7 +71,7 @@ ITER=ITER+1;
 
 %filename2 = "./estimation/progressmoment.txt";
 io = fopen(filename2,'a');
-fprintf(io,"GMM function value =   %16.8f\n",G);
+fprintf(io,"GMM =   %16.8f\n",G);
 fprintf(io,"time =   %16.8f\n",time);
 
 
