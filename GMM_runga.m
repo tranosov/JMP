@@ -11,16 +11,16 @@ rng(357)
 fprintf('Running GMM estimation - ga algorithm.\n');
 
 global filename1 filename2
-filename1 = "./estimation/progress.txt";
-filename2 = "./estimation/progressmoment.txt";
+filename1 = "./estimation/progress_ga.txt";
+filename2 = "./estimation/progressmoment_ga.txt";
 io = fopen(filename1,'a');
-filename = "./estimation/progressmoment.txt";
-io = fopen(filename,'a');
+%filename = "./estimation/progressmoment.txt";
+io = fopen(filename1,'a');
 fprintf(io," \n");
 fprintf(io,"Rerun routine. \n");
 fclose(io);
-filename = "./estimation/progress.txt";
-io = fopen(filename,'a');
+%filename = "./estimation/progress.txt";
+io = fopen(filename2,'a');
 fprintf(io," \n");
 fprintf(io,"Rerun routine. \n");
 fclose(io);
@@ -40,8 +40,8 @@ momentest=formom(formom.('toestimate')==1,'value');
 global DOWN
 DOWN=10^3; % scale down W. it is reallyhigh.
 
-filename = "./estimation/progress.txt";
-io = fopen(filename,'a');
+%filename = "./estimation/progress.txt";
+io = fopen(filename2,'a');
 fprintf(io," \n");
 fprintf(io,"Scaling down weighting matrix by a factor %16.8f\n",DOWN);
 fclose(io);

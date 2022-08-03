@@ -7,7 +7,7 @@ params('plocal_','value')={1/(exp(-params{'plocal_',:}) +1)};
 params('piw_','value')={1/(exp(-params{'piw_',:}) +1)};
 %params('Jseg','value')={1/(exp(-params{'Jseg',:}) +1)};
 
-params('deltaw_','value')={1/(exp(-params{'deltaw_',:}/1000) +1)};
+params('deltaw_','value')={1/(exp(-params{'deltaw_',:}/10) +1)};
 
 params('line','value')={(1+ 1/(exp(-(params{'line',:}-1)) +1))  };
 

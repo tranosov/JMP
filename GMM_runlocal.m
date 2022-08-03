@@ -12,8 +12,8 @@ fprintf('Running GMM estimation.\n');
 
 
 global filename1 filename2
-filename1 = "./estimation/progress.txt";
-filename2 = "./estimation/progressmoment.txt";
+filename1 = "./estimation/progress_local.txt";
+filename2 = "./estimation/progressmoment_local.txt";
 io = fopen(filename1,'a');
 fprintf(io," \n");
 fprintf(io,"Rerun routine. \n");
@@ -50,13 +50,14 @@ W_=(DOWN.*table2array(forw( momentest.Properties.RowNames, momentest.Properties.
 %[SEs]=SEs(x0,pars,momentest,W,momentall,paramsall);
 
 
-momentest_noL=momentest;
-momentest_noL('L',:)=[];
-W_noL=(DOWN.*table2array(forw( momentest_noL.Properties.RowNames, momentest_noL.Properties.RowNames)))\eye(size(momentest_noL.Properties.RowNames,1));
+
+%momentest_noL=momentest;
+%momentest('L',:)=[];
+%W_noL=(DOWN.*table2array(forw( momentest_noL.Properties.RowNames, momentest_noL.Properties.RowNames)))\eye(size(momentest_noL.Properties.RowNames,1));
 
 fprintf('W inverted.\n');
 
-paramsest('LA0',:)=[];
+%paramsest('LA0',:)=[];
 pars=paramsest;
 global RESC
 RESC=10^3;
@@ -83,10 +84,10 @@ fclose(io);
 
 % options
 options = optimset('Display','iter');
-    ObjectiveFunction=@(x)GMM_noL(x,pars,momentest,W_noL,momentall,paramsall); % pars has the list!
+    ObjectiveFunction=@(x)GMM_noL(x,pars,momentest,W_,momentall,paramsall,1); % pars has the list!
     rng(354);
     options.TolFun=10^(-3);
-    options.TolX=10^(-3);
+    options.TolX=10^(-2);
     %options.MaxFunctionEvaluations
     
     %Unlike other solvers, fminsearch stops when it satisfies both TolFun and TolX.
@@ -103,3 +104,5 @@ fprintf(io," \n");
 fclose(io);
 
 % 
+% 1191 iterations and still did not fucking converge. still is improving.
+% that is wild.
