@@ -8,7 +8,7 @@ params('plocal_','value')={flogit(params{'plocal_',:})};
 params('piw_','value')={flogit(params{'piw_',:})};
 %params('Jseg','value')={flogit(params{'Jseg',:})};
 
-params('deltaw_','value')={flogit(params{'deltaw_',:})*1000};
+params('deltaw_','value')={flogit(params{'deltaw_',:})*10};
 
 
 params('line','value')={ (1+ flogit((params{'line',:}-1))) };
