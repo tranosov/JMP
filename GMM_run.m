@@ -48,6 +48,7 @@ fclose(io);
 
 
 W_=(DOWN.*table2array(forw( momentest.Properties.RowNames, momentest.Properties.RowNames)))\eye(size(momentest.Properties.RowNames,1));
+Wsq=chol(W_);
 %[SEs]=SEs(x0,pars,momentest,W,momentall,paramsall);
 
 
@@ -82,7 +83,7 @@ fprintf(" \n");
 fprintf(io," FLAG: MINIMUM \n");
 fclose(io);
 
-    ObjectiveFunction=@(x)GMM(x,pars,momentest,W_,momentall,paramsall); % pars has the list!
+    ObjectiveFunction=@(x)GMM(x,pars,momentest,W_,momentall,paramsall,Wsq); % pars has the list!
     rng(360);
     options = optimoptions(@simulannealbnd,'MaxFunctionEvaluations',10000,'Display','diagnose');
     % increase temp to have more acceptence

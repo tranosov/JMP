@@ -1,4 +1,4 @@
-function [G]=GMM_noL(pars_,pars,momentest,W,momentall,params,Lpar)
+function [G]=GMM_noL(pars_,pars,momentest,W,momentall,params,Lpar,Wsq)
 % set model
 % solve model
 % create moments to compare to daya
@@ -85,8 +85,6 @@ if EXITFLAG~=999
         %fprintf(" FLAG: MINIMUM \n");
         fprintf(io," FLAG: MINIMUM \n");
     end
-    weightedm=((moments_-table2array(momentest))'*W).*(moments_-table2array(momentest))';
-    sum(weightedm)
     % shouldn't this pe positive in all elements???
     for jj=1:size(moments_,1)
         fprintf(io,"%s",char(momnames(jj,1)));
@@ -95,12 +93,13 @@ if EXITFLAG~=999
     end
     fprintf(io," \n");
     fprintf(io," data and simulated moments: and dif and weighted dif \n");
-    weightedm=((moments_-table2array(momentest))'*W).*(moments_-table2array(momentest))';
+    
+    weightedm=abs(Wsq*(moments_-table2array(momentest))).^2;
     for jj=1:size(moments_,1)
         fprintf(io,"%s",char(momnames(jj,1)));
         fprintf(io,"%16.8f",table2array(momentest(jj,1)) -moments_(jj,1)) ; 
         %fprintf(io,"%16.8f ",abs(table2array(momentest(jj,1)) -moments_(jj,1))) ; 
-        fprintf(io,"%16.8f\n",weightedm(1,jj)) ; 
+        fprintf(io,"%16.8f\n",weightedm(jj,1)) ; 
     end
     
     
