@@ -8,7 +8,7 @@ clear; clc;
 clear global;
 %cd 'C:\Users\ranos\OneDrive - Umich\Documents\D\Michigan\Res\Female careers in location\Codes\matlab'
 rng(357)
-fprintf('Running GMM estimation.\n');
+fprintf('Running GMM estimation -fminsearch without L recomputing.\n');
 
 
 global filename1 filename2
@@ -87,9 +87,9 @@ fclose(io);
 options = optimset('Display','iter');
     ObjectiveFunction=@(x)GMM_noL(x,pars,momentest,W_,momentall,paramsall,1,Wsq); % pars has the list!
     rng(354);
-    options.TolFun=10^(-3);
-    options.TolX=10^(-2);
-    %options.MaxFunctionEvaluations
+    options.TolFun=10^(-2);
+    options.TolX=10;
+    options.MaxFunctionEvaluations=3000;
     
     %Unlike other solvers, fminsearch stops when it satisfies both TolFun and TolX.
 [x,fval,exitFlag,output] = fminsearch(ObjectiveFunction,x0,options);

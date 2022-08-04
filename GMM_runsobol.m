@@ -8,7 +8,7 @@ clear; clc;
 clear global;
 %cd 'C:\Users\ranos\OneDrive - Umich\Documents\D\Michigan\Res\Female careers in location\Codes\matlab'
 rng(357)
-fprintf('Running GMM estimation.\n');
+fprintf('Running GMM estimation - sobol points and fminsearch, with L=LA0.\n');
 
 
 global filename1 filename2
@@ -73,6 +73,41 @@ UB=table2array(forparams(paramsest.Properties.RowNames,'max'));
 %GGnoL=GMM_noL(x0,pars,momentest,W_noL,momentall,paramsall);
 
 
+% run a short version from my x0
+global GMIN ITER
+GMIN=99999;
+ITER=0;
+
+
+io = fopen(filename1,'a');
+fprintf(" \n");
+fprintf(io," FLAG: MINIMUM \n");
+fprintf(io,"GMM =   %16.8f\n",G);
+fclose(io);
+
+x00=UB.*sob_(1,:)'+LB.*(1-sob_(1,:))';
+% options
+options = optimset('Display','iter');
+    ObjectiveFunction=@(x)GMM_noL(x,pars,momentest,W_,momentall,paramsall,1,Wsq); % pars has the list!
+    rng(354);
+    options.TolFun=10^(-1); % lenient!
+    options.TolX=10^(0); % hopefully  - should not matetr
+    options.MaxFunctionEvaluations=500; % pretty low!
+
+    %Unlike other solvers, fminsearch stops when it satisfies both TolFun and TolX.
+
+[x,fval,exitFlag,output] = fminsearch(ObjectiveFunction,x00,options);
+output
+
+
+io = fopen(filename1,'a');
+fprintf(io," \n");
+fprintf(io,"Routine terminated. \n");
+fprintf(io,"%s",output);
+fprintf(io," \n");
+fclose(io);
+
+
 
 
 NP=size(table2array(pars),1);
@@ -89,16 +124,6 @@ for sobn=1:SOBN
     io = fopen(filename2,'a');
     fprintf(io," \n");
     fprintf(io,"New input0. \n");
-    fclose(io);
-    
-    global GMIN ITER
-    GMIN=99999;
-    ITER=0;
-
-
-    io = fopen(filename1,'a');
-    fprintf(" \n");
-    fprintf(io," FLAG: MINIMUM \n");
     fclose(io);
 
     x00=UB.*sob_(1,:)'+LB.*(1-sob_(1,:))';
