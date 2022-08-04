@@ -82,7 +82,7 @@ ITER=0;
 io = fopen(filename1,'a');
 fprintf(" \n");
 fprintf(io," FLAG: MINIMUM \n");
-fprintf(io,"GMM =   %16.8f\n",G);
+fprintf(io,"GMM =   %16.8f\n",GMIN);
 fclose(io);
 
 x00=UB.*sob_(1,:)'+LB.*(1-sob_(1,:))';
