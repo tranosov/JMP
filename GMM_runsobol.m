@@ -84,8 +84,6 @@ fprintf(" \n");
 fprintf(io," FLAG: MINIMUM \n");
 fprintf(io,"GMM =   %16.8f\n",GMIN);
 fclose(io);
-
-x00=UB.*sob_(1,:)'+LB.*(1-sob_(1,:))';
 % options
 options = optimset('Display','iter');
     ObjectiveFunction=@(x)GMM_noL(x,pars,momentest,W_,momentall,paramsall,1,Wsq); % pars has the list!
@@ -96,7 +94,7 @@ options = optimset('Display','iter');
 
     %Unlike other solvers, fminsearch stops when it satisfies both TolFun and TolX.
 
-[x,fval,exitFlag,output] = fminsearch(ObjectiveFunction,x00,options);
+[x,fval,exitFlag,output] = fminsearch(ObjectiveFunction,x0,options);
 output
 
 
