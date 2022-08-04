@@ -47,6 +47,7 @@ fclose(io);
 
 
 W_=(DOWN.*table2array(forw( momentest.Properties.RowNames, momentest.Properties.RowNames)))\eye(size(momentest.Properties.RowNames,1));
+Wsq=chol(W_);
 %[SEs]=SEs(x0,pars,momentest,W,momentall,paramsall);
 
 
@@ -84,7 +85,7 @@ fclose(io);
 
 % options
 options = optimset('Display','iter');
-    ObjectiveFunction=@(x)GMM_noL(x,pars,momentest,W_,momentall,paramsall,1); % pars has the list!
+    ObjectiveFunction=@(x)GMM_noL(x,pars,momentest,W_,momentall,paramsall,1,Wsq); % pars has the list!
     rng(354);
     options.TolFun=10^(-3);
     options.TolX=10^(-2);
