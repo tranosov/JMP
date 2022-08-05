@@ -16,12 +16,12 @@ filename1 = "./estimation/progress_ganoL.txt";
 filename2 = "./estimation/progressmoment_ganoL.txt";
 io = fopen(filename1,'a');
 fprintf(io," \n");
-fprintf(io,"Rerun routine. \n");
+fprintf(io,"Rerun routine. new W! \n");
 fclose(io);
 
 io = fopen(filename2,'a');
 fprintf(io," \n");
-fprintf(io,"Rerun routine. \n");
+fprintf(io,"Rerun routine. new W!\n");
 fclose(io);
 
 %%
