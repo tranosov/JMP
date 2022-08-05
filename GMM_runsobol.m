@@ -101,7 +101,8 @@ output
 io = fopen(filename1,'a');
 fprintf(io," \n");
 fprintf(io,"Routine terminated. \n");
-fprintf(io,"%s",output);
+
+fprintf(io,"%s",output.message);
 fprintf(io," \n");
 fclose(io);
 
@@ -142,7 +143,7 @@ for sobn=1:SOBN
     io = fopen(filename1,'a');
     fprintf(io," \n");
     fprintf(io,"Routine terminated. \n");
-    fprintf(io,"%s",output);
+    fprintf(io,"%s",output.message);
     fprintf(io," \n");
     fclose(io);
 
