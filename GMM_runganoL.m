@@ -84,7 +84,7 @@ fclose(io);
 
 
     ObjectiveFunction=@(x)GMM_noL(x,pars,momentest,W_,momentall,paramsall,1,Wsq); % pars has the list!
-    rng(353);
+    rng(300);
     options = optimoptions(@ga,'Display','iter');
     % increase temp to have more acceptence
     
