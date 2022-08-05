@@ -17,12 +17,12 @@ filename2 = "./estimation/progressmoment_ga.txt";
 %filename = "./estimation/progressmoment.txt";
 io = fopen(filename1,'a');
 fprintf(io," \n");
-fprintf(io,"Rerun routine. \n");
+fprintf(io,"Rerun routine. new W! \n");
 fclose(io);
 %filename = "./estimation/progress.txt";
 io = fopen(filename2,'a');
 fprintf(io," \n");
-fprintf(io,"Rerun routine. \n");
+fprintf(io,"Rerun routine. new W! \n");
 fclose(io);
 
 %%
@@ -100,7 +100,7 @@ output
 io = fopen(filename1,'a');
 fprintf(io," \n");
 fprintf(io,"Routine terminated. \n");
-fprintf(io,"%s",output);
+fprintf(io,"%s",output.message);
 fprintf(io," \n");
 fclose(io);
 
