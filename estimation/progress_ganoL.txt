@@ -1,0 +1,12 @@
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor    1000.00000000
+ FLAG: MINIMUM 
+GMM function value, L not recomputed=       326.16959200
+time =        51.50069100
+ iter:       0.00000000
+ FLAG: MINIMUM 
+GMM function value, L not recomputed=       376.87228300
+time =        42.28278000
+ iter:       1.00000000
