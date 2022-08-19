@@ -3,7 +3,7 @@ global Davg ICLOWS
 if isempty(mm)
     mm=0;
 end
-
+type=round(type,10);
 
 % just one suburb bad:
 if type==1

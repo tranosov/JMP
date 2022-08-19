@@ -25,7 +25,7 @@ fprintf(io,"Rerun routine. \n");
 fclose(io);
 
 %%
-forparams =readtable('./input/PREP.xlsx','Sheet','PARS','ReadVariableNames', true,'ReadRowNames',true);
+forparams =readtable('./input/PREP.xlsx','Sheet','PARSTEST','ReadVariableNames', true,'ReadRowNames',true);
 formom =readtable('./input/PREP.xlsx','Sheet','MOMS','ReadVariableNames', true,'ReadRowNames',true);
 forw =readtable('./input/PREP.xlsx','Sheet','W','ReadVariableNames', true,'ReadRowNames',true);
 
@@ -111,7 +111,7 @@ fclose(io);
 NP=size(table2array(pars),1);
 sob = sobolset(NP,'Skip',1e3,'Leap',1e2);
 sob= scramble(sob,'MatousekAffineOwen');
-SOBN=10;
+SOBN=20;
 sob_ = sob(1:SOBN,:);
 for sobn=1:SOBN
     io = fopen(filename1,'a');
