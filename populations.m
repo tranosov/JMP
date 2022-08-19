@@ -1,6 +1,9 @@
 function [DC, DC1, DC2,HCouple,Pw,hC,VC,cexp1,cexp2,...
-    OUTC, DS,HSingle, DSh, DSw, VS,Pws,cexps,OUTS,EQS,PARREST] = populations(p,LA,EQS,PARREST,FORCEFIT)
-
+    OUTC, DS,HSingle, DSh, DSw, VS,Pws,cexps,OUTS,EQS,PARREST,hS] = populations(p,LA,EQS,PARREST,FORCEFIT)
+global VERBOSE doepses
+if isempty(doepses)
+    doepses=0;
+end
 
 HS=PARREST.('HS');
 Jw=PARREST.('Jw');
@@ -14,15 +17,10 @@ W=3;
 
 
 [DC, DC1, DC2,HCouple,Pw,hC,VC,cexp1,cexp2,OUTC]=DCouple(p,1,LA,EQS,PARREST);
-[DS,HSingle, DSh, DSw, VS,Pws,cexps,OUTS]=DSingle(p,1,EQS,PARREST);
+[DS,hS, DSh, DSw, VS,Pws,cexps,OUTS]=DSingle(p,1,EQS,PARREST);
 
 
-DSh_agr=sum(DSh,4);
-DSw_agr=sum(DSw,4);
-uhS=2*sum(sum(sum(DSh_agr.*VS)))./sum(sum(sum(DSh_agr)));
-uwS=2*sum(sum(sum(DSw_agr.*VS)))./sum(sum(sum(DSw_agr)));
 
-%global OUTC % when you call it here - you call the version created within the function, not before!
 uh=OUTC.('uh') ;
 uw=OUTC.('uw') ;
 uhC_det=zeros(I,I,T,T,I,W,W); 
@@ -59,9 +57,33 @@ end
 DC_agr=sum(sum(DC,7),6);
 DC1_agr=sum(sum(DC1,7),6);
 DC2_agr=sum(sum(DC2,7),6);
+DSh_agr=sum(DSh,4);
+DSw_agr=sum(DSw,4);
+
+uhS=2*sum(sum(sum(DSh_agr.*VS)))./sum(sum(sum(DSh_agr)));
+uwS=2*sum(sum(sum(DSw_agr.*VS)))./sum(sum(sum(DSw_agr)));
 
 uhC=sum(sum(sum(sum(sum(DC1_agr.*uhC_)))))./sum(sum(sum(sum(sum(DC1_agr)))))+sum(sum(sum(sum(sum(DC2_agr.*uhC_)))))./sum(sum(sum(sum(sum(DC2_agr)))));
 uwC=sum(sum(sum(sum(sum(DC1_agr.*uwC_)))))./sum(sum(sum(sum(sum(DC1_agr)))))+sum(sum(sum(sum(sum(DC2_agr.*uwC_)))))./sum(sum(sum(sum(sum(DC2_agr)))));
+
+if doepses==1 
+    [OUTC,OUTS]=eps_condmean(OUTC,OUTS,PARREST,VS,VC);   
+    epsS=OUTS.('epsS');
+    epsC=OUTC.('epsC');
+    epsC_raw= sum(sum(sum(sum(sum(DC1_agr.*epsC)))))./sum(sum(sum(sum(sum(DC1_agr))))); %in second period of being in a couple - this should be the same?
+    epshS_raw= sum(sum(sum(DSh_agr.*epsS)))./sum(sum(sum(DSh_agr)));
+    epswS_raw= sum(sum(sum(DSw_agr.*epsS)))./sum(sum(sum(DSw_agr)));
+    %expectedly - singles sould get less, because they get more in
+    %systematic benefits
+    
+    uhS=uhS+epshS_raw;
+    uwS=uwS+epswS_raw;
+    uhC=uhC+epsC_raw;
+    uwC=uwC+epsC_raw;
+end
+
+
+
 % no - need to do it separately for DC1 and DC2! check if same?
 
 % Notice - the distribution does not depend on the share that gets married
@@ -108,30 +130,44 @@ if FORCEFIT==0.5 % only THETAHW, not THETA - just so I can treat lambda as a par
        
 end
 
-clmm=  F*(exp((uwC-uwS)/sigmam)/(1+exp((uwC-uwS)/sigmam)))  - M*(exp((uhC-uhS)/sigmam)/(1+exp((uhC-uhS)/sigmam)));
-if norm(clmm)>10^(-2)
-    fprintf('Marrriage market uncleared - on purpose? I am not recomputing quantities')
-    FORCEFIT=FORCEFIT
-    clmm=clmm
-    ssh=1/(1+exp((uhC-uhS)/sigmam)) 
-    ssw=1/(1+exp((uwC-uwS)/sigmam))
-    
-else
-    
 ssh=1/(1+exp((uhC-uhS)/sigmam)) ;
 ssw=1/(1+exp((uwC-uwS)/sigmam)) ;
+clmm=  F*(exp((uwC-uwS)/sigmam)/(1+exp((uwC-uwS)/sigmam)))  - M*(exp((uhC-uhS)/sigmam)/(1+exp((uhC-uhS)/sigmam)));
+
+if norm(clmm)>10^(-2) 
+    fprintf('Marrriage market uncleared or changed a lot - on purpose? I am not recomputing quantities')
+    FORCEFIT=FORCEFIT
+    clmm=clmm
+    ssh=ssh
+    ssw=ssw
+    HSingleH=hS.*DSh;
+    HSingleW=hS.*DSw;
+    HSingle=HSingleH+HSingleW;
+    HCouple=(HCouple);
+    
+else
+    if (abs(ssh-ssh_)>10^(-2) | abs(ssw-ssw_)>10^(-2)) && (VERBOSE==1)
+        fprintf('Marrriage market changed a lot.')
+        FORCEFIT=FORCEFIT
+        clmm=clmm
+        ssh=ssh
+        ssw=ssw
+    end
+    
+
 %log((1-0.15)/0.15)*sigmam = dU
 
 CONSTSH=(ssh*M*(2/3)+(1/3)*M  )/(sum(sum(sum(DSh_agr))));
 CONSTSW=(ssw*F*(2/3)+(1/3)*F  )/(sum(sum(sum(DSw_agr))));
 CONSTC=(1/2)*(M*(2/3)*(1-ssh)+F*(2/3)*(1-ssw))/(sum(sum(sum(sum(sum(DC_agr)))))) ;
+
 if norm([CONSTSH-1,CONSTSW-1,CONSTC-1])^2>0.1
     fprintf('Adjusting quantities?')
 end
 % it should be true that M*(2)*(1-ssh) = F*(2)*(1-ssw)
 
-HSingleH=HSingle.*DSh*CONSTSH ;
-HSingleW=HSingle.*DSw*CONSTSW ;
+HSingleH=hS.*DSh*CONSTSH ;
+HSingleW=hS.*DSw*CONSTSW ;
 
 HSingle=HSingleH+HSingleW;
 HCouple=(HCouple)*CONSTC; % todo: make a function for all these sums

@@ -39,8 +39,7 @@ momentest=formom(formom.('toestimate')==1,'value');
 global DOWN
 DOWN=10^3; % scale down W. it is reallyhigh.
 
-filename = "./estimation/progress.txt";
-io = fopen(filename,'a');
+io = fopen(filename1,'a');
 fprintf(io," \n");
 fprintf(io,"Scaling down weighting matrix by a factor %16.8f\n",DOWN);
 fclose(io);

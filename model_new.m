@@ -9,9 +9,15 @@ function [EQS,PARREST]=...
     d21,d31,Sup1,Sup2,Sup3,SupS,addS,out,daddS,aaddS,pophous,...
     XI,wc, PID,typeic_,pid_,wgap_raw,mm_,lsbar, NLY,THETA,THETAHW,sigmam,MtoF) 
 rng(357)
-global VERBOSE ic0
+xbar=0;
+
+global VERBOSE ic0 FLIN
 mm=mm_;
 typeic=typeic_;
+
+if isempty(FLIN)
+    FLIN=0;
+end
 
 eta=eta*ces;
 etaC=etaC*ceh;
@@ -209,9 +215,10 @@ end
 %((piw_(d))^(1/crra)/((piw_(d))^(1/crra)+(1-lambda)^(1/crra))) - percent of
 %your time spent on housework?
 
-PGT_=@(xh,xw,dh,dw) (piw_(dh,dw)==1)*((xw.^(1-piel_)).^(1/(1-piel_))) + ...
+PGT_=@(xh,xw,dh,dw) (piw_(dh,dw)==1)*(((xw-xbar).^(1-piel_)).^(1/(1-piel_))) + ...
     (piw_(dh,dw)==0)*((xh.^(1-piel_)).^(1/(1-piel_))) + ...
-    (piw_(dh,dw)>0)*(piw_(dh,dw)<1)*(max(piw_(dh,dw),0.000000001).*xw.^(1-piel_)+ (max(1-piw_(dh,dw),0.000000001)).*xh.^(1-piel_) ).^(1/(1-piel_)); % pi_.*(piw_.*xw.^(1-piel_)+ (1-piw_).*xh.^(1-piel_) ).^(1/(1-piel_)); 
+    (piw_(dh,dw)>0)*(piw_(dh,dw)<1)*(max(piw_(dh,dw),0.000000001).*(xw-xbar).^(1-piel_)+...
+    (max(1-piw_(dh,dw),0.000000001)).*xh.^(1-piel_) ).^(1/(1-piel_)); % pi_.*(piw_.*xw.^(1-piel_)+ (1-piw_).*xh.^(1-piel_) ).^(1/(1-piel_)); 
 PG_= @(xh,xw,q,dh,dw) (PGT_(xh,xw,dh,dw)^(1-qel_)+(q*pitheta_)^(1-qel_))^(1/(1-qel_));
 PG=@(xh,xw,q,dh,dw) pi_.*uux(PG_(xh,xw,q,dh,dw));
 PGsh=@(xh,q) pish_.*uux((xh^(1-qel_)+(q*pitheta_)^(1-qel_))^(1/(1-qel_))); %pish_.*xh;
@@ -230,14 +237,21 @@ end
 fdistS=@(d)betas*d; % to keep things in the same scale - make it in time. And avoid 0
 %}
 
-if gamd<1000
-    Fdist=@(dh,dw)((((1-deltaw)^(gamd))/((1-deltaw)^(gamd)+deltaw^(gamd)))*(1-betah*dh)^(gamd)+...
-        ((deltaw^(gamd))/((1-deltaw)^(gamd)+deltaw^(gamd)))*(1-dw*betaw)^(gamd))^(1/gamd); 
+if FLIN
+    Fdist=@(dh,dw) 2*(1-deltaw)*(1-betah*dh)+2*(deltaw)*(1-dw*betaw); -1; % got rid of times 2
+    FdistS=@(d)(1-betas*d);
 else
-    Fdist=@(dh,dw) 2*max( (((1-deltaw))/((1-deltaw)+deltaw))*(1-betah*dh), ((deltaw)/((1-deltaw)+deltaw))*(1-dw*betaw) ); 
+    if gamd<1000
+        %Fdist=@(dh,dw)((((1-deltaw)^(gamd))/((1-deltaw)^(gamd)+deltaw^(gamd)))*(1-betah*dh)^(gamd)+...
+         %   ((deltaw^(gamd))/((1-deltaw)^(gamd)+deltaw^(gamd)))*(1-dw*betaw)^(gamd))^(1/gamd); 
+        Fdist=@(dh,dw)((((1-deltaw)^(gamd))/((0.5)^(gamd)))*(1-betah*dh)^(gamd)+...
+            ((deltaw^(gamd))/((0.5)^(gamd)))*(1-dw*betaw)^(gamd))^(1/gamd); 
+    else
+        Fdist=@(dh,dw) 2*max( (((1-deltaw))/((1-deltaw)+deltaw))*(1-betah*dh), ((deltaw)/((1-deltaw)+deltaw))*(1-dw*betaw) ); 
+    end % I think something is wrong here it does not have F(d,d)=Fds(d)
+    % infty~ max?
+    FdistS=@(d)(1-betas*d);
 end
-% infty~ max?
-FdistS=@(d)(1-betas*d);
 
 uw=@(work,dh,dw,a,c,h,ls,xh_,xw_,q,ic) (cew*uu(-cneces+c)*(c >0)+...
     (-1.0000e+10)*(-cneces+c <=0) + a+ etaC*uuh(h/2) ...
@@ -255,23 +269,23 @@ uh=@(work,dh,dw,a,c,h,ls,xh_,xw_,q,ic) (ceh*uu(-cneces+c)*(c >0)+...
     +XI*ls*ic)+ THETA/2 + THETAHW/2;
     %-PHI*fdist(dh,dw)+...
     %-fdistw(dw
-V=@(workh,workw,dh,dw,a,ch,cw,h,lsh,lsw,xh,xw,q,ich,icw) lambda*uh(workh,dh,dw,a,ch,h,lsh,xh,xw,q,ich)+(1-lambda)*uw(workw,dh,dw,a,cw,h,lsw,xh,xw,q,icw);   
-V_lambda=@(workh,workw,dh,dw,a,ch,cw,h,lsh,lsw,xh,xw,q,ich,icw,lambda) lambda*uh(workh,dh,dw,a,ch,h,lsh,xh,xw,q,ich)+(1-lambda)*uw(workw,dh,dw,a,cw,h,lsw,xh,xw,q,icw);   
+V=@(workh,workw,dh,dw,a,ch,cw,h,lsh,lsw,xh,xw,q,ich,icw) lambda*uh(workh,dh*workh,dw*workw,a,ch,h,lsh,xh,xw,q,ich)+(1-lambda)*uw(workw,dh*workh,dw*workw,a,cw,h,lsw,xh,xw,q,icw);   
+V_lambda=@(workh,workw,dh,dw,a,ch,cw,h,lsh,lsw,xh,xw,q,ich,icw,lambda) lambda*uh(workh,dh*workh,dw*workw,a,ch,h,lsh,xh,xw,q,ich)+(1-lambda)*uw(workw,dh*workh,dw*workw,a,cw,h,lsw,xh,xw,q,icw);   
 
 us=@(work,d,a,c,h,ls,x,q,ic)(ces*uu(-cneces+c)*(c >0)+...
     (-1.0000e+10)*(-cneces+c <=0) + a+ eta*uuh(h)+ leffecth*uutime((1-work*ls*alphas - x-work*d*betas -tih))...
-    +PHID*(FdistS(d)-1)...
+    +PHID*(FdistS(d*work)-1)...
     +PGsh(x,q) ...
     +XI*ls*ic);
     %-PHI*fdistS(d) ...
 ush=@(work,d,a,c,h,ls,x,q,ic)(ces*uu(cneces+c)*(c >0)+...
     (-1.0000e+10)*(cneces+c <=0) + a+ eta*uuh(h)+ leffecth*uutime((1-work*ls*alphas - x-work*d*betas -tih))...
-    +PHID*(FdistS(d)-1)...
+    +PHID*(FdistS(d*work)-1)...
     +PGsh(x,q) ...
     +XI*ls*ic);
 usw=@(work,d,a,c,h,ls,x,q,ic)(ces*uu(-cneces+c)*(c >0)+...
     (-1.0000e+10)*(-cneces+c <=0) + a+ eta*uuh(h)+ leffecth*uutime((1-work*ls*alphas - x- work*d*betas -tih))...
-    +PHID*(FdistS(d)-1)...
+    +PHID*(FdistS(d*work)-1)...
     +PGsw(x,q) ...
     +XI*ls*ic);
 
@@ -302,8 +316,8 @@ end
 
 CONS=10;
 % prepare equations to solve for mu (only in spacial cases it has a closed form)
-multS_eq=@(Y,p,mu,x) 1000*[(- Y + cs(mu) + hdS(mu,p) + qs(mu,x))]; % will solve a system of equations for (mu,x)
-multC_eq=@(Y,p,mu,xh,xw,lambda) 1000*CONS*[(- Y + cc(mu,lambda) + hdC(mu,p) + qc(mu,xh,xw))];
+multS_eq=@(Y,p,mu,x) 1000*(- Y + cs(mu) + hdS(mu,p)*p ); %+ qs(mu,x))]; % will solve a system of equations for (mu,x)
+multC_eq=@(Y,p,mu,xh,xw,lambda) 1000*CONS*(- Y + cc(mu,lambda) + hdC(mu,p)*p); % + qc(mu,xh,xw))];
 
 %multS=@(ls,p,ic) (1/ceh)*(Ys(ls,ic).^crra).*(1 + p^(1-1/crra)*(eta/ceh)^(1/crra) )^(-crra); %1/mult!
 %multC=@(lsh,lsw,p,ich,icw) (1/ceh)*((Yc(lsh, lsw,ich,icw)).^crra).*(Z^(1/crra) + p^(1-1/crra)*(etaC/ceh)^(1/crra) )^(-crra);
@@ -327,7 +341,7 @@ Leish= @(mu,xh,xw,dh,dw,lambda) (    (leffecth*lambda)./( pi_*PGT_(xh,xw,dh,dw)^
 %(    lambda./( (1-pitheta_)*pi_*(qc(mu,xh,xw)^(pitheta_*(1-crrax)))*(PGT_(xh,xw,dh,dw)^((1-pitheta_)*(1-crrax)-1))*((max(1-piw_(dh,dw),0.0000001))*...
 %    (xh^(-piel_))*(PGT_(xh,xw,dh,dw)^piel_)) ) ).^(1/crrat);  
 Leisw= @(mu,xh,xw,dh,dw,lambda) (    (leffectw*(1-lambda))./( pi_*PGT_(xh,xw,dh,dw)^(-crrax)*(max(piw_(dh,dw),0.0000001))*...
-    (xw^(-piel_))*(PGT_(xh,xw,dh,dw)^piel_) ) ).^(1/crrat);  
+    ((xw-xbar)^(-piel_))*(PGT_(xh,xw,dh,dw)^piel_) ) ).^(1/crrat);  
 %((1-lambda)./( (1-pitheta_)*pi_*(qc(mu,xh,xw)^(pitheta_*(1-crrax)))*(PGT_(xh,xw,dh,dw)^((1-pitheta_)*(1-crrax)-1))*(max(piw_(dh,dw),0.0000001)*...
 %    (xw^(-piel_))*(PGT_(xh,xw,dh,dw)^piel_)) ) ).^(1/crrat); 
 mulh=@(mu,xh,xw,dh,dw,ic,lambda) lambda*alphah.*leffecth./((Leish(mu,xh,xw,dh,dw,lambda)).^crrat) -fxi(XI*ic);
@@ -745,7 +759,7 @@ EQS.('utill') = @(ls,x,d) uutime(1-x-ls*alphas - (ls>0)*d*betas-tih) ;
 EQS.('utilho') = @(x)etaC*uuh(x/2) ;
 EQS.('utilx') =  PG;
 EQS.('utilcl') = @(dh,dw) PHID*(Fdist(dh,dw)-1);
-EQS.('leis') = @(ls,x,d) 1-x-ls*alphas - (ls>0)*d*betas-tih ;
+EQS.('leis') = @(ls,x,d) 1-x-ls*alphas - (ls>0)*d*betas; %-tih ;
 
 %todo: think -  singles vs couples 'public goods': do I implicitely have
 %couples value it twice as much? (I think so) this does not mean the demand
@@ -795,6 +809,8 @@ PARREST.('XI')=XI;
 PARREST.('Jc')=Jc;
 PARREST.('sstaysingleh')=sstaysingleh;
 PARREST.('sstaysinglew')=sstaysinglew;
+PARREST.('lambda')=lambda;
+PARREST.('lsbar')=lsbar;
 
 end
 

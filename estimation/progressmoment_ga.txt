@@ -1,4 +1,0 @@
- 
-Rerun routine. 
- 
-Scaling down weighting matrix by a factor    1000.00000000

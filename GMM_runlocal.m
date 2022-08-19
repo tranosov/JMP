@@ -25,7 +25,7 @@ fprintf(io,"Rerun routine. \n");
 fclose(io);
 
 %%
-forparams =readtable('./input/PREP.xlsx','Sheet','PARS','ReadVariableNames', true,'ReadRowNames',true);
+forparams =readtable('./input/PREP.xlsx','Sheet','PARSTEST','ReadVariableNames', true,'ReadRowNames',true);
 formom =readtable('./input/PREP.xlsx','Sheet','MOMS','ReadVariableNames', true,'ReadRowNames',true);
 forw =readtable('./input/PREP.xlsx','Sheet','W','ReadVariableNames', true,'ReadRowNames',true);
 
@@ -87,8 +87,8 @@ fclose(io);
 options = optimset('Display','iter');
     ObjectiveFunction=@(x)GMM_noL(x,pars,momentest,W_,momentall,paramsall,1,Wsq); % pars has the list!
     rng(354);
-    options.TolFun=10^(-1);
-    options.TolX=10;
+    options.TolFun=10^(0);
+    options.TolX=50; % ignore this
     options.MaxFunctionEvaluations=3000;
     
     %Unlike other solvers, fminsearch stops when it satisfies both TolFun and TolX.
@@ -100,7 +100,7 @@ output
 io = fopen(filename1,'a');
 fprintf(io," \n");
 fprintf(io,"Routine terminated. \n");
-fprintf(io,"%s",output);
+fprintf(io,"%s",output.message);
 fprintf(io," \n");
 fclose(io);
 
