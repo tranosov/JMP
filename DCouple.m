@@ -27,6 +27,12 @@ WARNINGS=0; % reset
 OUTC=labors(p,alloutput,lambda,EQS,PARREST);
 %OUTC_=OUTC;
 %OUTC.vc
+global show
+show=0;
+if show==1
+    Vcouplesharesmatch_2(1,1,1,1,2,PARREST,OUTC)
+    Vcouplesharesmatch_2(1,1,1,1,2,PARREST,OUTC)
+end
 
 if WARNINGS>0
     DC=999*10^6;

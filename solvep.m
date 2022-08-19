@@ -1,6 +1,6 @@
 
 function [output,EXITFLAG,time]=solvep(lp0,EQS,PARREST,tolmult)
-global WARNINGS VERBOSE
+global WARNINGS VERBOSE NOLOC
 rng(357);
 if VERBOSE
     iter_="iter";
@@ -9,7 +9,13 @@ else
 end
 
 TOL=10^(-1)*tolmult; 
-F=@(x) Clearing(x,EQS,PARREST); 
+
+if NOLOC
+    F=@(x) Clearing_noloc(x,EQS,PARREST); 
+else
+    F=@(x) Clearing(x,EQS,PARREST); 
+end
+
 params=PARREST.('params');
 tic
 WARNINGS=0;

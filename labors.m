@@ -88,6 +88,8 @@ if alloutput
     uXiw=zeros(T,T,I,I,I,3);
     ich_=zeros(T,T,I,I,I,3);
     icw_=zeros(T,T,I,I,I,3);
+    %leih=zeros(T,T,I,I,I,3);
+    %leiw=zeros(T,T,I,I,I,3);
 end
 inputs=zeros(T,T,I,I,I,3,3);
 vc=zeros(T,T,I,I,I,3); % last - only h, only w, both work
@@ -419,15 +421,15 @@ for i=1:I
                     ulw(th,tw,jh,jw,i,2)=utill(lw(th,tw,jh,jw,i,2),output2(3),dw);
                     ulw(th,tw,jh,jw,i,3)=utill(lw(th,tw,jh,jw,i,3),output3(3),dw);
                     
-                    uh(th,tw,jh,jw,i,1)=utilh(1,dh,dw,AC(i),ch_fun(output1(1),lambda),hdC(output1(1),p),lh(th,tw,jh,jw,i,1),...
+                    uh(th,tw,jh,jw,i,1)=utilh(1,dh,0,AC(i),ch_fun(output1(1),lambda),hdC(output1(1),p),lh(th,tw,jh,jw,i,1),...
                        xh_fun(output1(1),output1(2),output1(3),dh,0),xw_fun(output1(1),output1(2),output1(3),dh,0),0,ich); 
-                    uh(th,tw,jh,jw,i,2)=utilh(0,dh,dw,AC(i),ch_fun(output2(1),lambda),hdC(output2(1),p),0,...
+                    uh(th,tw,jh,jw,i,2)=utilh(0,0,dw,AC(i),ch_fun(output2(1),lambda),hdC(output2(1),p),0,...
                         xh_fun(output2(1),output2(2),output2(3),0,dw),xw_fun(output2(1),output2(2),output2(3),0,dw),0,ich); 
                     uh(th,tw,jh,jw,i,3)=utilh(1,dh,dw,AC(i),ch_fun(output3(1),lambda),hdC(output3(1),p),lh(th,tw,jh,jw,i,3),...
                         xh_fun(output3(1),output3(2),output3(3),dh,dw),xw_fun(output3(1),output3(2),output3(3),dh,dw),0,ich); 
-                    uw(th,tw,jh,jw,i,1)=utilw(0,dh,dw,AC(i),cw_fun(output1(1),lambda),hdC(output1(1),p),0,...
+                    uw(th,tw,jh,jw,i,1)=utilw(0,dh,0,AC(i),cw_fun(output1(1),lambda),hdC(output1(1),p),0,...
                         xh_fun(output1(1),output1(2),output1(3),dh,0),xw_fun(output1(1),output1(2),output1(3),dh,0),0,icw); 
-                    uw(th,tw,jh,jw,i,2)=utilw(1,dh,dw,AC(i),cw_fun(output2(1),lambda),hdC(output2(1),p), lw(th,tw,jh,jw,i,2),...
+                    uw(th,tw,jh,jw,i,2)=utilw(1,0,dw,AC(i),cw_fun(output2(1),lambda),hdC(output2(1),p), lw(th,tw,jh,jw,i,2),...
                         xh_fun(output2(1),output2(2),output2(3),0,dw),xw_fun(output2(1),output2(2),output2(3),0,dw),0,icw); 
                     uw(th,tw,jh,jw,i,3)=utilw(1,dh,dw,AC(i),cw_fun(output3(1),lambda),hdC(output3(1),p),lw(th,tw,jh,jw,i,3),...
                         xh_fun(output3(1),output3(2),output3(3),dh,dw),xw_fun(output3(1),output3(2),output3(3),dh,dw),0,icw); 
@@ -445,7 +447,7 @@ for i=1:I
                     uho(th,tw,jh,jw,i,2)=utilho(Hc(th,tw,jh,jw,i,2));
                     uho(th,tw,jh,jw,i,3)=utilho(Hc(th,tw,jh,jw,i,3));
                     
-                    uXih(th,tw,jh,jw,i,1)=uXi(lh(th,tw,jh,jw,i),ich);
+                    uXih(th,tw,jh,jw,i,1)=uXi(lh(th,tw,jh,jw,i,1),ich);
                     uXih(th,tw,jh,jw,i,2)=uXi(0,0);
                     uXih(th,tw,jh,jw,i,3)=uXi(lh(th,tw,jh,jw,i,3),ich);
                     uXiw(th,tw,jh,jw,i,1)=uXi(0,0);
@@ -471,7 +473,8 @@ for i=1:I
 end
 
 
-OUTC.('vc') = vc-vc(1,1,1,1,1,1);
+OUTC.('vc') = vc-vc(1,1,1,1,1,1); % i.e. do not use for any welfare comparisons, just for generating loc choices!!!
+
 OUTC.('Hc') = Hc;
 OUTC.('lambda') = lambda;
 OUTC.('p') = pp;
@@ -484,10 +487,10 @@ if alloutput
     OUTC.('Yc') = Y;
     OUTC.('xh') = xh;
     OUTC.('lh') = lh;
-    OUTC.('ich') = ich;
+    %OUTC.('ich') = ich; % nonsense
     OUTC.('xw') = xw;
     OUTC.('lw') = lw;
-    OUTC.('icw') = icw;
+    %OUTC.('icw') = icw;
     OUTC.('mus') = mus;
     OUTC.('ch') = ch;
     OUTC.('cw') = cw;
@@ -504,6 +507,7 @@ if alloutput
     OUTC.('uXiw') = uXiw;
     OUTC.('ich_') = ich_;
     OUTC.('icw_') = icw_;
+    OUTC.('epsC') = 0;
 end
 
 end

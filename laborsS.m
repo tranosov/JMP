@@ -138,16 +138,18 @@ for j=1:I
             
             if alloutput
                 mus(t,j,i)=output(1);
+                phs(t,j,i)=Hs(t,j,i)*p;
                 xs(t,j,i)=output(2);
                 ics(t,j,i)=ic;
                 lss(t,j,i)=lssh(output(1),output(2),d);
                 ucs(t,j,i)=utilcs(cs(output(1)));
+                Yss(t,j,i)=Ys(lssh(output(1),output(2),d),ic);
                 conss(t,j,i)=cs(output(1));
                 uhs(t,j,i)=utilhs(Hs(t,j,i));
                 uls(t,j,i)=utills(lssh(output(1),output(2),d),output(2),d);
                 ucls(t,j,i)=utilcls(d);
                 uxs(t,j,i)=utilxs(output(2),0);
-                Yss(t,j,i)=Ys(lssh(output(1),output(2),d),ic);
+                
             end
         end
     end
@@ -171,7 +173,9 @@ if alloutput
     OUTS.('uxs') = uxs;
     OUTS.('ucls') = ucls;
     OUTS.('uhs') = uhs; 
-   
+    OUTS.('mus') = mus; 
+    OUTS.('phs') = phs; 
+    OUTS.('epsS') = 0;
 end
 
 end

@@ -1,5 +1,5 @@
 function [mIL1_,mAL1_,mI1_,mA1_,L_low,low]=matchdist(i,j,t,mA,mI,mAL,mIL,type,D,mm,JLs, betah) % local first!
-global Davg
+global Davg ICLOWS
 if isempty(mm)
     mm=0;
 end
@@ -194,6 +194,26 @@ if type==4
         fprintf('I think mm should be 0.')
     end
    
+end
+
+
+if (type==99) % FIXED!
+    %I=size(JLs);
+    %I=I(1);
+    %T=s(2);
+    %for u=1:I
+    %    d(u)=Do(u,JLs(:,t),D);
+    %end
+    %davg= sum(JLs(:,t).*d');
+    %low=betah*d(j)+1-betah*davg; % average 'productivity' stay the same. but issue - is negative ic in suburbs. bad for husbands
+    low=ICLOWS(j,t);
+    
+    mI1_=mI+mm*(1-low);
+    mA1_=mA+mm*(1-low);
+    %L_low=betah*d(i)+1-betah*davg; % make it so it is all positive here...
+    L_low=ICLOWS(i,t);
+    mIL1_=mI+mm*(1-L_low); %+ic*mm
+    mAL1_=mA+mm*(1-L_low);
 end
 
 %{

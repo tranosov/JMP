@@ -8,6 +8,10 @@ global sizehs
 
 %todo: only compute the necessary moments!
 
+PP(:,:,1)=repmat(p(1),2,3);
+PP(:,:,2)=repmat(p(2),2,3);
+PP(:,:,3)=repmat(p(3),2,3);
+
 D=PARREST.('D');
 %sigmal=PARREST.('sigmal');
 sigmam=PARREST.('sigmam');
@@ -30,6 +34,7 @@ Jc=PARREST.('Jc');
 
 params=PARREST.('params');
 NLY=params{'NLY',:};
+lsbar=PARREST.('lsbar');
 
 N=size(D);
 I=N(1);
@@ -50,12 +55,15 @@ ucs=OUTS.('ucs') ;
 uhs=OUTS.('uhs') ;
 uxs=OUTS.('uxs') ;
 xs=OUTS.('xs') ;
+vs=OUTS.('vs') ;
 
 Yc=OUTC.('Yc') ;
 xh=OUTC.('xh') ;
 xw=OUTC.('xw') ;
 lh=OUTC.('lh') ;
 lw=OUTC.('lw') ;
+%leih=OUTC.('leih') ;
+%leiw=OUTC.('leiw') ;
 ch=OUTC.('ch') ;
 cw=OUTC.('cw') ;
 uh=OUTC.('uh') ;
@@ -84,6 +92,13 @@ uhousS=zeros(I,T,I,W);
 uxS=zeros(I,T,I,W);
 xS=zeros(I,T,I,W);
 aS=zeros(I,T,I,W);
+uS_det=zeros(I,T,I,W);
+uS=zeros(I,T,I);
+if (OUTS.('epsS')==0) 
+    epsS=zeros(I,T,I);
+else
+    epsS=OUTS.('epsS');
+end
 for j=1:I
     for t=1:T
         for i=1:I
@@ -113,7 +128,11 @@ for j=1:I
                 xS(j,t,i,w)=xs(t,j_,i);
                 aS(j,t,i,w)=AS(i);
                 wagehS(j,t,i,w)=w1(lsS(j,t,i,w),ic); 
+                uS_det(j,t,i,w)=vs(t,j_,i);
             end
+                       
+uS(j,t,i)= sum(Pws(j,t,i,:).*uS_det(j,t,i,:)) + cexps(j,t,i);
+
         end
     end
 end
@@ -129,10 +148,17 @@ uhC_det=zeros(I,I,T,T,I,W,W);
 uwC_det=zeros(I,I,T,T,I,W,W);
 uhC=zeros(I,I,T,T,I); 
 uwC=zeros(I,I,T,T,I);
+if (OUTC.('epsC')==0) 
+    epsC=zeros(I,I,T,T,I);
+else
+    epsC=OUTC.('epsC');
+end
 matchhC=zeros(I,I,T,T,I,W,W); 
 matchwC=zeros(I,I,T,T,I,W,W);
 lshC=zeros(I,I,T,T,I,W,W); 
 lswC=zeros(I,I,T,T,I,W,W);
+lsbar_hC=zeros(I,I,T,T,I,W,W); 
+lsbar_wC=zeros(I,I,T,T,I,W,W);
 xhC=zeros(I,I,T,T,I,W,W); 
 xwC=zeros(I,I,T,T,I,W,W);
 commutehC=zeros(I,I,T,T,I,W,W); % misc
@@ -185,6 +211,8 @@ if wwi>0
     uconswC(jh,jw,th,tw,i,wh,ww)=ucw(th,tw,jh_,jw_,i,wwi);
     lshC(jh,jw,th,tw,i,wh,ww)=lsh_; 
     lswC(jh,jw,th,tw,i,wh,ww)=lsw_;
+    lsbar_hC(jh,jw,th,tw,i,wh,ww)=round(lsh_,3)==round(lsbar,3); 
+    lsbar_wC(jh,jw,th,tw,i,wh,ww)=round(lsw_,3)==round(lsbar,3);
     xhC(jh,jw,th,tw,i,wh,ww)=xh(th,tw,jh_,jw_,i,wwi);
     xwC(jh,jw,th,tw,i,wh,ww)=xw(th,tw,jh_,jw_,i,wwi);
     
@@ -221,10 +249,9 @@ if wwi>0
 end
                        end
                     end
-        
-        
-		uhC(jh,jw,th,tw,i)= sum(sum(Pw(jh,jw,th,tw,i,:,:).*uhC_det(jh,jw,th,tw,i,:,:))) + cexp1(jh,jw,th,tw,i);
-		uwC(jh,jw,th,tw,i)= sum(sum(Pw(jh,jw,th,tw,i,:,:).*uwC_det(jh,jw,th,tw,i,:,:))) + cexp2(jh,jw,th,tw,i);
+
+		uhC(jh,jw,th,tw,i)= sum(sum(Pw(jh,jw,th,tw,i,:,:).*uhC_det(jh,jw,th,tw,i,:,:))) + cexp1(jh,jw,th,tw,i) ;
+		uwC(jh,jw,th,tw,i)= sum(sum(Pw(jh,jw,th,tw,i,:,:).*uwC_det(jh,jw,th,tw,i,:,:))) + cexp2(jh,jw,th,tw,i) ;
                 
                 end
             end
@@ -296,6 +323,9 @@ hourswC_raw=sum(sumC(DC.*lswC.*workswC))./sum(sumC(DC.*workswC)) ;%0.18
 hourshC_pww_raw=sum(sumC(DC.*lshC.*PwwC))./sum(sumC(DC.*PwwC));
 hourswC_pww_raw=sum(sumC(DC.*lswC.*PwwC))./sum(sumC(DC.*PwwC));
 
+lsbar_hC_pww_raw=sum(sumC(DC.*lsbar_hC.*PwwC))./sum(sumC(DC.*PwwC));
+lsbar_wC_pww_raw=sum(sumC(DC.*lsbar_wC.*PwwC))./sum(sumC(DC.*PwwC));
+
 
 
 %% if just husband works/ wife works
@@ -308,6 +338,10 @@ d_=sumC(DC.*workshC.*(1-workswC));
 hourshC_h0_suburb=(hourshC_h0_location(2)*d_(2)+hourshC_h0_location(3)*d_(3))/(d_(2)+d_(3));
 d_=sumC(DC.*workswC.*(1-workshC));
 hourswC_0w_suburb=(hourswC_0w_location(2)*d_(2)+hourswC_0w_location(3)*d_(3))/(d_(2)+d_(3));
+
+
+lsbar_hC_h0_raw=sum(sumC(DC.*lsbar_hC.*workshC.*(1-workswC)))./sum(sumC(DC.*workshC.*(1-workswC)));
+lsbar_wC_0w_raw=sum(sumC(DC.*lsbar_wC.*workswC.*(1-workshC)))./sum(sumC(DC.*workswC.*(1-workshC)));
 
 %% wages
 lwagehC=log(wagehC);
@@ -381,6 +415,7 @@ publicwS_raw=sum(sumS(DSh.*uxS))/sum(sumS(DSh));
 publichS_raw=sum(sumS(DSw.*uxS))/sum(sumS(DSw));
 
 closeC_raw=sum(sumC(DC.*closeC))/sum(DCi);
+mindC_raw=sum(sumC(DC.*mind))/sum(DCi);
 publicC_raw=sum(sumC(DC.*publicC))/sum(DCi);
 
 
@@ -392,22 +427,32 @@ closewS_raw=sum(sumS(DSw.*closeS))/sum(sumS(DSw));
 
 
 %%
+epsC_raw= sum(sum(sum(sum(sum(DC1_agr.*epsC)))))./sum(sum(sum(sum(sum(DC1_agr))))); %in second period of being in a couple - this should be the same?
+epshS_raw= sum(sum(sum(DSh_agr.*epsS)))./sum(sum(sum(DSh_agr)));
+epswS_raw= sum(sum(sum(DSw_agr.*epsS)))./sum(sum(sum(DSw_agr)));
 
-
-uhS_life=2*sum(sum(sum(DSh_agr.*VS)))./sum(sum(sum(DSh_agr)));
-uwS_life=2*sum(sum(sum(DSw_agr.*VS)))./sum(sum(sum(DSw_agr)));
+uhS_life=2*sum(sum(sum(DSh_agr.*uS)))./sum(sum(sum(DSh_agr))) + 2*epshS_raw; % btw - a bit lower - couple amenities + h jobs - pricy housing
+uwS_life=2*sum(sum(sum(DSw_agr.*uS)))./sum(sum(sum(DSw_agr))) + 2*epswS_raw;
+% here I noticed something kind of stupid - singles get to choose location
+% each period! (they do not change from period to period)
+% why on earth am I not allowing this for the couples??? wouldn't it be
+% JUST EASIER? and also more justifiable?
+% I think I need to bring in a statistic that says that in psid single
+% people are more likely to move? (even when they remain single) - if I
+% find this, it gives another margin for couples to commute more than
+% singles. 
 
 uhS_raw=uhS_life/2;
 uwS_raw=uwS_life/2;
 
-VS_raw=sum(sum(sum(DS_agr.*VS)))./sum(sum(sum(DS_agr)));
+%VS_raw=sum(sum(sum(DS_agr.*VS)))./sum(sum(sum(DS_agr)));
 
-uhC_raw=sum(sum(sum(sum(sum(DC_agr.*uhC)))))./sum(sum(sum(sum(sum(DC_agr)))));
-uwC_raw=sum(sum(sum(sum(sum(DC_agr.*uwC)))))./sum(sum(sum(sum(sum(DC_agr)))));
+uhC_raw=sum(sum(sum(sum(sum(DC_agr.*uhC)))))./sum(sum(sum(sum(sum(DC_agr))))) + epsC_raw;
+uwC_raw=sum(sum(sum(sum(sum(DC_agr.*uwC)))))./sum(sum(sum(sum(sum(DC_agr))))) + epsC_raw;
 
 
-uhC_life=sum(sum(sum(sum(sum(DC1_agr.*uhC)))))./sum(sum(sum(sum(sum(DC1_agr)))))+sum(sum(sum(sum(sum(DC2_agr.*uhC)))))./sum(sum(sum(sum(sum(DC2_agr)))));
-uwC_life=sum(sum(sum(sum(sum(DC1_agr.*uwC)))))./sum(sum(sum(sum(sum(DC1_agr)))))+sum(sum(sum(sum(sum(DC2_agr.*uwC)))))./sum(sum(sum(sum(sum(DC2_agr)))));
+uhC_life=sum(sum(sum(sum(sum(DC1_agr.*uhC)))))./sum(sum(sum(sum(sum(DC1_agr)))))+sum(sum(sum(sum(sum(DC2_agr.*uhC)))))./sum(sum(sum(sum(sum(DC2_agr))))) +2*epsC_raw;
+uwC_life=sum(sum(sum(sum(sum(DC1_agr.*uwC)))))./sum(sum(sum(sum(sum(DC1_agr)))))+sum(sum(sum(sum(sum(DC2_agr.*uwC)))))./sum(sum(sum(sum(sum(DC2_agr))))) +2*epsC_raw;
 
 wVMAR=uwC_life - uwS_life; 
 hVMAR=uhC_life - uhS_life;
@@ -847,43 +892,47 @@ shnmarried=1 - (exp((hVMAR)/sigmam)/(1+exp((hVMAR)/sigmam)));
 %%
 
 Keys = {'scity_dif', 'wlfp_dif', 'hlfp','whours_pww_dif',...
-    'scommiles','hdj','shcommiles_dif','swcommiles_difw',...
+    'scommiles','shcommiles_dif','swcommiles_difw',...
     'hrs0_dif_citysub',...
     'betacom' ,'betacom_w','betalfp' ,'betalfp_w','betahrs0','betahrs0_w','betahrs','betahrs_w','betahwk','betahwk_w',...
-    'hdo','wdo_dif','sdo_dif','commiles_sd','do_sd','dj_sd','betalwg','betalwg_w',...
+    'hdj','hdo','wdo_dif','sdo_dif','commiles_sd','do_sd','dj_sd','betalwg','betalwg_w',...
     'shours','hhours_pww','hhours_pwn_dif','whours_pnw_difwpww',...
     'whwk_pww','whwk_pwn_dif','whwk_pnw_dif','hhwk_pww_dif','hhwk_pwn_difhpww','hhwk_pnw_difhpww',...
     'd_jobjob_all_psid','d_jobjob_within_psid','d_jobjob_hwithin_psid','d_jobjob_hw','d_jobjob_hw_actual',...
     'abs_hdo_wdo','shouseexp','p_gradient','wagegap_hw_withn','shwk',...
     'snmarried','scity','sjobscity','sd_hdo_wdo','p_gradient_simple','NLY_'};
-Keyso =  {'shnmarried','swnmarried','sdj_dif','sshouseexp','cshouseexp','wagegap_actual','wagegap_hw',...
+Keyso =  {'shnmarried_','swnmarried_','sdj_dif','sshouseexp','cshouseexp','wagegap_actual','wagegap_hw',...
     'p_gradient_swdjobs',...
+    'lsbar_hC_pww_raw','lsbar_wC_pww_raw','lsbar_hC_h0_raw','lsbar_wC_0w_raw',...
     'hVC_hVS' , 'wVC_wVS','hL','wL','hl','wl','hx','wx','hcom0','wcom0','hcom','wcom','hcons','wcons',...
     'uconshC_raw','uconswC_raw','uconshS_raw','uconswS_raw',...
     'uleishC_raw','uleiswC_raw','uleishS_raw','uleiswS_raw',...
     'matchhC_raw','matchwC_raw','matchhS_raw','matchwS_raw',...
     'uhousC_raw','uhoushS_raw','uhouswS_raw',...
     'publicC_raw','closeC_raw','closehS_raw','closewS_raw','publichS_raw','publicwS_raw',...
-    'hdo_of','wdo_of_dif','wdo_act_dif','Yc','HC','p1','p2','p3'};
+    'hdo_of','wdo_of_dif','wdo_act_dif','Yc','Ys','HC','p1','p2','p3'};
 
 model_m=[sDSi(1)-sDCi(1),workwC_raw-workhC_raw, workhC_raw, (hourswC_pww_raw-hourshC_pww_raw)*24*365,...
-        commuteS_raw,distalljC_m_raw, commuteS_raw- commutehC_raw,commuteS_raw- commutewC_raw,...
+        commuteS_raw,commuteS_raw- commutehC_raw,commuteS_raw- commutewC_raw,...
         (hours0hC_suburb-hours0wC_suburb-(hours0hC_location(1)-hours0wC_location(1)))*24*365,...
         betas(4,1),betas(4,2), betas(3,1),betas(3,2),betas(1,1),betas(1,2),betas(2,1),betas(2,2),betas(5,1),betas(5,2),...
-        distohC_m_raw,distowC_m_raw-distohC_m_raw,distohS_m_raw-distohC_m_raw, d_sd,do_sd, dj_sd, betas(6,1),betas(6,2),...
+        distalljC_m_raw, distohC_m_raw,distowC_m_raw-distohC_m_raw,distohS_m_raw-distohC_m_raw, d_sd,do_sd, dj_sd, betas(6,1),betas(6,2),...
         hours0S_raw*24*365,hourshC_pww_raw*24*365,(hourshC_h0_raw-hourshC_pww_raw)*24*365,(hourswC_0w_raw-hourswC_pww_raw)*24*365,...
         xwC_pww_raw*24*365, ( xwC_h0_raw - xwC_pww_raw)*24*365, (xwC_0w_raw - xwC_pww_raw)*24*365, (xhC_pww_raw-xwC_pww_raw)*24*365,( xhC_h0_raw - xhC_pww_raw)*24*365, (xhC_0w_raw - xhC_pww_raw)*24*365,...
         jobjob_all_m, jobjob_within_m,jobjob_hwithin_m, jobjob_hw_m, jobjob_hwact,...
         abs_hdo_wdo,sH,  pg(1,1),-wagegap_hw_within,xS_raw*24*365,...
         shnmarried,scity,JLs_all_m(1,1),sd_hdo_wdo,p_gradient_simple,NLY_];
 model_m_add=[shnmarried,swnmarried,distalljS_m_raw-distalljC_m_raw, sHS, sHC,wagegap_actual,wagegap_hw , pg(2,1) ];
-other_=[hVMAR ,wVMAR, leisurehC_raw,leisurewC_raw,hourshC_raw,hourswC_raw,xhC_raw,xwC_raw,comtimehC_raw*betah,comtimewC_raw*betah,commutehC_raw*betah,commutewC_raw*betah,conshC_raw,conswC_raw,...
-   uconshC_raw,uconswC_raw,uconshS_raw,uconswS_raw,...
+other_=[    lsbar_hC_pww_raw,lsbar_wC_pww_raw,lsbar_hC_h0_raw,lsbar_wC_0w_raw,...
+    hVMAR ,wVMAR, leisurehC_raw,leisurewC_raw,hourshC_raw,hourswC_raw,xhC_raw,xwC_raw,...
+    comtimehC_raw*betah,comtimewC_raw,commutehC_raw*betah,commutewC_raw*betah,...
+    conshC_raw,conswC_raw,uconshC_raw,uconswC_raw,uconshS_raw,uconswS_raw,...
     leishC_raw,leiswC_raw,uleishS_raw,uleiswS_raw,...
     matchhC_raw,matchwC_raw,matchhS_raw,matchwS_raw,...
     uhousC_raw,uhoushS_raw,uhouswS_raw,...
     publicC_raw,closeC_raw,closehS_raw,closewS_raw,publichS_raw,publicwS_raw,...
-    distowC_raw,distowC_raw-distohC_raw,distwC_raw-disthC_raw,YncomeC, hC,p];
+    distowC_raw,distowC_raw-distohC_raw,distwC_raw-disthC_raw,YncomeC, YncomeS,hC,p];
+
 
 if I==4
     Keyso{end+1}='p4';
@@ -891,18 +940,23 @@ end
 moments_= array2table([model_m]', 'RowNames',Keys);
 other_= array2table([model_m_add,other_], 'VariableNames',Keyso);
 
-aC_raw=sum(sumC(aC.*DC))./sum(DCi);
-ahS_raw=sum(sumS(DSh.*aS))./sum(sumS(DSh));
-awS_raw=sum(sumS(DSw.*aS))./sum(sumS(DSw));
+aC_raw=sum(sumC(aC.*DC))./sum(DCi) + sum(sum(sum(sum(sum(DC1_agr.*epsC)))))./sum(sum(sum(sum(sum(DC1_agr)))));
+% check it is the same as sum(sumC(aC.*DC1))./sum(sumC(DC1))
+ahS_raw=sum(sumS(DSh.*aS))./sum(sumS(DSh)) + sum(sum(sum(DSh_agr.*epsS)))./sum(sum(sum(DSh_agr)));
+awS_raw=sum(sumS(DSw.*aS))./sum(sumS(DSw)) + sum(sum(sum(DSw_agr.*epsS)))./sum(sum(sum(DSw_agr)));
+
+
+
+%%
 outcomes_=[workhC_raw,workwC_raw,...
     sDCi(1),sDSi(1),...
-    commutehC_raw,commutewC_raw,commuteS_raw,...
+    commutehC_raw,commutewC_raw,mindC_raw,commuteS_raw,...
     distohC_m_raw,distowC_m_raw,distoS_m_raw,...
-    uhC_raw,uwC_raw,uhS_raw,uwS_raw, VS_raw,...
+    uhC_raw,uwC_raw,uhS_raw,uwS_raw,...
     uconshC_raw,uconswC_raw,uconshS_raw,uconswS_raw,...
     leishC_raw,leiswC_raw,uleishS_raw,uleiswS_raw,...
     matchhC_raw,matchwC_raw,matchhS_raw,matchwS_raw,...
     uhousC_raw,uhoushS_raw,uhouswS_raw,...
     publicC_raw,closeC_raw,closehS_raw,closewS_raw,publichS_raw,publicwS_raw,...
-    aC_raw,ahS_raw,awS_raw,(shnmarried+swnmarried)/2];
+    aC_raw,ahS_raw,awS_raw,shnmarried,swnmarried];
 end
