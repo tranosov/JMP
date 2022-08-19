@@ -9,6 +9,11 @@ global filename1 filename2
     try
 
         [moments_,time, EXITFLAG,params_]=GMMmoments(pars_,pars,momentest,momentall,params,1,0);
+        if Lpar
+            moments_(end+1,1)=params_{'LA0',:};
+        else
+            momentest('L',:)=[]; % do not compute L moment
+        end
     catch e %e is an MException struct
             fprintf('The identifier was:\n%s',e.identifier);
             fprintf('There was an error! The message was:\n%s',e.message);
@@ -21,11 +26,8 @@ global filename1 filename2
             time=0;
             params_=params;
     end
-if Lpar
-    moments_(end+1,1)=params_{'LA0',:};
-else
-    momentest('L',:)=[]; % do not compute L moment
-end
+    
+
 
 if EXITFLAG==999
     params_;
