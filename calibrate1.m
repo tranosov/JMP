@@ -1,7 +1,7 @@
 
 
 function parsc=calibrate1(params,momentall)
-
+global VERBOSE
 b=params{'b',:};
 %ce_=params{'ce_',:};
 %crra_=params{'crra_',:};
@@ -80,7 +80,7 @@ pih_=((lam/(1-lam))*(xh0/xw0)^piel_)/((lam/(1-lam))*(xh0/xw0)^piel_+((Lh0)/(Lw0)
 piw_=1-pih_;
 
 piel_check= (log(piw_/pih_)+log(w1/w2))/log(xw0/xh0);
-if abs(piel_-piel_check)>0.02
+if (abs(piel_-piel_check)>0.02) & (VERBOSE==1)
     piel_=piel_
     piel_check=piel_check
     fprintf('piel will likely not work?')
