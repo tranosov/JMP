@@ -16,12 +16,12 @@ filename1 = "./estimation/progress_ganoL.txt";
 filename2 = "./estimation/progressmoment_ganoL.txt";
 io = fopen(filename1,'a');
 fprintf(io," \n");
-fprintf(io,"Rerun routine. new W! \n");
+fprintf(io,"Rerun routine.  \n");
 fclose(io);
 
 io = fopen(filename2,'a');
 fprintf(io," \n");
-fprintf(io,"Rerun routine. new W!\n");
+fprintf(io,"Rerun routine.\n");
 fclose(io);
 
 %%
@@ -129,7 +129,7 @@ fclose(io);
     options = optimoptions(@ga,'Display','iter');
     % increase temp to have more acceptence
     
-intcon = 1;
+intcon = [];
 nonlcon = [];
 A = [];
 b = [];
