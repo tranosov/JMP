@@ -68,11 +68,18 @@ if G<GMIN
         fprintf(io," FLAG: MINIMUM \n");
 end
 
-global Wadd
-if ~isempty(Wadd)
+global Wadd GMINadd
+if (~isempty(Wadd)) &&  (EXITFLAG<999)
     fprintf(" \n");
     Gadd=(moments_-table2array(momentest))'*Wadd*(moments_-table2array(momentest));
     fprintf(io,"GMM - W=inv(V)   %16.8f\n",Gadd);
+    if Gadd<GMINadd
+        GMINadd=Gadd;
+        fprintf(" \n");
+        fprintf(io," FLAG: MINIMUM in W=inv(V) \n");
+        fprintf(" \n");
+    end
+
     fprintf(" \n");
 end
 

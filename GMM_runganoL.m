@@ -108,8 +108,9 @@ G_W2=GMM_noL(x0,pars,momentest,Wall2,momentall,paramsall,1,Wsq_all2);
 W_=Wall2;
 Wsq=Wsq_all2;
 
-global Wadd
+global Wadd GMINadd
 Wadd=Wall;
+GMINadd=G_W;
 
 %%
 global GMIN ITER
