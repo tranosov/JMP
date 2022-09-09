@@ -85,6 +85,7 @@ if withmm
     IN=IN_;
     moments_('L',:)={L};
 else
+    moments_('L',:)={LA};
     EXITFLAG=1;
     
 end

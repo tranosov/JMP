@@ -19,20 +19,10 @@ function [V,workh, workw, Pnn, Pnw0,Pnw, Pw0n,Pw0w0,Pw0w, Pwn, Pww0,Pww,conexp1,
 %global typeic mm show JLs mA mI mAL mIL OUTC
 global show
 
-typeic=PARREST.('typeic');
-D=PARREST.('D');
-mm=PARREST.('mm');
-JLs=PARREST.('JLs');
-betah=PARREST.('betah');
-mA=PARREST.('mA');
-mI=PARREST.('mI');
-mAL=PARREST.('mAL');
-mIL=PARREST.('mIL');
-
 plocal=PARREST.('plocal');
 
-[mI1_,mA1_,mIG1_,mAG1_]=matchdist(i,jh,th,mA,mI,mAL,mIL, typeic,D,mm,JLs, betah);
-[mI2_,mA2_,mIG2_,mAG2_]=matchdist(i,jw,tw,mA,mI,mAL,mIL, typeic,D,mm,JLs, betah);
+%[mI1_,mA1_,mIG1_,mAG1_]=matchdist(i,jh,th,mA,mI,mAL,mIL, typeic,D,mm,JLs, betah);
+%[mI2_,mA2_,mIG2_,mAG2_]=matchdist(i,jw,tw,mA,mI,mAL,mIL, typeic,D,mm,JLs, betah);
 
 
 [V_,workh_, workw_, Pnn_, Pnw0_,Pnw_, Pw0n_,Pw0w0_,Pw0w_, Pwn_, Pww0_,Pww_,conexp1_, conexp2_]=Vcouplesharesmatch0_2(th,tw,jh,jw,i,PARREST,OUTC);

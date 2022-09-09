@@ -5,15 +5,16 @@ function [G]=GMM_noL(pars_,pars,momentest,W,momentall,params,Lpar,Wsq)
 global VERBOSE GMIN ITER IN %DOWN
 global filename1 filename2
 
+if Lpar~=1
+    %moments_(end,1)=table2array(params{'LA0',:});% I moved it inside
+    %GMMmoments?
+%else
+    momentest('L',:)=[]; % do not compute L moment
+end
 
     try
 
         [moments_,time, EXITFLAG,params_]=GMMmoments(pars_,pars,momentest,momentall,params,1,0);
-        if Lpar
-            moments_(end+1,1)=params_{'LA0',:};
-        else
-            momentest('L',:)=[]; % do not compute L moment
-        end
     catch e %e is an MException struct
             fprintf('The identifier was:\n%s',e.identifier);
             fprintf('There was an error! The message was:\n%s',e.message);
@@ -26,7 +27,6 @@ global filename1 filename2
             time=0;
             params_=params;
     end
-    
 
 
 if EXITFLAG==999
@@ -35,7 +35,7 @@ if EXITFLAG==999
     clear('global', 'IN')
 else
     G=(moments_-table2array(momentest))'*W*(moments_-table2array(momentest));
-    G=round(G,6); %last instance - get rid of tiny differences!
+    %G=round(G,6); %last instance - get rid of tiny differences!
 end
 
 
@@ -58,6 +58,7 @@ if Lpar
 else
     fprintf(io,"GMM function value no L =   %16.8f\n",G);
 end
+
 fprintf(io,"time =   %16.8f\n",time);
 fprintf(io," iter: %16.8f\n",ITER);
 if G<GMIN
@@ -65,6 +66,14 @@ if G<GMIN
         fprintf(" \n");
         fprintf(" FLAG: MINIMUM \n");
         fprintf(io," FLAG: MINIMUM \n");
+end
+
+global Wadd
+if ~isempty(Wadd)
+    fprintf(" \n");
+    Gadd=(moments_-table2array(momentest))'*Wadd*(moments_-table2array(momentest));
+    fprintf(io,"GMM - W=inv(V)   %16.8f\n",Gadd);
+    fprintf(" \n");
 end
 
 fclose(io);
@@ -87,6 +96,8 @@ if EXITFLAG~=999
         %fprintf(" FLAG: MINIMUM \n");
         fprintf(io," FLAG: MINIMUM \n");
     end
+    %weightedm=((moments_-table2array(momentest))'*W).*(moments_-table2array(momentest))';
+    %sum(weightedm)
     % shouldn't this pe positive in all elements???
     for jj=1:size(moments_,1)
         fprintf(io,"%s",char(momnames(jj,1)));
@@ -95,13 +106,12 @@ if EXITFLAG~=999
     end
     fprintf(io," \n");
     fprintf(io," data and simulated moments: and dif and weighted dif \n");
-    
-    weightedm=abs(Wsq*(moments_-table2array(momentest))).^2;
+    weightedm=((moments_-table2array(momentest))'*Wsq); %.*(moments_-table2array(momentest))';
     for jj=1:size(moments_,1)
         fprintf(io,"%s",char(momnames(jj,1)));
         fprintf(io,"%16.8f",table2array(momentest(jj,1)) -moments_(jj,1)) ; 
         %fprintf(io,"%16.8f ",abs(table2array(momentest(jj,1)) -moments_(jj,1))) ; 
-        fprintf(io,"%16.8f\n",weightedm(jj,1)) ; 
+        fprintf(io,"%16.8f\n",weightedm(1,jj)) ; 
     end
     
     

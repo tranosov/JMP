@@ -25,7 +25,7 @@ WARNINGS=0;
     I=size(lp0,2);
         if WARNINGS==0
             while (kk<15) && (sum(abs(cl))>TOL) 
-                    A=800/table2array(params('crrah_','value'));
+                    A=1000/table2array(params('crrah_','value'));
                     if VERBOSE
                         cl=cl
                     end

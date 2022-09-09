@@ -34,18 +34,30 @@ WARNINGS=0;
 toc
 time=toc;
 
-%}      
+%}   
+tic
+Fp=@(x) Clearing(x,EQS,PARREST); 
+tol=1;
+cl=Fp(x0(1:end-1));    
+if norm(cl)^2 >tol
+    tolmult=10^(-1);
+    [x0(1:end-1),~,~]=solvep(x0(1:end-1),EQS,PARREST,tolmult);
+    %time=time+time_;
+end
+
+time=time+toc;
+
          
 tic
 global mup
 
 if mup==1
-    x0_=[max(0.001*RESC,x0(end)*0.9),x0(end)*1.01]; % more men in mm, clm(x0(end)) should be<0, lambda down to incite women
+    x0_=[max(0.001*RESC,x0(end)*0.95),x0(end)*1.01]; % more men in mm, clm(x0(end)) should be<0, lambda down to incite women
     x02_=[max(0.001*RESC,x0(end)*0.5),x0(end)*1.05];
     %x03_=[max(0.001*RESC,x0(end)*0.5),x0(end)*1.1];
 end
 if mup==(-1)
-    x0_=[0.99*x0(end),min(x0(end)*1.1,0.999*RESC)]; % less men in mm, clm(x0(end)) should be>0, lambda up to incite men
+    x0_=[0.99*x0(end),min(x0(end)*1.05,0.999*RESC)]; % less men in mm, clm(x0(end)) should be>0, lambda up to incite men
     x02_=[0.95*x0(end),min(x0(end)*1.5,0.999*RESC)];
     %x03_=[0.9*x0(end),min(x0(end)*1.5,0.999*RESC)];
 end
@@ -68,7 +80,7 @@ if norm(Fm(x0(end)))^2 >tol
     else
         fmx2=Fm(x0_(2));
         fmx1=Fm(x0_(1));
-        if fmx2*fmx1<0
+        if (fmx2*fmx1<0) && (fmx1~=1000000) && (fmx2~=1000000)
             out=fzero(Fm,x0_,optionsz);
             fmout=Fm(out);
             if fmout<-0.01
@@ -139,22 +151,30 @@ params=PARREST.('params');
 LA0_=params('LA0','value');
 params('LA0','value')={x0(end)/(RESC)};
 PARREST.('params')=params;
+ssh_=PARREST.('sstaysingleh');
+ssw_=PARREST.('sstaysinglew');
+F=@(x) Clearing_withmm(x,EQS,PARREST); 
+[cl,ssh,ssw]=F(x0);
+PARREST.('sstaysingleh')=ssh;
+PARREST.('sstaysinglew')=ssw;
 time=time+toc;
 if VERBOSE
 toc
 end
 
 tic
-Fp=@(x) Clearing(x,EQS,PARREST); 
+%Fp=@(x) Clearing(x,EQS,PARREST); 
 tol=1;
-cl=Fp(x0(1:end-1));    
-if norm(cl)^2 >10^(-1)*tol
+%cl=Fp(x0(1:end-1));    
+if norm(cl(1:end-1))^2 >10^(-1)*tol
     tolmult=10^(-1);
     [x0(1:end-1),EXITFLAG,time_]=solvep(x0(1:end-1),EQS,PARREST,tolmult);
     time=time+time_;
 end
 
 params('LA0','value')=LA0_;
+PARREST.('sstaysingleh')=ssh_;
+PARREST.('sstaysinglew')=ssw_;
 PARREST.('params')=params;
 time=time+toc;
 
@@ -176,7 +196,7 @@ else
     if norm(cl)^2 >tol  
                 tic
         %if VERBOSE
-        fprintf('Have to do joint solution...')
+        fprintf('Have to do joint solution...') % this often happens, because overall share of peopl single changes
         cl
         %end
 
@@ -209,7 +229,7 @@ else
                         kk=1;
                         fprintf('Helping p...');
                         while (sum(abs(cl(1:end-1)))>0.4) && (kk<10)
-                            A=1/(800);
+                            A=table2array(params('crrah_','value'))/1000;
                             x0=x0 +cl.*(A*[ones(size(x0(1:end-1))),0]);
                             [cl]=F(x0); 
                             %if VERBOSE

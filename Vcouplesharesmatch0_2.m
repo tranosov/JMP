@@ -32,8 +32,22 @@ mIL=PARREST.('mIL');
 lambda=OUTC.('lambda'); 
 vc=OUTC.('vc') ;
 
-[mI1_,mA1_,mIG1_,mAG1_]=matchdist(i,jh,th,mA,mI,mAL,mIL, typeic,D,mm,JLs, betah);
-[mI2_,mA2_,mIG2_,mAG2_]=matchdist(i,jw,tw,mA,mI,mAL,mIL, typeic,D,mm,JLs, betah);
+mIL=PARREST.('mIL_');
+mAL=PARREST.('mAL_');
+mI=PARREST.('mI_');
+mA=PARREST.('mA_');
+
+mI1_=mIL(th,jh,i);
+mA1_=mAL(th,jh,i);
+mIG1_=mI(th,jh,i);
+mAG1_=mA(th,jh,i);
+mI2_=mIL(tw,jw,i);
+mA2_=mAL(tw,jw,i);
+mIG2_=mI(tw,jw,i);
+mAG2_=mA(tw,jw,i);
+
+%[mI1_,mA1_,mIG1_,mAG1_]=matchdist(i,jh,th,mA,mI,mAL,mIL, typeic,D,mm,JLs, betah);
+%[mI2_,mA2_,mIG2_,mAG2_]=matchdist(i,jw,tw,mA,mI,mAL,mIL, typeic,D,mm,JLs, betah);
 
  
 % choice: not working is 0 commute!

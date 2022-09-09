@@ -6,7 +6,7 @@ Function computing the difference between demand and supply in locations
 
 
 
-function [clearing] = Clearing_withmm(x,EQS,PARREST)
+function [clearing,ssh,ssw] = Clearing_withmm(x,EQS,PARREST)
 %global D  AS  AC uw uh us ch cw cs h hs alphaw betaw alphah betah mu lambda JLs Jw Jm HS Jc NC NS NSh NSw sigmaw 
 global RESC %D Jw HS  sigmam %ssingle WARNINGS 
 if isempty(RESC)
@@ -25,9 +25,13 @@ LA0=x(end);
 p=exp(lp);
 LA=LA0/(RESC);
 
-
+wfh=PARREST.('wfh');
 I=size(HS,2);
 T=size(Jw,2);
+if wfh>0
+    T=T*2;
+end
+
 W=3;
 
 [DS,HSingle, DSh, DSw, VS,Pws,cexps,OUTS]=DSingle(p,1,EQS,PARREST);

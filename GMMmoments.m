@@ -10,7 +10,10 @@ global VERBOSE
 
 tic
 params(pars.Properties.RowNames,:)= array2table( reshape(pars_,max(size(pars_)),1), 'RowNames',pars.Properties.RowNames);
-params=untransform(params);
+
+if recalibrate==1
+    params=untransform(params);
+end
 
 %params(pars.Properties.RowNames,:) % already untransformed
 if recalibrate==1
@@ -45,9 +48,11 @@ end
 time=time+time_;
 
 
-if withmm==0
-    momentest('L',:)=[];
-end
+%if withmm==0
+%    if sum(strcmp('L',momentest.Properties.RowNames))>0
+%        momentest('L',:)=[];
+%    end
+%end
 
 if EXITFLAG==999
     moments_=999;

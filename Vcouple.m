@@ -16,6 +16,15 @@ function [V,workh, workw, Pnn, Pnw0,Pnw, Pw0n,Pw0w0,Pw0w, Pwn, Pww0,Pww,conexp1,
 JLs=PARREST.('JLs');
 mu=PARREST.('mu');
 D=PARREST.('D');
+th0=th;
+tw0=tw;
+T0=size(JLs,2);
+if th>T0
+    th0=th-T0;
+end
+if tw>T0
+    tw0=tw-T0;
+end
 
 [V1,workh, workw, Pnn, Pnw0,Pnw, Pw0n,Pw0w0,Pw0w, Pwn, Pww0,Pww,conexp1, conexp2]=Vcouplesharesmatch_2(th,tw,jh,jw,i, PARREST,OUTC);
 
@@ -28,9 +37,11 @@ for ii=1:N(1)
     end
 end
 
-EV2w=EV2(jh,:)*JLs(:,tw);
-EV2h=JLs(:,th)'*EV2(:,jw);
-EV2both=JLs(:,th)'*EV2*JLs(:,tw);
+
+
+EV2w=EV2(jh,:)*JLs(:,tw0);
+EV2h=JLs(:,th0)'*EV2(:,jw);
+EV2both=JLs(:,th0)'*EV2*JLs(:,tw0);
 V2=mu^2*EV2both + mu*(1-mu)*EV2h + (1-mu)*mu*EV2w + (1-mu)*(1-mu)*Vcouplesharesmatch_2(th,tw,jh,jw,i, PARREST,OUTC); % here I am recomputing stuff unnecessarily - I should have created all of them somewhere and only use them
 
 

@@ -9,8 +9,9 @@ clear global;
 %cd 'C:\Users\ranos\OneDrive - Umich\Documents\D\Michigan\Res\Female careers in location\Codes\matlab'
 rng(357)
 fprintf('Running GMM estimation - FLIN=1, fminsearch without L recomputing.\n');
-global FLIN
-FLIN=1
+global FLIN VERBOSE
+FLIN=1;
+VERBOSE=1;
 
 
 global filename1 filename2
@@ -64,8 +65,6 @@ fprintf('W inverted.\n');
 pars=paramsest;
 global RESC
 RESC=10^3;
-global VERBOSE
-VERBOSE=0;
 
 
 %fopt=10^(-6); % no idea

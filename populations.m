@@ -7,12 +7,17 @@ end
 
 HS=PARREST.('HS');
 Jw=PARREST.('Jw');
+JLs=PARREST.('JLs');
 sigmam=PARREST.('sigmam');
 ssh_=PARREST.('sstaysingleh');
 ssw_=PARREST.('sstaysinglew');
+wfh=PARREST.('wfh');
 
 I=size(HS,2);
-T=size(Jw,2);
+T=size(JLs,2);
+if wfh>0
+    T=T*2;
+end
 W=3;
 
 
@@ -76,10 +81,10 @@ if doepses==1
     %expectedly - singles sould get less, because they get more in
     %systematic benefits
     
-    uhS=uhS+epshS_raw;
-    uwS=uwS+epswS_raw;
-    uhC=uhC+epsC_raw;
-    uwC=uwC+epsC_raw;
+    uhS=uhS+2*epshS_raw;
+    uwS=uwS+2*epswS_raw;
+    uhC=uhC+2*epsC_raw;
+    uwC=uwC+2*epsC_raw;
 end
 
 

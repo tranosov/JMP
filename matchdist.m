@@ -3,7 +3,7 @@ global Davg ICLOWS
 if isempty(mm)
     mm=0;
 end
-type=round(type,10);
+
 
 % just one suburb bad:
 if type==1
@@ -113,7 +113,7 @@ if (type==3.7) || (type==7) % slide + average  - for hours can also be filled in
     for u=1:I
         d(u)=Do(u,JLs(:,t),D);
     end
-    davg= sum(JLs(:,t).*d');
+    davg= sum(JLs(:,t).*d'); %weighted by job offer! (probablys switch to weighted by units!)
     low=betah*d(j)+1-betah*davg; % average 'productivity' stay the same. but issue - is negative ic in suburbs. bad for husbands
     
     

@@ -1,7 +1,8 @@
 
 
 
-function [V,workh, workw, Pnn, Pnw0,Pnw, Pw0n,Pw0w0,Pw0w, Pwn, Pww0,Pww,conexp1, conexp2]=locfirst(i,jh,jw,th,tw,lambda,mA,mI,mAL,mIL,mm,D,typeic,JLs, betah,vw0w0,vw0n,vnw0,vww,vwn,vnw,vnn,vww0,vw0w)
+function [V,workh, workw, Pnn, Pnw0,Pnw, Pw0n,Pw0w0,Pw0w, Pwn, Pww0,Pww,conexp1, conexp2]=...
+    locfirst(i,jh,jw,th,tw,lambda,mI1_,mA1_,mIG1_,mAG1_,mI2_,mA2_,mIG2_,mAG2_,vw0w0,vw0n,vnw0,vww,vwn,vnw,vnn,vww0,vw0w)
 
 
 %todo: check the use of lambda here - somehow high lambda suggests lower
@@ -15,8 +16,8 @@ function [V,workh, workw, Pnn, Pnw0,Pnw, Pw0n,Pw0w0,Pw0w, Pwn, Pww0,Pww,conexp1,
 % lower bounds of distributions as matrices itself.
 
 
-[mI1_,mA1_,mIG1_,mAG1_]=matchdist(i,jh,th,mA,mI,mAL,mIL, typeic,D,mm,JLs, betah);
-[mI2_,mA2_,mIG2_,mAG2_]=matchdist(i,jw,tw,mA,mI,mAL,mIL, typeic,D,mm,JLs, betah);
+%[mI1_,mA1_,mIG1_,mAG1_]=matchdist(i,jh,th,mA,mI,mAL,mIL, typeic,D,mm,JLs, betah);
+%[mI2_,mA2_,mIG2_,mAG2_]=matchdist(i,jw,tw,mA,mI,mAL,mIL, typeic,D,mm,JLs, betah);
 
 
 denom=(mA1_-mI1_)*(mA2_-mI2_);

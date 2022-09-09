@@ -7,7 +7,8 @@ function [EQS,PARREST]=...
     ces,ceh,cew,leffecth,leffectw,eta,etaC,muprob,plocal_,sstaysingleh,sstaysinglew,mA_,mI_,kappa_,...
     gamd,PHID,deltaw,PHI,rhod,PHIW_,line,muw,muwL,swL,crra,crrat,crrah, crrax,pih0_,piw0_,pi_,pish_,pisw_,piel_,pitheta_,qel_,...
     d21,d31,Sup1,Sup2,Sup3,SupS,addS,out,daddS,aaddS,pophous,...
-    XI,wc, PID,typeic_,pid_,wgap_raw,mm_,lsbar, NLY,THETA,THETAHW,sigmam,MtoF) 
+    XI,wc, PID,typeic_,pid_,wgap_raw,mm_,lsbar, NLY,THETA,THETAHW,sigmam,MtoF,...
+    wfh,hs_wfh) 
 rng(357)
 xbar=0;
 
@@ -124,10 +125,13 @@ JLs=[ JL11, JL12 ;... % center
       %0, 0.3]; %suburb with a good school district
 % This will have to be matched in a complicated way, because I observe only the distribution of jobs taken.
 if addS==1
-    Jcenter_=2*(JL11+JL12)/(JL21+JL22+JL31+JL32);
-    JLs=[JLs*(Jcenter_+2)/(Jcenter_+3);
-        1/(Jcenter_+3),1/(Jcenter_+3)];
-        
+    JLs(4,:)=1/3;
+    JLs=JLs./repmat(sum(JLs),4,1);
+    %Jcenter_=2*(JL11+JL12)/(JL21+JL22+JL31+JL32);
+    %JLs=[JLs*(Jcenter_+2)/(Jcenter_+3);
+    %    1/(Jcenter_+3),1/(Jcenter_+3)];
+% I do not think this is doing what I wanted it to do! fourth location does NOT have enough jobs!
+
 end
 
 T=size(JLs);
@@ -178,6 +182,43 @@ end
 
 NC=NN*(1-(ssingleh+ssinglew)/2)*NC*0.5; %m&w together (so half as many couples as there are allocated housing units to couples
 %NC(jh,jw,th,tw)
+
+if wfh>0
+    for j=1:I
+        for t=1:T
+            
+            NSh(j,t+T)=NSh(j,t)*(wfh);
+            NSh(j,t)=NSh(j,t)*(1-wfh);
+            
+            NSw(j,t+T)=NSw(j,t)*(wfh);
+            NSw(j,t)=NSw(j,t)*(1-wfh);
+        end
+    end
+    NS=NSh+NSw;
+  
+    for jh=1:I
+        for jw=1:I
+            for th=1:T
+                for tw=1:T
+                    if hs_wfh==1
+                        NC(jh,jw,th+T,tw)=0;
+                        NC(jh,jw,th,tw+T)=0;
+                        NC(jh,jw,th+T,tw+T)=NC(jh,jw,th,tw)*(wfh);
+                        NC(jh,jw,th,tw)=NC(jh,jw,th,tw)*(1-wfh); % perfect correlation over couples! (on a household level)
+                     else
+                        NC(jh,jw,th+T,tw)=NC(jh,jw,th,tw)*(wfh)*(1-wfh);
+                        NC(jh,jw,th,tw+T)=NC(jh,jw,th,tw)*(1-wfh)*(wfh);
+                        NC(jh,jw,th+T,tw+T)=NC(jh,jw,th,tw)*(wfh)*(wfh);
+                        NC(jh,jw,th,tw)=NC(jh,jw,th,tw)*(1-wfh)*(1-wfh);
+                    
+                    end
+                
+                end
+            end
+        end
+    end
+      %T=T*2;
+end
 
 mIL=muwL-sqrt(3)*swL;
 mAL=muwL+sqrt(3)*swL;
@@ -328,7 +369,10 @@ multC_eq=@(Y,p,mu,xh,xw,lambda) 1000*CONS*(- Y + cc(mu,lambda) + hdC(mu,p)*p); %
 Leissh= @(mu,x) (1./((1-pitheta_)*pish_*(qs(mu,x).^(pitheta_*(1-crrax)))*x.^((1-pitheta_)*(1-crrax)-1) )).^(1/crrat); %note - this is not leisure this is leisure-tih
 mulSh=@(mu,x,ic) alphas.*leffecth./(Leissh(mu,x).^crrat) -fxi(XI*ic); % - der wrt h
 lssh=@(mu,x,d) 1-betah*d -x - Leissh(mu,x)-tih;
-lssh_eq=  @(mu,x,p,d,ic) (mulSh(mu,x,ic) - mu*w1_d(lssh(mu,x,d) ,ic))*(lssh(mu,x,d)<lsbar)+(lssh(mu,x,d)==1)*0 + (lssh(mu,x,d)>lsbar)*(CONS)*(lssh(mu,x,d)-lsbar)^1;
+lssh_eq=  @(mu,x,p,d,ic) (mulSh(mu,x,ic) - mu*w1_d(lssh(mu,x,d) ,ic))*(lssh(mu,x,d)<lsbar) + ...
+    (lssh(mu,x,d)==1)*0 + ...
+    (lssh(mu,x,d)>lsbar)*(mulSh(mu,x,ic) < mu*w1_d(lssh(mu,x,d) ,ic))*(CONS)*(lssh(mu,x,d)-lsbar)^1 + ...
+    (lssh(mu,x,d)>lsbar)*(mulSh(mu,x,ic) > mu*w1_d(lssh(mu,x,d) ,ic))*(CONS)*10^6;
 %mulSw=@(ls,d,ic) alphas.*leffecth./((1-alphas.*ls -betas*d+tih -xsw_fun(ls,d)).^crrat) -fxi(XI*ic);; % - der wrt h
 %lssw_eq=  @(ls,p,d,ic) multS(ls,p,ic).*mulSw(ls,d,ic) - w1_d(ls,ic); % to solve for ls (d)
 
@@ -358,11 +402,15 @@ xh_fun=@(mu,o2,o3,dh,dw) (piw_(dh,dw)>0 && piw_(dh,dw)<1 )*o2 + (piw_(dh,dw)==1)
 xw_fun=@(mu,o2,o3,dh,dw) (piw_(dh,dw)>0 && piw_(dh,dw)<1 )*o3 + (piw_(dh,dw)==1)*o3 + (piw_(dh,dw)==0)*0;
 
 
-lsb_eq1= @(mu,xh,xw,p,dh,dw,ich,icw,lambda) (mulh(mu,xh,xw,dh,dw,ich,lambda) - w1_d(lsh(mu,xh,xw,dh,dw,lambda),ich)*mu)*(lsh(mu,xh,xw,dh,dw,lambda)<lsbar) +...
-    (lsh(mu,xh,xw,dh,dw,lambda)>lsbar)*(CONS)*(lsh(mu,xh,xw,dh,dw,lambda)-lsbar)^1 +(lsh(mu,xh,xw,dh,dw,lambda)<=0)*10^6+...
+lsb_eq1= @(mu,xh,xw,p,dh,dw,ich,icw,lambda) (mulh(mu,xh,xw,dh,dw,ich,lambda) - w1_d(lsh(mu,xh,xw,dh,dw,lambda),ich)*mu)*(lsh(mu,xh,xw,dh,dw,lambda)<lsbar) + ...
+    (lsh(mu,xh,xw,dh,dw,lambda)>lsbar)*(mulh(mu,xh,xw,dh,dw,ich,lambda) < w1_d(lsh(mu,xh,xw,dh,dw,lambda),ich)*mu)*(CONS)*(lsh(mu,xh,xw,dh,dw,lambda)-lsbar)^1 + ... % Kuchn-Tacker conditions
+    (lsh(mu,xh,xw,dh,dw,lambda)>lsbar)*(mulh(mu,xh,xw,dh,dw,ich,lambda) > w1_d(lsh(mu,xh,xw,dh,dw,lambda),ich)*mu)*(CONS)*10^6 + ...
+    (lsh(mu,xh,xw,dh,dw,lambda)<=0)*10^6 + ...
     (lsh(mu,xh,xw,dh,dw,lambda)<=0)*((lshY(mu,xh,xw,dh,dw,lambda)-0)^2)*10^6;
 lsb_eq2= @(mu,xh,xw,p,dh,dw,ich,icw,lambda) (mulw(mu,xh,xw,dh,dw,icw,lambda) - w2_d(lsw(mu,xh,xw,dh,dw,lambda),ich)*mu)*(lsw(mu,xh,xw,dh,dw,lambda)<lsbar) + ...
-(lsw(mu,xh,xw,dh,dw,lambda)>lsbar)*(CONS)*(lsw(mu,xh,xw,dh,dw,lambda)-lsbar)^1 + (lsw(mu,xh,xw,dh,dw,lambda)<=0)*10^6+...
+(lsw(mu,xh,xw,dh,dw,lambda)>lsbar)*(mulw(mu,xh,xw,dh,dw,icw,lambda) < w2_d(lsw(mu,xh,xw,dh,dw,lambda),ich)*mu)*(CONS)*(lsw(mu,xh,xw,dh,dw,lambda)-lsbar)^1 + ...
+(lsw(mu,xh,xw,dh,dw,lambda)>lsbar)*(mulw(mu,xh,xw,dh,dw,icw,lambda) > w2_d(lsw(mu,xh,xw,dh,dw,lambda),ich)*mu)*(CONS)*10^6 + ...
+(lsw(mu,xh,xw,dh,dw,lambda)<=0)*10^6 + ...
 (lsw(mu,xh,xw,dh,dw,lambda)<=0)*((lswY(mu,xh,xw,dh,dw,lambda)-0)^2)*10^6;
 
 lsb_eq = @(mu,xh,xw,p,dh,dw,ich,icw,lambda) 10*[ lsb_eq1(mu,xh,xw,p,dh,dw,ich,icw,lambda),lsb_eq2(mu,xh,xw,p,dh,dw,ich,icw,lambda)];
@@ -370,29 +418,59 @@ lsb_eq = @(mu,xh,xw,p,dh,dw,ich,icw,lambda) 10*[ lsb_eq1(mu,xh,xw,p,dh,dw,ich,ic
 
 % couples - one works    
 % just husband works
-lsah_eq= @(mu,xh,xw,p,dh,dw,ic,lambda) [(mulh(mu,xh,xw,dh,dw,ic,lambda)  - w1_d(lsh(mu,xh,xw,dh,dw,lambda),ic)*mu)*(lsh(mu,xh,xw,dh,dw,lambda)<lsbar) + (lsh(mu,xh,xw,dh,dw,lambda)>lsbar)*(CONS)*(lsh(mu,xh,xw,dh,dw,lambda)-lsbar)^1, ...
+lsah_eq= @(mu,xh,xw,p,dh,dw,ic,lambda) [(mulh(mu,xh,xw,dh,dw,ic,lambda)  - w1_d(lsh(mu,xh,xw,dh,dw,lambda),ic)*mu)*(lsh(mu,xh,xw,dh,dw,lambda)<lsbar) + ...
+    (lsh(mu,xh,xw,dh,dw,lambda)>lsbar)*(mulh(mu,xh,xw,dh,dw,ic,lambda)  < w1_d(lsh(mu,xh,xw,dh,dw,lambda),ic)*mu)*(CONS)*(lsh(mu,xh,xw,dh,dw,lambda)-lsbar)^1 + ...
+    (lsh(mu,xh,xw,dh,dw,lambda)>lsbar)*(mulh(mu,xh,xw,dh,dw,ic,lambda)  > w1_d(lsh(mu,xh,xw,dh,dw,lambda),ic)*mu)*(CONS)*10^6 + ...
+    (lsh(mu,xh,xw,dh,dw,lambda)<=0)*10^6 , ...
     (Leisw(mu,xh,xw,dh,dw,lambda)  - (1-xw)+tiw)*CONS];
 %xx=xh/xw
 
 % just wife working
-lsaw_eq= @(mu,xh,xw,p,dh,dw,ic,lambda) [(mulw(mu,xh,xw,dh,dw,ic,lambda)  - w2_d(lsw(mu,xh,xw,dh,dw,lambda),ic)*mu)*(lsw(mu,xh,xw,dh,dw,lambda)<lsbar) + (lsw(mu,xh,xw,dh,dw,lambda)>lsbar)*(CONS)* (lsw(mu,xh,xw,dh,dw,lambda)-lsbar)^1 , ...
+lsaw_eq= @(mu,xh,xw,p,dh,dw,ic,lambda) [(mulw(mu,xh,xw,dh,dw,ic,lambda)  - w2_d(lsw(mu,xh,xw,dh,dw,lambda),ic)*mu)*(lsw(mu,xh,xw,dh,dw,lambda)<lsbar) + ...
+    (lsw(mu,xh,xw,dh,dw,lambda)>lsbar)*(mulw(mu,xh,xw,dh,dw,ic,lambda)  < w2_d(lsw(mu,xh,xw,dh,dw,lambda),ic)*mu)*(CONS)* (lsw(mu,xh,xw,dh,dw,lambda)-lsbar)^1 + ...
+    (lsw(mu,xh,xw,dh,dw,lambda)>lsbar)*(mulw(mu,xh,xw,dh,dw,ic,lambda)  > w2_d(lsw(mu,xh,xw,dh,dw,lambda),ic)*mu)*(CONS)*10^6 + ...
+    (lsw(mu,xh,xw,dh,dw,lambda)<=0)*10^6, ...
     (Leish(mu,xh,xw,dh,dw,lambda)  - (1-xh)+tih)*CONS];
 %xx=xw/xh
 
 % for piw=0 or piw=1: 
-lsb_eq_xh0= @(mu,Lh,xw,p,dh,dw,ich,icw,lambda) [(lambda*alphah.*leffecth./((Lh-tih).^crrat) - fxi(XI*ich) - w1_d(1-betah*dh - Lh,ich)*mu)*(1-betah*dh - Lh<lsbar)  + (1-betah*dh - Lh <=0)*10^6 + (1-betah*dh - Lh >lsbar)*(CONS)*(1-betah*dh - Lh -lsbar)^1,...
-    (mulw(mu,0,xw,dh,dw,icw,lambda) - w2_d(lsw(mu,0,xw,dh,dw,lambda),ich)*mu)*(lsw(mu,0,xw,dh,dw,lambda)<lsbar) + (lsw(mu,0,xw,dh,dw,lambda)<=0)*10^6 + (lsw(mu,0,xw,dh,dw,lambda)>lsbar)*(CONS)*(lsw(mu,0,xw,dh,dw,lambda)-lsbar)^1];
-lsb_eq_xw0= @(mu,xh,Lw,p,dh,dw,ich,icw,lambda) [(mulh(mu,xh,0,dh,dw,ich,lambda) - w1_d(lsh(mu,xh,0,dh,dw,lambda),ich)*mu)*(lsh(mu,xh,0,dh,dw,lambda)<lsbar) +  (lsh(mu,xh,0,dh,dw,lambda)<=0)*10^6 + (lsh(mu,xh,0,dh,dw,lambda)>lsbar)*(CONS)*(lsh(mu,xh,0,dh,dw,lambda)-lsbar)^1, ...
-    ((1-lambda)*alphah.*leffectw./((Lw-tiw).^crrat) - fxi(XI*icw) - w2_d(1-betah*dw - Lw,icw)*mu)*(1-betah*dw - Lw<lsbar) + (1-betah*dw - Lw<=0)*10^6 + (1-betah*dw - Lw>lsbar)*(CONS)*(1-betah*dw - Lw - lsbar)^1];
+lsb_eq_xh0= @(mu,Lh,xw,p,dh,dw,ich,icw,lambda) [(lambda*alphah.*leffecth./((Lh-tih).^crrat) - fxi(XI*ich) - w1_d(1-betah*dh - Lh,ich)*mu)*(1-betah*dh - Lh<lsbar)  +...
+    (1-betah*dh - Lh <=0)*10^6 +...
+    (1-betah*dh - Lh >lsbar)*(lambda*alphah.*leffecth./((Lh-tih).^crrat) - fxi(XI*ich) < w1_d(1-betah*dh - Lh,ich)*mu)*(CONS)*(1-betah*dh - Lh -lsbar)^1 + ...
+    (1-betah*dh - Lh >lsbar)*(lambda*alphah.*leffecth./((Lh-tih).^crrat) - fxi(XI*ich) > w1_d(1-betah*dh - Lh,ich)*mu)*CONS*10^6, ...
+    (mulw(mu,0,xw,dh,dw,icw,lambda) - w2_d(lsw(mu,0,xw,dh,dw,lambda),ich)*mu)*(lsw(mu,0,xw,dh,dw,lambda)<lsbar) + ...
+    (lsw(mu,0,xw,dh,dw,lambda)<=0)*10^6 + ...
+    (lsw(mu,0,xw,dh,dw,lambda)>lsbar)*(mulw(mu,0,xw,dh,dw,icw,lambda) < w2_d(lsw(mu,0,xw,dh,dw,lambda),ich)*mu)*(CONS)*(lsw(mu,0,xw,dh,dw,lambda)-lsbar)^1 + ...
+    (lsw(mu,0,xw,dh,dw,lambda)>lsbar)*(mulw(mu,0,xw,dh,dw,icw,lambda) > w2_d(lsw(mu,0,xw,dh,dw,lambda),ich)*mu)*(CONS)*10^6];
+lsb_eq_xw0= @(mu,xh,Lw,p,dh,dw,ich,icw,lambda) [(mulh(mu,xh,0,dh,dw,ich,lambda) - w1_d(lsh(mu,xh,0,dh,dw,lambda),ich)*mu)*(lsh(mu,xh,0,dh,dw,lambda)<lsbar) + ...
+    (lsh(mu,xh,0,dh,dw,lambda)<=0)*10^6 + ...
+    (lsh(mu,xh,0,dh,dw,lambda)>lsbar)*(mulh(mu,xh,0,dh,dw,ich,lambda) < w1_d(lsh(mu,xh,0,dh,dw,lambda),ich)*mu)*(CONS)*(lsh(mu,xh,0,dh,dw,lambda)-lsbar)^1 + ...
+    (lsh(mu,xh,0,dh,dw,lambda)>lsbar)*(mulh(mu,xh,0,dh,dw,ich,lambda) > w1_d(lsh(mu,xh,0,dh,dw,lambda),ich)*mu)*CONS*10^6, ...
+    ((1-lambda)*alphah.*leffectw./((Lw-tiw).^crrat) - fxi(XI*icw) - w2_d(1-betah*dw - Lw,icw)*mu)*(1-betah*dw - Lw<lsbar) + ...
+    (1-betah*dw - Lw<=0)*10^6 + ...
+    (1-betah*dw - Lw>lsbar)*((1-lambda)*alphah.*leffectw./((Lw-tiw).^crrat) - fxi(XI*icw) < w2_d(1-betah*dw - Lw,icw)*mu)*(CONS)*(1-betah*dw - Lw - lsbar)^1 + ...
+    (1-betah*dw - Lw>lsbar)*((1-lambda)*alphah.*leffectw./((Lw-tiw).^crrat) - fxi(XI*icw) > w2_d(1-betah*dw - Lw,icw)*mu)*(CONS)*10^6];
 
-lsah_eq_xh0= @(mu,Lh,xw,p,dh,dw,ic,lambda) [(lambda*alphah.*leffecth./((Lh-tih).^crrat)  - fxi(XI*ic) - w1_d(1-betah*dh - Lh,ic)*mu)*(1-betah*dh - Lh<lsbar) + (1-betah*dh - Lh>lsbar)*(CONS)*(1-betah*dh - Lh-lsbar)^1 + (1-betah*dh - Lh<=0)*10^6 ,...
+lsah_eq_xh0= @(mu,Lh,xw,p,dh,dw,ic,lambda) [(lambda*alphah.*leffecth./((Lh-tih).^crrat)  - fxi(XI*ic) - w1_d(1-betah*dh - Lh,ic)*mu)*(1-betah*dh - Lh<lsbar) + ...
+    (1-betah*dh - Lh>lsbar)*(lambda*alphah.*leffecth./((Lh-tih).^crrat)  - fxi(XI*ic) < w1_d(1-betah*dh - Lh,ic)*mu)*(CONS)*(1-betah*dh - Lh-lsbar)^1 + ...
+    (1-betah*dh - Lh>lsbar)*(lambda*alphah.*leffecth./((Lh-tih).^crrat)  - fxi(XI*ic) > w1_d(1-betah*dh - Lh,ic)*mu)*CONS*10^6 + ...
+    (1-betah*dh - Lh<=0)*10^6 , ...
     (Leisw(mu,0,xw,dh,dw,lambda)  - (1-xw)+tiw)*CONS];
-lsah_eq_xw0= @(mu,xh,xw,p,dh,dw,ic,lambda) [(mulh(mu,xh,0,dh,dw,ic,lambda)  - w1_d(lsh(mu,xh,0,dh,dw,lambda),ic)*mu)*(lsh(mu,xh,0,dh,dw,lambda)<lsbar) + (lsh(mu,xh,0,dh,dw,lambda)>lsbar)*(CONS)*(lsh(mu,xh,0,dh,dw,lambda) - lsbar)^1 + (lsh(mu,xh,0,dh,dw,lambda)<=0)*10^6,...
+lsah_eq_xw0= @(mu,xh,xw,p,dh,dw,ic,lambda) [(mulh(mu,xh,0,dh,dw,ic,lambda)  - w1_d(lsh(mu,xh,0,dh,dw,lambda),ic)*mu)*(lsh(mu,xh,0,dh,dw,lambda)<lsbar) + ...
+    (lsh(mu,xh,0,dh,dw,lambda)>lsbar)*(mulh(mu,xh,0,dh,dw,ic,lambda)  < w1_d(lsh(mu,xh,0,dh,dw,lambda),ic)*mu)*(CONS)*(lsh(mu,xh,0,dh,dw,lambda) - lsbar)^1 + ...
+    (lsh(mu,xh,0,dh,dw,lambda)>lsbar)*(mulh(mu,xh,0,dh,dw,ic,lambda)  > w1_d(lsh(mu,xh,0,dh,dw,lambda),ic)*mu)*(CONS)*10^6 + ...
+    (lsh(mu,xh,0,dh,dw,lambda)<=0)*10^6 , ...
     xw*CONS];
 
-lsaw_eq_xh0= @(mu,xh,xw,p,dh,dw,ic,lambda) [(mulw(mu,0,xw,dh,dw,ic,lambda)  - w2_d(lsw(mu,0,xw,dh,dw,lambda),ic)*mu)*(lsw(mu,0,xw,dh,dw,lambda)<lsbar) + (lsw(mu,0,xw,dh,dw,lambda)>lsbar)*(CONS)*(lsw(mu,0,xw,dh,dw,lambda) - lsbar)^1 + (lsw(mu,0,xw,dh,dw,lambda)<=0)*10^6, ...
+lsaw_eq_xh0= @(mu,xh,xw,p,dh,dw,ic,lambda) [(mulw(mu,0,xw,dh,dw,ic,lambda)  - w2_d(lsw(mu,0,xw,dh,dw,lambda),ic)*mu)*(lsw(mu,0,xw,dh,dw,lambda)<lsbar) + ...
+    (lsw(mu,0,xw,dh,dw,lambda)>lsbar)*(mulw(mu,0,xw,dh,dw,ic,lambda)  < w2_d(lsw(mu,0,xw,dh,dw,lambda),ic)*mu)*(CONS)*(lsw(mu,0,xw,dh,dw,lambda) - lsbar)^1 + ...
+    (lsw(mu,0,xw,dh,dw,lambda)>lsbar)*(mulw(mu,0,xw,dh,dw,ic,lambda)  > w2_d(lsw(mu,0,xw,dh,dw,lambda),ic)*mu)*(CONS)*10^6 + ...
+    (lsw(mu,0,xw,dh,dw,lambda)<=0)*10^6 , ...
     xh*CONS];
-lsaw_eq_xw0= @(mu,xh,Lw,p,dh,dw,ic,lambda) [ ((1-lambda)*alphah.*leffectw./((Lw-tiw).^crrat) -fxi(XI*ic) - w2_d(1-betah*dw - Lw,ic)*mu)*(1-betah*dw - Lw<lsbar)+ (1-betah*dw - Lw>lsbar)*(CONS)*(1-betah*dw - Lw-lsbar)^1 + (1-betah*dw - Lw<=0)*10^6, ...
+lsaw_eq_xw0= @(mu,xh,Lw,p,dh,dw,ic,lambda) [ ((1-lambda)*alphah.*leffectw./((Lw-tiw).^crrat) -fxi(XI*ic) - w2_d(1-betah*dw - Lw,ic)*mu)*(1-betah*dw - Lw<lsbar) + ...
+    (1-betah*dw - Lw>lsbar)*((1-lambda)*alphah.*leffectw./((Lw-tiw).^crrat) -fxi(XI*ic) < w2_d(1-betah*dw - Lw,ic)*mu)*(CONS)*(1-betah*dw - Lw-lsbar)^1 + ...
+    (1-betah*dw - Lw>lsbar)*((1-lambda)*alphah.*leffectw./((Lw-tiw).^crrat) -fxi(XI*ic) > w2_d(1-betah*dw - Lw,ic)*mu)*(CONS)*10^6 + ...
+    (1-betah*dw - Lw<=0)*10^6 , ...
     (Leish(mu,xh,0,dh,dw,lambda)  - (1-xh)+tih)*CONS];
 
 
@@ -453,12 +531,12 @@ if toinputs==1
 
     ich0=ic0; % also adjust! 
     icw0=ic0;
-    xh0_2=0.03;
+    xh0_2=0.045;
     xh0_3=0.13;
-    xh0_1=0.04;
+    xh0_1=0.05;
     xw0_2=0.189;
-    xw0_3=0.06;
-    xw0_1=0.11;
+    xw0_3=0.1;
+    xw0_1=0.12;
 
     mu00= (lambda*ceh)*((1+((1-lambda)/lambda)^(1/crra))/(Yc(lsh(1,xh0_2,xw0_2,10,8,lambda),0,ich0,icw0)-1.4))^(crra); %l*(1/(w1_d(0.26,0)))*(1/(0.6856)^crrat) ; %0.45; %0.3885; 
     mu000=  (lambda*ceh)*((1+((1-lambda)/lambda)^(1/crra))/(Yc(0,lsw(1,xh0_3,xw0_3,10,8,lambda),ich0,icw0)-1.4))^(crra); %l*(1/(w1_d(0.26,0)))*(1/(0.6856)^crrat) ; %0.45; %0.3885; 
@@ -540,7 +618,7 @@ if toinputs==1
                                 if lsh(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0
                                     [output1,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2)*0.1,in_(3)],options);
                                 else
-                                    [output1,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2)*1.1,in_(3)*1.1],options);
+                                    [output1,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2)*2,in_(3)],options);
                                 end
                             end
                             
@@ -551,14 +629,20 @@ if toinputs==1
                                 in_=inputs0(th,tw,jh,jw,i,1,:);
                                 mu0_=  (lambda*ceh)*((1+((1-lambda)/lambda)^(1/crra))/(Yc(lsh(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda),0,ich0,icw0)-hdC(output1(1),1)))^(crra); %l*(1/(w1_d(0.258,0)))*(1/(0.69)^crrat); %0.42; %0.3902;0.6856
                                 if lsh(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0
-                                    [output1,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2)*0.1,in_(3)],options);
+                                    [output1,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2)*0.5,in_(3)],options);
                                 else
-                                    [output1,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2)*1.1,in_(3)*1.1],options);
+                                    [output1,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2)*1.1,in_(3)],options);
                                 end
 
                                 if ~isreal(output1) | output1(1)<=0 | output1(2)<=0 | lsh(output1(1),output1(2)/100,output1(3)/100,dh,0,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                                    fprintf(' INIT: Warning w0 3')
-                                    output1=output1_;
+                                    if VERBOSE
+                                        fprintf(' INIT: Warning w0 2');
+                                    end
+                                    [output1,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2)*0.8,in_(3)],options);
+                                    if ~isreal(output1) | output1(1)<=0 | output1(2)<=0 | lsh(output1(1),output1(2)/100,output1(3)/100,dh,0,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
+                                        fprintf(' INIT: Warning w0 3')
+                                        output1=output1_;
+                                    end
                                 else
                                     %fprintf('Solved');
                                 end
@@ -603,7 +687,7 @@ if toinputs==1
                                 if lsw(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0
                                     [output2,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2),in_(3)*0.1],options);
                                 else
-                                    [output2,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2)*1.1,in_(3)*1.1],options);
+                                    [output2,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2),in_(3)*2],options);
                                 end
                             end
 
@@ -617,14 +701,20 @@ if toinputs==1
                                 if lsw(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0
                                     [output2,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2),in_(3)*0.1],options);
                                 else
-                                    [output2,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2)*1.1,in_(3)*1.1],options);
+                                    [output2,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2),in_(3)*2],options);
                                 end
 
                                 if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                                    fprintf('INIT: Warning 0w 3')
-                                    output2=output2_;
-                                else
-                                    %fprintf('Solved');
+                                    if VERBOSE
+                                        fprintf('INIT: Warning 0w 2');
+                                    end
+                                    
+                                    [output2,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2),in_(3)*0.8],options);
+                                    if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
+                                        fprintf('INIT: Warning 0w 3')
+                                        output2=output2_;
+                                    end
+
                                 end
                             end
                             
@@ -677,9 +767,13 @@ if toinputs==1
                                 in_=inputs0(th,tw,jh,jw,i,3,:);
                                 mu0_=  in_(1); %(lambda*ceh)*((1+((1-lambda)/lambda)^(1/crra))/(Yc(lsh(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda),lsw(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda),ich0,icw0)-hdC(output3_(1),1)))^(crra); %l*(1/(w1_d(0.258,0)))*(1/(0.69)^crrat); %0.42; %0.3902;0.6856
                                 if lsw(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0 
-                                    [output3,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2)*0.1,in_(3)],options);
+                                    [output3,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2),in_(3)*0.1],options);
                                 elseif lsh(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0
                                     [output3,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2)*0.1,in_(3)],options);
+                                elseif lsw(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)>lsbar 
+                                    [output3,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2),in_(3)*1.5],options);
+                                elseif lsh(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)>lsbar 
+                                    [output3,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2)*1.5,in_(3)],options);
                                 else
                                     [output3,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2)*1.1,in_(3)*1.1],options);
                                 end
@@ -706,6 +800,13 @@ if toinputs==1
         end
     end
 
+if wfh>0
+  inputs0S(T+1:T+T,:,:,:)=inputs0S; 
+  inputs_=inputs;
+  inputs(1:T,T+1:T+T,:,:,:,:,:)=inputs_;
+  inputs(T+1:T+T,1:T,:,:,:,:,:)=inputs_;
+  inputs(T+1:T+T,T+1:T+T,:,:,:,:,:)=inputs_;
+end
 end
 
 
@@ -811,7 +912,29 @@ PARREST.('sstaysingleh')=sstaysingleh;
 PARREST.('sstaysinglew')=sstaysinglew;
 PARREST.('lambda')=lambda;
 PARREST.('lsbar')=lsbar;
+PARREST.('wfh')=wfh;
+PARREST.('hs_wfh')=hs_wfh;
 
+
+for j=1:I
+    for i=1:I
+        for t=1:T
+           [mIL_(t,j,i),mAL_(t,j,i),mI_(t,j,i),mA_(t,j,i)]=matchdist(i,j,t,mA,mI,mAL,mIL,typeic,D,mm,JLs, betah);
+           
+           if wfh>0
+                mIL_(t+T,j,i)=mIL_(t,j,i);
+                mAL_(t+T,j,i)=mAL_(t,j,i);
+                mI_(t+T,j,i)=mI_(t,j,i);
+                mA_(t+T,j,i)=mA_(t,j,i);
+           end
+ 
+        end
+    end
+end
+PARREST.('mIL_')=mIL_;
+PARREST.('mAL_')=mAL_;
+PARREST.('mI_')=mI_;
+PARREST.('mA_')=mA_;
 end
 
 

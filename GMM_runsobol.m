@@ -12,8 +12,8 @@ fprintf('Running GMM estimation - sobol points and fminsearch, with L=LA0.\n');
 
 
 global filename1 filename2
-filename1 = "./estimation/progress_sobol.txt";
-filename2 = "./estimation/progressmoment_sobol.txt";
+filename1 = "./estimation/progress_bla.txt";
+filename2 = "./estimation/progressmoment_bla.txt";
 io = fopen(filename1,'a');
 fprintf(io," \n");
 fprintf(io,"Rerun routine. \n");
@@ -25,7 +25,7 @@ fprintf(io,"Rerun routine. \n");
 fclose(io);
 
 %%
-forparams =readtable('./input/PREP.xlsx','Sheet','PARSTEST','ReadVariableNames', true,'ReadRowNames',true);
+forparams =readtable('./input/PREP_test.xlsx','Sheet','PARS','ReadVariableNames', true,'ReadRowNames',true);
 formom =readtable('./input/PREP.xlsx','Sheet','MOMS','ReadVariableNames', true,'ReadRowNames',true);
 forw =readtable('./input/PREP.xlsx','Sheet','W','ReadVariableNames', true,'ReadRowNames',true);
 
@@ -37,7 +37,7 @@ paramsest=forparams(forparams.('toestimateR')==1,'value');
 momentall=formom(:,'value');
 momentest=formom(formom.('toestimate')==1,'value');
 global DOWN
-DOWN=10^3; % scale down W. it is reallyhigh.
+DOWN=10^3; % scale down W. it is reallyhigh. Now that I do not trat Q 
 
 io = fopen(filename1,'a');
 fprintf(io," \n");
@@ -93,6 +93,7 @@ options = optimset('Display','iter');
 
     %Unlike other solvers, fminsearch stops when it satisfies both TolFun and TolX.
 
+ObjectiveFunction(x0)   
 [x,fval,exitFlag,output] = fminsearch(ObjectiveFunction,x0,options);
 output
 

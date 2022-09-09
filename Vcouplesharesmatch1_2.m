@@ -21,15 +21,19 @@ function [V,workh, workw, Pnn, Pnw0,Pnw, Pw0n,Pw0w0,Pw0w, Pwn, Pww0,Pww,conexp1,
 %global OUTC typeic show EQS mm mA mI mAL mIL %lsah lsaw lsb Ycc ich icw
 global show
 
-typeic=PARREST.('typeic');
-D=PARREST.('D');
-mm=PARREST.('mm');
-JLs=PARREST.('JLs');
-betah=PARREST.('betah');
-mA=PARREST.('mA');
-mI=PARREST.('mI');
-mAL=PARREST.('mAL');
-mIL=PARREST.('mIL');
+mIL=PARREST.('mIL_');
+mAL=PARREST.('mAL_');
+mI=PARREST.('mI_');
+mA=PARREST.('mA_');
+
+mI1_=mIL(th,jh,i);
+mA1_=mAL(th,jh,i);
+mIG1_=mI(th,jh,i);
+mAG1_=mA(th,jh,i);
+mI2_=mIL(tw,jw,i);
+mA2_=mAL(tw,jw,i);
+mIG2_=mI(tw,jw,i);
+mAG2_=mA(tw,jw,i);
 
 
 lambda=OUTC.('lambda'); %this way I am sure it was used in vc!
@@ -58,7 +62,8 @@ if vnn>=max([vnw0,vw0n,vw0w0])
 end
 
 
-[V,workh, workw, Pnn, Pnw0,Pnw, Pw0n,Pw0w0,Pw0w, Pwn, Pww0,Pww,conexp1, conexp2]=locfirst(i,jh,jw,th,tw,lambda,mA,mI,mAL,mIL,mm,D,typeic,JLs, betah,vw0w0,vw0n,vnw0,vww,vwn,vnw,vnn,vww0,vw0w);
+[V,workh, workw, Pnn, Pnw0,Pnw, Pw0n,Pw0w0,Pw0w, Pwn, Pww0,Pww,conexp1, conexp2]=...
+        locfirst(i,jh,jw,th,tw,lambda,mI1_,mA1_,mIG1_,mAG1_,mI2_,mA2_,mIG2_,mAG2_,vw0w0,vw0n,vnw0,vww,vwn,vnw,vnn,vww0,vw0w);
 %{
 workh
 workw

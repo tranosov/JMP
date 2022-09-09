@@ -13,7 +13,12 @@ params('line','value')={(1+ 1/(exp(-(params{'line',:}-1)) +1))  };
 
 
 params('pish_','value')={exp(params{'pish_',:})};
-params('PHID_','value')={exp(params{'PHID_',:})};
+
+if exp(params{'PHID_',:})>-1000
+    params('PHID_','value')={exp(params{'PHID_',:})};
+else
+    params('PHID_','value')={0};
+end
 
 params('eta_','value')={exp(params{'eta_',:})};
 params('ce_','value')={exp(params{'ce_',:})};

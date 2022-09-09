@@ -26,8 +26,14 @@ p=exp(lp);
 %LA=LA0/(RESC);
 
 
+wfh=PARREST.('wfh');
+
 I=size(HS,2);
 T=size(Jw,2);
+if wfh>0
+    T=T*2;
+end
+
 W=3;
 
 [DS,HSingle, DSh, DSw, VS,Pws,cexps,OUTS]=DSingle(p,1,EQS,PARREST);

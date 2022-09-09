@@ -12,8 +12,8 @@ fprintf('Running GMM estimation -fminsearch without L recomputing.\n');
 
 
 global filename1 filename2
-filename1 = "./estimation/progress_local.txt";
-filename2 = "./estimation/progressmoment_local.txt";
+filename1 = "./estimation/progress_local_nopwn.txt";
+filename2 = "./estimation/progressmoment_nopwn.txt";
 io = fopen(filename1,'a');
 fprintf(io," \n");
 fprintf(io,"Rerun routine. \n");
@@ -39,8 +39,8 @@ momentest=formom(formom.('toestimate')==1,'value');
 global DOWN
 DOWN=10^3; % scale down W. it is reallyhigh.
 
-filename = "./estimation/progress.txt";
-io = fopen(filename,'a');
+
+io = fopen(filename1,'a');
 fprintf(io," \n");
 fprintf(io,"Scaling down weighting matrix by a factor %16.8f\n",DOWN);
 fclose(io);

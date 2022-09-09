@@ -8,7 +8,7 @@ PC_=exp(VC./(repmat(sigmal*2,I,I,T,T,I)))./repmat(sum(exp(VC./(repmat(sigmal*2,I
 S=10000;
 rng(357)
 dist=makedist('gev',0,sigmal,0); % gev not ev!
-epses = random(dist,[S,3]);
+epses = random(dist,[S,I]);
 
 epsS=zeros(I,T,I);
 for j=1:I

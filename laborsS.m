@@ -31,9 +31,12 @@ us=EQS.('us');
 cs=EQS.('cs');
 hdS=EQS.('hdS');
 
-N=size(JLs);
-I=N(1);
-T=N(2);
+wfh=PARREST.('wfh');
+T0=T;
+if wfh>0
+    T=T0*2;
+end
+
 vs=zeros(T,I,I);
 Hs=zeros(T,I,I);
 if alloutput
@@ -91,9 +94,16 @@ for j=1:I
         for t=1:T
             d=D(i,j);
             p=pp(i);
-            [~,~,~,~,~,low]=matchdist(i,j,t,0,0,0,0,typeic,D,mm,JLs,betah);
+
+            if t>T0
+                d=0;
+                [~,~,~,~,~,low]=matchdist(i,j,t-T0,0,0,0,0,typeic,D,mm,JLs,betah);
+            else
+                [~,~,~,~,~,low]=matchdist(i,j,t,0,0,0,0,typeic,D,mm,JLs,betah);
+            end
             ic=1-low;
             ics(t,j,i)=ic;
+            
             fn=@(mu,x) [lssh_eq(mu,x,p,d,ic) ,multS_eq(Ys(lssh(mu,x,d),ic),p,mu,x)];
             fn=@(in) fn(in(1),in(2));
             
@@ -177,5 +187,7 @@ if alloutput
     OUTS.('phs') = phs; 
     OUTS.('epsS') = 0;
 end
+
+
 
 end

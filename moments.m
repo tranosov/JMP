@@ -8,12 +8,12 @@ global sizehs
 
 %todo: only compute the necessary moments!
 
-PP(:,:,1)=repmat(p(1),2,3);
-PP(:,:,2)=repmat(p(2),2,3);
-PP(:,:,3)=repmat(p(3),2,3);
+%PP(:,:,1)=repmat(p(1),2,3);
+%PP(:,:,2)=repmat(p(2),2,3);
+%PP(:,:,3)=repmat(p(3),2,3); % ignore
 
 D=PARREST.('D');
-%sigmal=PARREST.('sigmal');
+sigmal=PARREST.('sigmal');
 sigmam=PARREST.('sigmam');
 JLs=PARREST.('JLs');
 mm=PARREST.('mm');
@@ -36,12 +36,15 @@ params=PARREST.('params');
 NLY=params{'NLY',:};
 lsbar=PARREST.('lsbar');
 
-N=size(D);
-I=N(1);
-N=size(Jw);
-T=N(2);
 W=3;
 sizehs=size(HS);
+wfh=PARREST.('wfh');
+I=size(HS,2);
+T=size(Jw,2);
+T0=T;
+if wfh>0
+    T=T*2;
+end
 
 w1=EQS.('w1') ;
 w2=EQS.('w2') ;
@@ -93,6 +96,7 @@ uxS=zeros(I,T,I,W);
 xS=zeros(I,T,I,W);
 aS=zeros(I,T,I,W);
 uS_det=zeros(I,T,I,W);
+ic_S=zeros(I,T,I,W);
 uS=zeros(I,T,I);
 if (OUTS.('epsS')==0) 
     epsS=zeros(I,T,I);
@@ -104,18 +108,27 @@ for j=1:I
         for i=1:I
             for w=2:W
                 j_=j*(w==3) + i*(w==2);
-                worksS(j,t,i,w)=(w>1);
+                
+                if t>T0
+                    d=0;
+                    L_low(j,t,i,w)=out5(@()matchdist(i,j,t-T0,mA,mI,mAL,mIL,typeic,D,mm,JLs,betah));
+                    [~,~,~,~,~,low]=matchdist(i,j_,t-T0,mA,mI,mAL,mIL,typeic,D,mm,JLs,betah); % of what you really took
+                else
+                    d=D(i,j_);
+                    L_low(j,t,i,w)=out5(@()matchdist(i,j,t,mA,mI,mAL,mIL,typeic,D,mm,JLs,betah));
+                    [~,~,~,~,~,low]=matchdist(i,j_,t,mA,mI,mAL,mIL,typeic,D,mm,JLs,betah); % of what you really took   
+                end
+                
+                ic=1-low; % is j low (not an industry center)?
+                ic_S(j,t,i,w)=ic;
+                commuteS(j,t,i,w)=d;
                 distS(j,t,i,w)=D(i,j); % offer
-                L_low(j,t,i,w)=out5(@()matchdist(i,j,t,mA,mI,mAL,mIL,typeic,D,mm,JLs,betah));
-                commuteS(j,t,i,w)=D(i,j_);
+                worksS(j,t,i,w)=(w>1);
                 lsS(j,t,i,w)=lss(t,j_,i);
                 YS(j,t,i,w)=Yss(t,j_,i);
                 closeS(j,t,i,w)=ucls(t,j_,i);
                 %PHID*(FdistS(commuteS(j,t,i,w))-1);
 
-          
-                [~,~,~,~,~,low]=matchdist(i,j_,t,mA,mI,mAL,mIL,typeic,D,mm,JLs,betah); % of what you really took
-                ic=1-low; % is j low (not an industry center)?
                 matchS(j,t,i,w)=cexps(j,t,i)+ XI* lsS(j,t,i,w)*ic; %first part: is not really correct for w=2 vs w=3, but should work on the aggregate
                 % i.e. the first part you can take as an expectation before
                 % you see the match shocks!
@@ -183,6 +196,8 @@ wagehC=zeros(I,I,T,T,I,W,W);
 wagewC=zeros(I,I,T,T,I,W,W);
 L_lowhC=zeros(I,I,T,T,I,W,W);
 L_lowwC=zeros(I,I,T,T,I,W,W);
+ic_hC=zeros(I,I,T,T,I,W,W);
+ic_wC=zeros(I,I,T,T,I,W,W);
 for jh=1:I
     for jw=1:I
         for th=1:T
@@ -193,15 +208,36 @@ for jh=1:I
 hi=wh>1;
 wi=ww>1;
 wwi=hi*(1-wi)+2*wi*(1-hi) + 3*wi*hi;
+
 if wwi>0
     dh=D(i,jh)*(wh==3) + D(i,i)*(wh==2);
     dw=D(i,jw)*(ww==3) + D(i,i)*(ww==2);
     jh_=jh*(wh==3) + i*(wh==2|wh==1);
     jw_=jw*(ww==3) + i*(ww==2|ww==1);
-    [~,~,~,~,~,low]=matchdist(i,jh_,th,mA,mI,mAL,mIL,typeic,D,mm,JLs,betah);
-    ich=1-low;
-    [~,~,~,~,~,low]=matchdist(i,jw_,tw,mA,mI,mAL,mIL,typeic,D,mm,JLs,betah);
-    icw=1-low;
+    
+    if th>T0
+        dh=0;        
+        [~,~,~,~,~,lowh]=matchdist(i,jh_,th-T0,mA,mI,mAL,mIL,typeic,D,mm,JLs,betah); % of what you really took
+         L_lowhC(jh,jw,th,tw,i,wh,ww)=out5(@()matchdist(i,jh,th-T0,mA,mI,mAL,mIL,typeic,D,mm,JLs,betah)); % is the local labor market 'low' for me?
+    else
+        [~,~,~,~,~,lowh]=matchdist(i,jh_,th,mA,mI,mAL,mIL,typeic,D,mm,JLs,betah);
+         L_lowhC(jh,jw,th,tw,i,wh,ww)=out5(@()matchdist(i,jh,th,mA,mI,mAL,mIL,typeic,D,mm,JLs,betah)); % is the local labor market 'low' for me?
+    end
+
+    if tw>T0
+        dw=0;
+        [~,~,~,~,~,loww]=matchdist(i,jw_,tw-T0,mA,mI,mAL,mIL,typeic,D,mm,JLs,betah); % of what you really took
+        L_lowwC(jh,jw,th,tw,i,wh,ww)=out5(@()matchdist(i,jw,tw-T0,mA,mI,mAL,mIL,typeic,D,mm,JLs,betah));
+    else
+        [~,~,~,~,~,loww]=matchdist(i,jw_,tw,mA,mI,mAL,mIL,typeic,D,mm,JLs,betah);
+        L_lowwC(jh,jw,th,tw,i,wh,ww)=out5(@()matchdist(i,jw,tw,mA,mI,mAL,mIL,typeic,D,mm,JLs,betah));
+    end
+     
+    
+    ich=1-lowh;
+    icw=1-loww;
+    ic_hC(jh,jw,th,tw,i,wh,ww)=ich;
+    ic_wC(jh,jw,th,tw,i,wh,ww)=icw;
     lsh_=lh(th,tw,jh_,jw_,i,wwi);  
     lsw_=lw(th,tw,jh_,jw_,i,wwi);
    
@@ -238,8 +274,6 @@ if wwi>0
     mind(jh,jw,th,tw,i,wh,ww)=min(dh*hi,dw*wi); %0 if not working
     wagehC(jh,jw,th,tw,i,wh,ww)=w1(lsh_,ich)*hi; %+99999*(1-hi); % 0 if not working
     wagewC(jh,jw,th,tw,i,wh,ww)=w2(lsw_,icw)*wi; %+99999*(1-wi); 
-    L_lowhC(jh,jw,th,tw,i,wh,ww)=out5(@()matchdist(i,jh,th,mA,mI,mAL,mIL,typeic,D,mm,JLs,betah)); % is the local labor market 'low' for me?
-    L_lowwC(jh,jw,th,tw,i,wh,ww)=out5(@()matchdist(i,jw,tw,mA,mI,mAL,mIL,typeic,D,mm,JLs,betah));
 
     uhousC(jh,jw,th,tw,i,wh,ww)=uho(th,tw,jh_,jw_,i,wwi);
     aC(jh,jw,th,tw,i,wh,ww)=AC(i);
@@ -313,11 +347,24 @@ matchwS_raw=sum(sumS(DSw.*matchS))./sum(sum(sum(DSw_agr)));
 matchhC_raw=sum(sumC(matchhC.*DC))./sum(DCi);
 matchwC_raw=sum(sumC(matchwC.*DC))./sum(DCi);
 
+ic_hS_raw=sum(sumS(DSh.*ic_S))./sum(sum(sum(DSh_agr)));
+ic_wS_raw=sum(sumS(DSw.*ic_S))./sum(sum(sum(DSw_agr)));
+
+ic_hC_raw=sum(sumC(ic_hC.*DC))./sum(DCi);
+ic_wC_raw=sum(sumC(ic_wC.*DC))./sum(DCi);
+
+ic_hC_pww=sum(sumC(ic_hC.*DC.*PwwC))./sum(sumC(DC.*PwwC));
+ic_wC_pww=sum(sumC(ic_wC.*DC.*PwwC))./sum(sumC(DC.*PwwC)); % contributing to wagegaps?
+
 %%
 % hours - positive
 
 hourshC_raw=sum(sumC(DC.*lshC.*workshC))./sum(sumC(DC.*workshC)); %0.26
 hourswC_raw=sum(sumC(DC.*lswC.*workswC))./sum(sumC(DC.*workswC)) ;%0.18
+
+% hours - all
+hours0hC_raw=sum(sumC(DC.*lshC.*workshC))./sum(sumC(DC)); 
+hours0wC_raw=sum(sumC(DC.*lswC.*workswC))./sum(sumC(DC)) ;
 
 %% if both work
 hourshC_pww_raw=sum(sumC(DC.*lshC.*PwwC))./sum(sumC(DC.*PwwC));
@@ -416,14 +463,11 @@ publichS_raw=sum(sumS(DSw.*uxS))/sum(sumS(DSw));
 
 closeC_raw=sum(sumC(DC.*closeC))/sum(DCi);
 mindC_raw=sum(sumC(DC.*mind))/sum(DCi);
+mindCiswoman_raw=sum(sumC(DC.*(mind==commutewC.*workswC)))/sum(DCi);
 publicC_raw=sum(sumC(DC.*publicC))/sum(DCi);
 
-
 closehS_raw=sum(sumS(DSh.*closeS))/sum(sumS(DSh));
-
-
 closewS_raw=sum(sumS(DSw.*closeS))/sum(sumS(DSw));
-
 
 
 %%
@@ -459,7 +503,7 @@ hVMAR=uhC_life - uhS_life;
 
 
 %%
- a=(DS.*worksS);
+a=(DS.*worksS);
 JSingle=sum(sum(a(:,:,:,3),4),3)+transpose(reshape(sum(sum(a(:,:,:,2),4),1),[T,I]));
 
 a=DC.*workshC;
@@ -471,6 +515,17 @@ Jcouplew=reshape(sum(sum(sum(sum(sum(a(:,:,:,:,:,:,3),7),6),5),1),3),[I,T])+...
     transpose(reshape(sum(sum(sum(sum(sum(a(:,:,:,:,:,:,2),7),6),2),1),3),[T,I]));
 
 Jobs=JSingle+Jcoupleh+Jcouplew;
+if wfh>0
+   Jobs(:,1:T0)=Jobs(:,1:T0)+Jobs(:,T0+1:T);
+   Jobs=Jobs(:,1:T0); 
+   
+   JSingle(:,1:T0)=JSingle(:,1:T0)+JSingle(:,T0+1:T);
+   JSingle=JSingle(:,1:T0);
+   Jcoupleh(:,1:T0)=Jcoupleh(:,1:T0)+Jcoupleh(:,T0+1:T);
+   Jcoupleh=Jcoupleh(:,1:T0);
+   Jcouplew(:,1:T0)=Jcouplew(:,1:T0)+Jcouplew(:,T0+1:T);
+   Jcouplew=Jcouplew(:,1:T0);
+end
 
 JLs_m=Jobs./repmat(sum(Jobs),I,1);
 JLs_all_m=sum(Jobs,2)/sum(sum(Jobs));
@@ -482,13 +537,16 @@ for j=1:I
     for t=1:T
         for i=1:I
             for w=1:W
-                distoS_m(j,t,i,w)=Do(i,JLs_m(:,t),D); %indep of jh,jw
+                t0=t;
+                if t>T0
+                    t0=t-T0;
+                end
+                distoS_m(j,t,i,w)=Do(i,JLs_m(:,t0),D); %indep of jh,jw
                 distalljS_m(j,t,i,w)=Do(i,JLs_all_m,D);
             end
         end
     end
 end
-
 
 distoS_m_raw=sum(sumS(distoS_m.*DS))/sum(sumS(DS));
 distohS_m_raw=sum(sumS(distoS_m.*DSh))/sum(sumS(DSh));
@@ -504,9 +562,19 @@ for jh=1:I
                 for i=1:I
                     for wh=1:W
                         for ww=1:W
-distohC_m(jh,jw,th,tw,i,wh,ww)=  Do(i,JLs_m(:,th),D);
-distowC_m(jh,jw,th,tw,i,wh,ww)=  Do(i,JLs_m(:,tw),D);
+                            th0=th;
+                            if th>T0
+                                th0=th-T0;
+                            end
+                            tw0=tw;
+                            if tw>T0
+                                tw0=tw-T0;
+                            end
+                            
+distohC_m(jh,jw,th,tw,i,wh,ww)=  Do(i,JLs_m(:,th0),D);
+distowC_m(jh,jw,th,tw,i,wh,ww)=  Do(i,JLs_m(:,tw0),D);
 distalljC_m(jh,jw,th,tw,i,wh,ww)=  Do(i,JLs_all_m,D);
+
                         end
                     end
                 end
@@ -522,6 +590,50 @@ distalljC_m_raw=sum(sumC(distalljC_m.*DC))./sum(DCi);
 
 disthC_raw=sum(sumC(DC.*disthC))/sum(DCi); % OFFERS
 distwC_raw=sum(sumC(DC.*distwC))/sum(DCi);
+
+
+%% correlation of A and do
+distoS_m_location=sumS(distoS_m.*DS)./sumS(DS);
+distoC_m_location=(sumC(distohC_m.*DC)./DCi+sumC(distowC_m.*DC)./DCi)/2;
+
+%corrS = corrcoef(AS,distoS_m_location);
+%corrC = corrcoef(AC,distoC_m_location); % stupid with so few locations and no idiosyncracies considered here
+
+WW=eye(I);
+
+X=[ones(I,1),-distoS_m_location'];
+y=AS';
+b=((X'*WW*X)\eye(size(X'*WW*X)))*(X'*WW*y);
+corrS=[b(end)];
+
+X=[ones(I,1),-distoC_m_location'];
+y=AC';
+b=((X'*WW*X)\eye(size(X'*WW*X)))*(X'*WW*y);
+corrC=[b(end)];
+
+distalljC_m_location=sumC(distalljC_m.*DC)./DCi;
+%distoC_m_location=(sumC(distohC_m.*DC)./DCi+sumC(distowC_m.*DC)./DCi)/2;
+%distoS_m_location=(sumS(distoS_m.*DSh)./DCi+sumC(distoS_m.*DSw)./DSi)/2;
+
+distallj_CS1=distalljC_m_location(2)-distalljC_m_location(1);
+distallj_CS2=distalljC_m_location(3)-distalljC_m_location(1);
+
+denomC=0;
+denomS=0;
+for i=1:I
+    denomC=denomC+exp(AC(i)/sigmal);
+    denomS=denomS+exp(AS(i)/sigmal);
+end
+distalljC_maxamen=0;
+distalljS_maxamen=0;
+distoC_maxamen=0;
+distoS_maxamen=0;
+for i=1:I
+    distalljC_maxamen=distalljC_maxamen+distalljC_m_location(i)*exp(AC(i)/sigmal)/denomC;
+    distalljS_maxamen=distalljS_maxamen+distalljC_m_location(i)*exp(AS(i)/sigmal)/denomS;
+    distoC_maxamen=distoC_maxamen+distoC_m_location(i)*exp(AC(i)/sigmal)/denomC;
+    distoS_maxamen=distoS_maxamen+distoS_m_location(i)*exp(AS(i)/sigmal)/denomS;
+end
 
 %% standard deviation of do and dj
 
@@ -546,25 +658,25 @@ sd_hdo_wdo=(sum(sumC(DC.*((distowC_m-distohC_m-mean_hdo_wdo).^2))))/(sum(sumC(DC
 
 
 %% jobjob distances
-jobjob_prep_m=zeros(I,T+1);
+jobjob_prep_m=zeros(I,T0+1);
 for i=1:I
-    for t=1:T
+    for t=1:T0
         jobjob_prep_m(i,t)=Do(i,JLs_m(:,t),D); %indep of jh,jw, based on all jobs, just by type
     end
-    jobjob_prep_m(i,T+1)=Do(i,JLs_all_m,D);
+    jobjob_prep_m(i,T0+1)=Do(i,JLs_all_m,D);
 end
 
-jobjob_all_m=sum(jobjob_prep_m(:,T+1).*JLs_all_m)/sum(JLs_all_m) ; % data 10.7
-jobjob_within_m=sum(sum(jobjob_prep_m(:,1:T).*JLs_m))/sum(sum(JLs_m)); % data 10.2
+jobjob_all_m=sum(jobjob_prep_m(:,T0+1).*JLs_all_m)/sum(JLs_all_m) ; % data 10.7
+jobjob_within_m=sum(sum(jobjob_prep_m(:,1:T0).*JLs_m))/sum(sum(JLs_m)); % data 10.2
 
 
 JLsh_m=Jcoupleh./repmat(sum(Jcoupleh),I,1);
-jobjob_hwithin_m=sum(sum(jobjob_prep_m(:,1:T).*JLsh_m))/sum(sum(JLsh_m)); % need to replace JLs_m with dist of husband jobs?
+jobjob_hwithin_m=sum(sum(jobjob_prep_m(:,1:T0).*JLsh_m))/sum(sum(JLsh_m)); % need to replace JLs_m with dist of husband jobs?
 
 % hw potential job distances - since matching random
-jobjob_inds_m=zeros(T,T);
-for t1=1:T
-    for t2=1:T
+jobjob_inds_m=zeros(T0,T0);
+for t1=1:T0
+    for t2=1:T0
         jobjob_inds_m(t1,t2)=sum(jobjob_prep_m(:,t1).*JLs_m(:,t2))/sum(JLs_m(:,t2));
     end
 end
@@ -582,6 +694,7 @@ for jh=1:I
                         for ww=1:W
 jh_=jh*(wh==3) + i*(wh==2|wh==1);
 jw_=jw*(ww==3) + i*(ww==2|ww==1);
+% keep jobjob distances as where the job was 'supposed' to be?
 
 jobjob_hw_toact(jh,jw,th,tw,i,wh,ww)=  D(jh_,jw_);                            
 jobjob_hw_tooff(jh,jw,th,tw,i,wh,ww)=  D(jh,jw);
@@ -607,6 +720,9 @@ YncomeC=sum(sumC(YC.*DC))./sum(DCi);
 YncomeS=sum(sumS(YS.*DS))./sum(DSi);
 hC=sum(sumC(HCouple))/sum(DCi);
 
+p_HS=sum(pHSi)/sum(sumS(HSingle));
+p_HC=sum(pHCi)/sum(sumC(HCouple));
+
 
 NLY_=(NLY*0.5*sum(sumS(DS))+ NLY*sum(sumC(DC)))/(sum(sumS(YS.*DS))+sum(sumC(YC.*DC)));
 %%
@@ -628,10 +744,12 @@ disth_long=reshape(disthC,I*I*T*T*I*W*W,1);
 distw_long=reshape(distwC,I*I*T*T*I*W*W,1);
 housh_long=8760*reshape(xhC,I*I*T*T*I*W*W,1);
 housw_long=8760*reshape(xwC,I*I*T*T*I*W*W,1);
-wageh_long=reshape(wagehC,I*I*T*T*I*W*W,1);
-wagew_long=reshape(wagewC,I*I*T*T*I*W*W,1);
+wageh_long=reshape(lwagehC,I*I*T*T*I*W*W,1);
+wagew_long=reshape(lwagewC,I*I*T*T*I*W*W,1);
 wageh_long(isinf(wageh_long))=0;
 wagew_long(isinf(wagew_long))=0;
+ich_long=reshape(ic_hC,I*I*T*T*I*W*W,1);
+icw_long=reshape(ic_wC,I*I*T*T*I*W*W,1);
 
 % with couple fes? how? would it change?
 % TODO: so far I think these regressions are nonsense. distoh is by
@@ -654,6 +772,12 @@ for jh=1:I
                 location(jh,jw,th,tw,i,wh,ww)=i;
                 typeh(jh,jw,th,tw,i,wh,ww)=th;
                 typew(jh,jw,th,tw,i,wh,ww)=tw;
+                if th>T0
+                    typeh(jh,jw,th,tw,i,wh,ww)=th-T0;
+                end
+                if tw>T0
+                    typew(jh,jw,th,tw,i,wh,ww)=tw-T0;
+                end
                 loh(jh,jw,th,tw,i,wh,ww)=jh;
                 low(jh,jw,th,tw,i,wh,ww)=jw;
                 accepth(jh,jw,th,tw,i,wh,ww)=wh;
@@ -688,12 +812,12 @@ tbl=mat2dataset([[dosh_m_long;dosw_m_long],groups,[lsh_long;lsw_long],[commsh_lo
     [disth_long;distw_long],[zeros(I*I*T*T*I*W*W,1);distw_long],[location_long;location_long],...
     [typeh_long;typew_long],[typeh_long;typeh_long],[typew_long;typew_long],[loh_long;loh_long],[low_long;low_long],...
     [accepth_long;accepth_long],[acceptw_long;acceptw_long],[worksh_long;worksw_long],...
-    [housh_long;housw_long],[wageh_long; wagew_long]]);
+    [housh_long;housw_long],[wageh_long; wagew_long],[ich_long;icw_long]]);
 
 
 tbl.Properties.VarNames = {'dos_m','couple','ls','comm','woman','womandos_m',...
     'weights','weights_bothwork','dj','womandj','location','type','typeh','typew','loh','low',...
-    'accepth','acceptw','works','hous','wage'};
+    'accepth','acceptw','works','hous','wage','ic'};
 tbl.couple=categorical(tbl.couple);
 
 typedif=[[typeh_long==1] - [typew_long==1]];
@@ -820,15 +944,21 @@ for i=1:I
     dj(i)=Do(i,JLs_all_m,D);
 end
 
-employees=reshape(sum(sum(sum(sum(sum(sum(DC.*workshC)),4),5),6),7),[1,2])+...
-    reshape(sum(sum(sum(sum(sum(sum(DC.*workswC)),3),5),6),7),[1,2])+...
+employees=reshape(sum(sum(sum(sum(sum(sum(DC.*workshC)),4),5),6),7),[1,T])+...
+    reshape(sum(sum(sum(sum(sum(sum(DC.*workswC)),3),5),6),7),[1,T])+...
     sum(sum(sum(DS.*worksS),3),4);
 
-semployees=(reshape(sum(sum(sum(sum(sum(sum(DC.*workswC)),3),5),6),7),[1,2])+...
-    sum(sum(sum(DSw.*worksS),3),4))./employees;
+wemployees=(reshape(sum(sum(sum(sum(sum(sum(DC.*workswC)),3),5),6),7),[1,T])+...
+    sum(sum(sum(DSw.*worksS),3),4));
+
+if wfh>0
+    employees=employees(1:T0)+employees(T0+1:T);
+    wemployees=wemployees(1:T0)+wemployees(T0+1:T);
+end
+semployees=wemployees./employees;
 
 for i=1:I
-    for t=1:T
+    for t=1:T0
         djj(i,t)=Do(i,JLs_m(:,t),D);
         prices(i,t)=log(p(i));
         sharew(i,t)=semployees(t);
@@ -848,11 +978,11 @@ pg(1,:)=b(end);
 %lm = fitlm(tbl,'  p ~ 1+ dj');
 %pg(1,:)=table2array(lm.Coefficients('dj',:)); % log-point per mile
 
-pp_long=reshape(prices,I*T,1);
-djj_long=reshape(djj,I*T,1);
-sharew_long=reshape(sharew,I*T,1);
+pp_long=reshape(prices,I*T0,1);
+djj_long=reshape(djj,I*T0,1);
+sharew_long=reshape(sharew,I*T0,1);
 
-X=[ones(I*T,1),djj_long,sharew_long,sharew_long.*djj_long];
+X=[ones(I*T0,1),djj_long,sharew_long,sharew_long.*djj_long];
 b=((X'*X)\eye(size(X'*X)))*(X'*pp_long);
 pg(2,:)=b(end);
 
@@ -872,8 +1002,16 @@ for jh=1:I
                 for i=1:I
                     for wh=1:W
                         for ww=1:W
-distohC(jh,jw,th,tw,i,wh,ww)=  Do(i,JLs(:,th),D);
-distowC(jh,jw,th,tw,i,wh,ww)=  Do(i,JLs(:,tw),D);
+                            th0=th;
+                            if th>T0
+                                th0=th-T0;
+                            end
+                            tw0=tw;
+                            if tw>T0
+                                tw0=tw-T0;
+                            end
+distohC(jh,jw,th,tw,i,wh,ww)=  Do(i,JLs(:,th0),D);
+distowC(jh,jw,th,tw,i,wh,ww)=  Do(i,JLs(:,tw0),D);
                         end
                     end
                 end
@@ -890,6 +1028,12 @@ distowC_raw=sum(sumC(distowC.*DC))./sum(DCi);
 swnmarried=1 - (exp((wVMAR)/sigmam)/(1+exp((wVMAR)/sigmam)));
 shnmarried=1 - (exp((hVMAR)/sigmam)/(1+exp((hVMAR)/sigmam)));
 %%
+d4=0;
+if I==4
+    d4=distalljC_m_location(4);
+else
+    p(4)=0;
+end
 
 Keys = {'scity_dif', 'wlfp_dif', 'hlfp','whours_pww_dif',...
     'scommiles','shcommiles_dif','swcommiles_difw',...
@@ -904,13 +1048,17 @@ Keys = {'scity_dif', 'wlfp_dif', 'hlfp','whours_pww_dif',...
 Keyso =  {'shnmarried_','swnmarried_','sdj_dif','sshouseexp','cshouseexp','wagegap_actual','wagegap_hw',...
     'p_gradient_swdjobs',...
     'lsbar_hC_pww_raw','lsbar_wC_pww_raw','lsbar_hC_h0_raw','lsbar_wC_0w_raw',...
-    'hVC_hVS' , 'wVC_wVS','hL','wL','hl','wl','hx','wx','hcom0','wcom0','hcom','wcom','hcons','wcons',...
+    'hVC_hVS' , 'wVC_wVS','hL','wL','hl','wl','hl0','wl0','hx','wx','hcom0','wcom0','hcom','wcom','hcons','wcons',...
     'uconshC_raw','uconswC_raw','uconshS_raw','uconswS_raw',...
     'uleishC_raw','uleiswC_raw','uleishS_raw','uleiswS_raw',...
     'matchhC_raw','matchwC_raw','matchhS_raw','matchwS_raw',...
     'uhousC_raw','uhoushS_raw','uhouswS_raw',...
     'publicC_raw','closeC_raw','closehS_raw','closewS_raw','publichS_raw','publicwS_raw',...
-    'hdo_of','wdo_of_dif','wdo_act_dif','Yc','Ys','HC','p1','p2','p3'};
+    'hdo_of','wdo_of_dif','wdo_act_dif','Yc','Ys','HC','p1','p2','p3','p4',...
+    'corrC','corrS','dj_CS1','dj_CS2','dj1','dj2','dj3','dj4','djC_maxamen','djS_maxamen',...
+    'epsC_raw','epshS_raw','epswS_raw',...
+    'p_HC','p_HS','lwagehC','lwagewC','lwagehS','lwagewS',...
+    'mindCiswoman_raw'};
 
 model_m=[sDSi(1)-sDCi(1),workwC_raw-workhC_raw, workhC_raw, (hourswC_pww_raw-hourshC_pww_raw)*24*365,...
         commuteS_raw,commuteS_raw- commutehC_raw,commuteS_raw- commutewC_raw,...
@@ -923,25 +1071,29 @@ model_m=[sDSi(1)-sDCi(1),workwC_raw-workhC_raw, workhC_raw, (hourswC_pww_raw-hou
         abs_hdo_wdo,sH,  pg(1,1),-wagegap_hw_within,xS_raw*24*365,...
         shnmarried,scity,JLs_all_m(1,1),sd_hdo_wdo,p_gradient_simple,NLY_];
 model_m_add=[shnmarried,swnmarried,distalljS_m_raw-distalljC_m_raw, sHS, sHC,wagegap_actual,wagegap_hw , pg(2,1) ];
-other_=[    lsbar_hC_pww_raw,lsbar_wC_pww_raw,lsbar_hC_h0_raw,lsbar_wC_0w_raw,...
-    hVMAR ,wVMAR, leisurehC_raw,leisurewC_raw,hourshC_raw,hourswC_raw,xhC_raw,xwC_raw,...
-    comtimehC_raw*betah,comtimewC_raw,commutehC_raw*betah,commutewC_raw*betah,...
+other=[    lsbar_hC_pww_raw,lsbar_wC_pww_raw,lsbar_hC_h0_raw,lsbar_wC_0w_raw,...
+    hVMAR ,wVMAR, leisurehC_raw,leisurewC_raw,hourshC_raw,hourswC_raw,hours0hC_raw,hours0wC_raw,xhC_raw,xwC_raw,...
+    comtimehC_raw*betah,comtimewC_raw*betah,commutehC_raw*betah,commutewC_raw*betah,...
     conshC_raw,conswC_raw,uconshC_raw,uconswC_raw,uconshS_raw,uconswS_raw,...
     leishC_raw,leiswC_raw,uleishS_raw,uleiswS_raw,...
     matchhC_raw,matchwC_raw,matchhS_raw,matchwS_raw,...
     uhousC_raw,uhoushS_raw,uhouswS_raw,...
     publicC_raw,closeC_raw,closehS_raw,closewS_raw,publichS_raw,publicwS_raw,...
-    distowC_raw,distowC_raw-distohC_raw,distwC_raw-disthC_raw,YncomeC, YncomeS,hC,p];
-
-
-if I==4
-    Keyso{end+1}='p4';
-end
+    distowC_raw,distowC_raw-distohC_raw,distwC_raw-disthC_raw,YncomeC, YncomeS,hC,p,...
+    corrC,corrS,distallj_CS1,distallj_CS2,distalljC_m_location(1),distalljC_m_location(2),distalljC_m_location(3),d4,distalljC_maxamen,distalljS_maxamen,...
+    epsC_raw,epshS_raw,epswS_raw,...
+    p_HC,p_HS,...
+    lwagehC_raw,lwagewC_raw,lwagehS_raw,lwagewS_raw,...
+    mindCiswoman_raw];
 moments_= array2table([model_m]', 'RowNames',Keys);
-other_= array2table([model_m_add,other_], 'VariableNames',Keyso);
+other_= array2table([model_m_add,other], 'VariableNames',Keyso);
 
+epsC_raw=sum(sum(sum(sum(sum(DC1_agr.*epsC)))))./sum(sum(sum(sum(sum(DC1_agr)))));
 aC_raw=sum(sumC(aC.*DC))./sum(DCi) + sum(sum(sum(sum(sum(DC1_agr.*epsC)))))./sum(sum(sum(sum(sum(DC1_agr)))));
 % check it is the same as sum(sumC(aC.*DC1))./sum(sumC(DC1))
+
+epshS_raw=sum(sum(sum(DSh_agr.*epsS)))./sum(sum(sum(DSh_agr)));
+epswS_raw=sum(sum(sum(DSw_agr.*epsS)))./sum(sum(sum(DSw_agr)));
 ahS_raw=sum(sumS(DSh.*aS))./sum(sumS(DSh)) + sum(sum(sum(DSh_agr.*epsS)))./sum(sum(sum(DSh_agr)));
 awS_raw=sum(sumS(DSw.*aS))./sum(sumS(DSw)) + sum(sum(sum(DSw_agr.*epsS)))./sum(sum(sum(DSw_agr)));
 

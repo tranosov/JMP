@@ -6,7 +6,7 @@ Function computing the difference between demand and supply in locations
 
 
 
-function clearing = Clearing_justmm(LA0,EQS,PARREST)
+function [clearing] = Clearing_justmm(LA0,EQS,PARREST)
 %global D  AS  AC uw uh us ch cw cs h hs alphaw betaw alphah betah mu lambda JLs Jw Jm HS Jc NC NS NSh NSw sigmaw 
 global RESC %D Jw HS  %ssingle % WARNINGS 
 if isempty(RESC)
@@ -19,10 +19,13 @@ sigmam=PARREST.('sigmam');
 ssh_=PARREST.('sstaysingleh');
 ssw_=PARREST.('sstaysinglew');
 LA=LA0/(RESC);
-
+wfh=PARREST.('wfh');
 
 I=size(HS,2);
 T=size(Jw,2);
+if wfh>0
+    T=T*2;
+end
 W=3;
 
 
@@ -101,6 +104,8 @@ F=sum(sum(sum(DSw_agr)))*(1/(1/3 + ssw_*2/3)) ; %+ sum(sum(sum(sum(sum(DC_agr)))
 
 clmm=  F*(exp((uwC-uwS)/sigmam)/(1+exp((uwC-uwS)/sigmam)))  - M*(exp((uhC-uhS)/sigmam)/(1+exp((uhC-uhS)/sigmam)));
 
+%ssh=1/(1+exp((uhC-uhS)/sigmam)) ;
+%ssw=1/(1+exp((uwC-uwS)/sigmam)) ;
 clearing=[clmm*(1/3)];
 
 %todo - make a version where lambda is being identified separately - and

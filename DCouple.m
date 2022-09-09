@@ -17,10 +17,14 @@ sigmal=PARREST.('sigmal');
 JLs=PARREST.('JLs');
 mu=PARREST.('mu');
 NC=PARREST.('NC');
+wfh=PARREST.('wfh');
 
 
 I=size(D,1);
 T=size(JLs,2);
+if wfh>0
+    T=T*2;
+end
 W=3;
 
 WARNINGS=0; % reset
@@ -30,8 +34,8 @@ OUTC=labors(p,alloutput,lambda,EQS,PARREST);
 global show
 show=0;
 if show==1
-    Vcouplesharesmatch_2(1,1,1,1,2,PARREST,OUTC)
-    Vcouplesharesmatch_2(1,1,1,1,2,PARREST,OUTC)
+    Vcouplesharesmatch_2(1,1,1,1,3,PARREST,OUTC) %suburb terrible
+    Vcouplesharesmatch_2(1,1,1,1,2,PARREST,OUTC) %suburb not terrible
 end
 
 if WARNINGS>0
@@ -146,6 +150,7 @@ for i=1:I
 end
 OUTC.('vc') = vc;
 
+
 vc(1,2,2,3,2,3);
 vc(1,2,2,3,3,3);
 vc(1,2,2,3,2,3)-vc(1,2,2,3,3,3) % bigger difference (i=3 BETTER more if husband valued more)
@@ -154,7 +159,6 @@ vc(1,2,2,3,2,3)-vc(1,2,2,3,3,3) % bigger difference (i=3 BETTER more if husband 
 %vc(1,2,2,2,2,3);
 %vc(1,2,3,3,3,3);
 %vc(1,2,2,2,2,3)-vc(1,2,3,3,3,3); % this is driven by ich, byt it is way smaller, would never be enough - AND IT GETS SMALLER WITH LAMBDA higher???
-
 %}
 VC=zeros(I,I,T,T,I); %overall couple value
 Pw=zeros(I,I,T,T,I,W,W);

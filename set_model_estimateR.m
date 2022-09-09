@@ -69,7 +69,8 @@ ic0=params{'ic0_',:};
 
 le_=params{'le_',:};
 %params('ces_','value')={ces_};
-
+wfh=params{'wfh',:};
+hs_wfh=params{'hs_wfh',:};
 
 %AC3=0;
 %dmin=0;
@@ -143,7 +144,8 @@ end
     Wcenter, Wschool,Hcenter, Hschool,Jseg,sw,sel,wa,wb,wlinear, cneces,...
     ces_,ceh_,cew_,leh,lew,eta_,etaC_, muprob,plocal_,sstaysingleh,sstaysinglew,mA_,mI_,kappa_,...
     gamd_,PHID_,deltaw_,PHI_,rhod_,PHIW_,line,muw,muwL,swL,crra_,crrat_,crrah_,crrax_,pih_,piw_,pi_,pish_,pisw_,piel_,pitheta_,qel_,...
-    d21,d31,Sup1,Sup2,Sup3,SupS,addS,out,daddS,aaddS,pophous, Xi,wc, PID,typeic_,pid_,wgap_raw,mm_,lsbar,NLY,THETA,THETAHW,sigmam,MtoF);
+    d21,d31,Sup1,Sup2,Sup3,SupS,addS,out,daddS,aaddS,pophous, Xi,wc, PID,typeic_,pid_,wgap_raw,mm_,lsbar,NLY,THETA,THETAHW,sigmam,MtoF,...
+    wfh,hs_wfh);
 
 
 PARREST.('params')=params;

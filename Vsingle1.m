@@ -14,17 +14,23 @@ Maybe later add wage, now treat as a global variable!
 function [VS,works,Pn,Pw0,Pw,conexp]=Vsingle1(t,j,i,PARREST,OUTS)
 global show
 vs=OUTS.('vs') ;
-typeic=PARREST.('typeic');
-D=PARREST.('D');
-mm=PARREST.('mm');
-JLs=PARREST.('JLs');
-betah=PARREST.('betah');
-mA=PARREST.('mA');
-mI=PARREST.('mI');
-mAL=PARREST.('mAL');
-mIL=PARREST.('mIL');
+%typeic=PARREST.('typeic');
+%D=PARREST.('D');
+%mm=PARREST.('mm');
+%JLs=PARREST.('JLs');
+%betah=PARREST.('betah');
 
-[mIL_,mAL_,mI_,mA_]=matchdist(i,j,t,mA,mI,mAL,mIL,typeic,D,mm,JLs, betah);
+mIL=PARREST.('mIL_');
+mAL=PARREST.('mAL_');
+mI=PARREST.('mI_');
+mA=PARREST.('mA_');
+
+mIL_=mIL(t,j,i);
+mAL_=mAL(t,j,i);
+mI_=mI(t,j,i);
+mA_=mA(t,j,i);
+
+%[mIL_,mAL_,mI_,mA_]=matchdist(i,j,t,mA,mI,mAL,mIL, typeic,D,mm,JLs, betah);
 
 vw=vs(t,j,i); %us(1,d,a,cs(Yss(t,j,i),p),hdS(Yss(t,j,i),p),lss(t,j,i),ics(t,j,i)); 
 vw0=vs(t,i,i); %us(1,d0,a,cs(Yss(t,i,i),p),hdS(Yss(t,i,i),p),lss(t,i,i),ics(t,i,i)); 
