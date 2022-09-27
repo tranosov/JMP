@@ -44,6 +44,10 @@ elseif wlinear==2 % exp
     w1_d=@(ls,ic)wa.*exp(ls*wb+ic*wc).*(1+ls*wb);
     w2_d=@(ls,ic)wa.*exp(ls*wb+ic*wc+wgap_raw).*(1+ls*wb);
 end
+% todo in the future: wage in couples with wagegaps == single wage. not
+% lower. right now when I git rod a wage gap, I have a major income boost
+% in couples, which is stupid I guess....
+
 subsub=sqrt(d21-1+line^2/4)+sqrt(d31-1+line^2/4);
 D=[0,1*d21,1*d31;...
     1*d21,0,subsub;...
@@ -839,6 +843,8 @@ EQS.('cc') = cc;
 EQS.('us') = us;
 EQS.('lsh') = lsh;
 EQS.('lsw') = lsw;
+EQS.('Leish') = Leish;
+EQS.('Leisw') = Leisw;
 
 EQS.('V_nolambda') = V;
 EQS.('V') = V_lambda; % can change the weighting

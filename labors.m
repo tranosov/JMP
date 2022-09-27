@@ -235,28 +235,34 @@ else
                         if VERBOSE
                             fprintf('Warning w0');    
                         end
-                        [output1,~,EXITFLAG]=fsolve(fn,[in_(1),in_(2)*2,in_(3)],options0);  
+                        [output1,~,EXITFLAG]=fsolve(fn,[in_(1),in_(2)*1.5,in_(3)],options0);  
                     end
 
                     if ~isreal(output1) | output1(1)<=0 | output1(2)<=0 | lsh(output1(1),output1(2)/100,output1(3)/100,dh,0,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
                         if VERBOSE
                             fprintf('Warning w0 2');    
                         end
-                        [output1,~,EXITFLAG]=fsolve(fn,[in_(1),in_(2)*1.5,in_(3)],options0);  
+                        [output1,~,EXITFLAG]=fsolve(fn,[in_(1),in_(2)*2,in_(3)],options0);  
                         
                         if ~isreal(output1) | output1(1)<=0 | output1(2)<=0 | lsh(output1(1),output1(2)/100,output1(3)/100,dh,0,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
                             
                             if VERBOSE
                                 fprintf('Warning w0 3');    
-                            end                            
-                            [output1,~,EXITFLAG]=fsolve(fn,[mu00,in_(2)*0.9,in_(3)],options0);
-                            if ~isreal(output1) | output1(1)<=0 | output1(2)<=0 | lsh(output1(1),output1(2)/100,output1(3)/100,dh,0,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                                fprintf('labors: Warning w0')
-                                WARNINGS=WARNINGS+1;
-                                OUTC=999;
-                                inputs(th,tw,jh,jw,i,1,:)=inputs0_(th,tw,jh,jw,i,1,:);
-                                IN.('inputs')=real(inputs);
-                                return
+                            end
+                            [output1,~,EXITFLAG]=fsolve(fn,[mu00,in_(2)*1.1,in_(3)],options0);
+                            if ~isreal(output1) | output1(1)<=0 | output1(2)<=0 | lsh(output1(1),output1(2)/100,output1(3)/100,dh,0,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))                            
+                                if VERBOSE
+                                    fprintf('Warning w0 3');    
+                                end 
+                                [output1,~,EXITFLAG]=fsolve(fn,[mu00,in_(2)*0.9,in_(3)],options0);
+                                if ~isreal(output1) | output1(1)<=0 | output1(2)<=0 | lsh(output1(1),output1(2)/100,output1(3)/100,dh,0,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
+                                    fprintf('labors: Warning w0')
+                                    WARNINGS=WARNINGS+1;
+                                    OUTC=999;
+                                    inputs(th,tw,jh,jw,i,1,:)=inputs0_(th,tw,jh,jw,i,1,:);
+                                    IN.('inputs')=real(inputs);
+                                    return
+                                end
                             end
                         end
                     end
@@ -304,15 +310,21 @@ else
                             if VERBOSE
                                 fprintf('Warning 0w 3');    
                             end 
-                            [output2,~,EXITFLAG]=fsolve(fn,[mu000,in_(2),in_(3)*0.9],options1);
-                            
-                            if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                                fprintf('labors: Warning 0w')
-                                WARNINGS=WARNINGS+1;
-                                OUTC=999;
-                                inputs(th,tw,jh,jw,i,2,:)=inputs0_(th,tw,jh,jw,i,2,:);
-                                IN.('inputs')=real(inputs);
-                                return
+                            [output2,~,EXITFLAG]=fsolve(fn,[in_(1),in_(2),in_(3)*1.1],options0);
+                            if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))                       
+                                if VERBOSE
+                                    fprintf('Warning 0w 4');    
+                                end 
+                                [output2,~,EXITFLAG]=fsolve(fn,[mu000,in_(2),in_(3)*0.9],options1);
+
+                                if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
+                                    fprintf('labors: Warning 0w')
+                                    WARNINGS=WARNINGS+1;
+                                    OUTC=999;
+                                    inputs(th,tw,jh,jw,i,2,:)=inputs0_(th,tw,jh,jw,i,2,:);
+                                    IN.('inputs')=real(inputs);
+                                    return
+                                end
                             end
                         end
                     end
