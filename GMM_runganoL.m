@@ -47,20 +47,11 @@ fclose(io);
 
 
 DOWN=10^3;
+W__=diag(diag(table2array(forw( momentest.Properties.RowNames, momentest.Properties.RowNames))));
 Wall=table2array(forw( momentest.Properties.RowNames, momentest.Properties.RowNames));
 Wall=(DOWN.*Wall)\eye(size(momentest.Properties.RowNames,1));
 Wsq_all=chol(Wall);
-select=momentest;
-select.('blowW')=ones(size(W__,1),1);
-select('L','blowW')={10^3};
-select('scommiles','blowW')={10^2};
-select('swcommiles_difw','blowW')={10^2};
-select('shcommiles_dif','blowW')={10^2};
-select('wagegap_hw_withn','blowW')={10^2};
-select('betahrs_w','blowW')={10^3};
-select('betalwg_w','blowW')={10^3};
-Wall2=Wall.*diag(select.('blowW'));
-Wsq_all2=Wsq_all.*diag(select.('blowW'));
+
 %[SEs]=SEs(x0,pars,momentest,W,momentall,paramsall);
 
 DOWN=10^3;
