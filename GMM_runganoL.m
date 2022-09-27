@@ -96,10 +96,9 @@ UB=table2array(forparams(paramsest.Properties.RowNames,'max'));
 %GGnoL=GMM_noL(x0,pars,momentest,W_noL,momentall,paramsall);
 
 
-G_Wdiag=GMM_noL(x0,pars,momentest,Wdiag,momentall,paramsall,1,Wsq_diag);
 G_W=GMM_noL(x0,pars,momentest,Wall,momentall,paramsall,1,Wsq_all);
 
-G_Wdiag2=GMM_noL(x0,pars,momentest,Wdiag2,momentall,paramsall,1,Wsq_diag2);
+%G_Wdiag2=GMM_noL(x0,pars,momentest,Wdiag2,momentall,paramsall,1,Wsq_diag2);
 G_W2=GMM_noL(x0,pars,momentest,Wall2,momentall,paramsall,1,Wsq_all2);
 
 W_=Wall2;
