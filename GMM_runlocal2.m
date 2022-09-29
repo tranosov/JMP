@@ -26,7 +26,7 @@ fclose(io);
 
 
 %%
-forparams =readtable('./input/PREP_econstat6.xlsx','Sheet','PARS','ReadVariableNames', true,'ReadRowNames',true);
+forparams =readtable('./input/PREP_econstat1.xlsx','Sheet','PARS','ReadVariableNames', true,'ReadRowNames',true);
 formom =readtable('./input/PREP.xlsx','Sheet','MOMS','ReadVariableNames', true,'ReadRowNames',true);
 forw =readtable('./input/PREP.xlsx','Sheet','W','ReadVariableNames', true,'ReadRowNames',true);
 
@@ -62,14 +62,15 @@ select=momentest;
 select.('blowW')=ones(size(W__,1),1);
 select('L','blowW')={1};
 select('scommiles','blowW')={10^2};
-%select('swcommiles_difw','blowW')={10^3};
-select('shcommiles_dif','blowW')={10^3};
+select('swcommiles_difw','blowW')={10^3};
+select('shcommiles_dif','blowW')={10^2};
 select('hdj','blowW')={10^2};
 select('sdj_dif','blowW')={10^2};
 select('wagegap_hw_withn','blowW')={10^2};
 select('betahrs_w','blowW')={10^2};
 select('p_gradient_simple','blowW')={10^2};
-%select('betalwg_w','blowW')={1};
+select('betalwg_w','blowW')={10^2};
+select('wlfp_dif','blowW')={10^2};
 Wall2=Wall.*diag(select.('blowW'));
 Wsq_all2=chol(Wall2); %Wsq_all.*diag(select.('blowW'));
 %[SEs]=SEs(x0,pars,momentest,W,momentall,paramsall);
