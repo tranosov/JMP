@@ -12,8 +12,8 @@ fprintf('Running GMM estimation -fminsearch without L recomputing.\n');
 
 
 global filename1 filename2
-filename1 = "./estimation/progress_local_testserver.txt";
-filename2 = "./estimation/progressmoment_local_testserver.txt";
+filename1 = "./estimation/progress_local_econstat5.txt";
+filename2 = "./estimation/progressmoment_local_econstat5.txt";
 io = fopen(filename1,'a');
 fprintf(io," \n");
 fprintf(io,"Rerun routine. \n");
