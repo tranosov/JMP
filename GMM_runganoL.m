@@ -12,8 +12,8 @@ fprintf('Running GMM estimation - ga, with L=LA0.\n');
 
 
 global filename1 filename2
-filename1 = "./estimation/progress_ganoL.txt";
-filename2 = "./estimation/progressmoment_ganoL.txt";
+filename1 = "./estimation/progress_ganoL_econstat5.txt";
+filename2 = "./estimation/progressmoment_ganoL_econstat5.txt";
 io = fopen(filename1,'a');
 fprintf(io," \n");
 fprintf(io,"Rerun routine.  \n");
@@ -72,7 +72,7 @@ select('betahrs_w','blowW')={10^2};
 select('betalwg_w','blowW')={10^3};
 select('p_gradient_simple','blowW')={10^2};
 %select('betalwg_w','blowW')={1};
-Wall2=Wall.*diag(select.('blowW'));
+Wall2=Wall*diag(select.('blowW')); % NOTICE - THERE WAS AN ERROR HERE. NOT ELEMENT BY ELEMNT, HAS TO BE MATRIX MULTIPLICATION. FUCK
 Wsq_all2=chol(Wall2);
 
 %momentest_noL=momentest;
@@ -101,7 +101,7 @@ G_W=GMM_noL(x0,pars,momentest,Wall,momentall,paramsall,1,Wsq_all);
 %G_Wdiag2=GMM_noL(x0,pars,momentest,Wdiag2,momentall,paramsall,1,Wsq_diag2);
 G_W2=GMM_noL(x0,pars,momentest,Wall2,momentall,paramsall,1,Wsq_all2);
 
-W_=Wall2;
+W_=Wall2; % WEIGHTED!
 Wsq=Wsq_all2;
 
 global Wadd GMINadd

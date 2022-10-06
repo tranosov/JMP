@@ -44,8 +44,8 @@ FLIN=0;
 %AGAIN - THIS IS GOING A BIT TOO WELL???
 
 global filename1 filename2
-filename1 = "./estimation/progress_f0.txt";
-filename2 = "./estimation/progressmoment_f0.txt";
+filename1 = "./estimation/progress_f0_test.txt";
+filename2 = "./estimation/progressmoment_f0_test.txt";
 io = fopen(filename1,'a');
 fprintf(io," \n");
 fprintf(io,"Rerun routine. \n");
@@ -57,13 +57,14 @@ fprintf(io,"Rerun routine. \n");
 fclose(io);
 
 %%
-forparams =readtable('./input/PREP_f0.xlsx','Sheet','PARS','ReadVariableNames', true,'ReadRowNames',true);
-formom =readtable('./input/PREP.xlsx','Sheet','MOMS','ReadVariableNames', true,'ReadRowNames',true);
-forw =readtable('./input/PREP.xlsx','Sheet','W','ReadVariableNames', true,'ReadRowNames',true);
+forparams =readtable('./input/PREP_econstat2_f0b.xlsx','Sheet','PARS','ReadVariableNames', true,'ReadRowNames',true);
+formom =readtable('./input/PREP_econstat2_f0.xlsx','Sheet','MOMS','ReadVariableNames', true,'ReadRowNames',true);
+forw =readtable('./input/PREP_econstat2_f0.xlsx','Sheet','W','ReadVariableNames', true,'ReadRowNames',true);
 
 fprintf('Inputs loaded.\n');
 
 % GET RID OF PHID
+forparams(:,'toestimateR')=forparams(:,'toestimate_f0');
 forparams('PHID_','toestimateR')={0};
 forparams('PHID_','value')={-1000};
 
@@ -81,22 +82,27 @@ fprintf(io,"Scaling down weighting matrix by a factor %16.8f\n",DOWN);
 fclose(io);
 
 W__=diag(diag(table2array(forw( momentest.Properties.RowNames, momentest.Properties.RowNames))));
-Wdiag=(DOWN.*W__)\eye(size(momentest.Properties.RowNames,1));
-Wsq_diag=chol(Wdiag);
+
+DOWN=10^3;
+Wall=table2array(forw( momentest.Properties.RowNames, momentest.Properties.RowNames));
+Wall=(DOWN.*Wall)\eye(size(momentest.Properties.RowNames,1));
+Wsq_all=chol(Wall);
 
 select=momentest;
 select.('blowW')=ones(size(W__,1),1);
-select('L','blowW')={10^3};
-select('hdo','blowW')={10^3};
-select('scommiles','blowW')={10^3}; %SHOULD BE A BIG CONSTRAINT ON THIS EXCERCISE!
-select('swcommiles_difw','blowW')={10^1};
-select('shcommiles_dif','blowW')={10^1};
-select('wagegap_hw_withn','blowW')={10^3};
-select('betahrs_w','blowW')={1}; % dont focus on
-select('betalwg_w','blowW')={1};
+select('L','blowW')={1};
+select('scommiles','blowW')={10^4};
+select('swcommiles_difw','blowW')={10^2};
+select('shcommiles_dif','blowW')={10^2};
+select('hdj','blowW')={10^4};
+select('sdj_dif','blowW')={10^2};
+select('wagegap_hw_withn','blowW')={10^2};
+select('betahrs_w','blowW')={10^2};
+select('p_gradient_simple','blowW')={10^2};
+select('betalwg_w','blowW')={10^2};
 select('wlfp_dif','blowW')={10^2};
-Wdiag2=Wdiag.*diag(select.('blowW'));
-Wsq_diag2=Wsq_diag.*diag(select.('blowW'));
+Wall2=Wall.*diag(select.('blowW'));
+Wsq_all2=chol(Wall2);
 
 DOWN=10^3;
 Wall=table2array(forw( momentest.Properties.RowNames, momentest.Properties.RowNames));
@@ -109,7 +115,6 @@ Wsq_all2=Wsq_all.*diag(select.('blowW'));
 %momentest_noL=momentest;
 %momentest('L',:)=[];
 %W_noL=(DOWN.*table2array(forw( momentest_noL.Properties.RowNames, momentest_noL.Properties.RowNames)))\eye(size(momentest_noL.Properties.RowNames,1));
-
 fprintf('W inverted.\n');
 
 %paramsest('LA0',:)=[];
@@ -127,21 +132,20 @@ UB=table2array(forparams(paramsest.Properties.RowNames,'max'));
 %GGnoL=GMM_noL(x0,pars,momentest,W_noL,momentall,paramsall);
 
 
-G_Wdiag=GMM_noL(x0,pars,momentest,Wdiag,momentall,paramsall,1,Wsq_diag);
+%G_Wdiag=GMM_noL(x0,pars,momentest,Wdiag,momentall,paramsall,1,Wsq_diag);
 G_W=GMM_noL(x0,pars,momentest,Wall,momentall,paramsall,1,Wsq_all);
 
-G_Wdiag2=GMM_noL(x0,pars,momentest,Wdiag2,momentall,paramsall,1,Wsq_diag2);
+%G_Wdiag2=GMM_noL(x0,pars,momentest,Wdiag2,momentall,paramsall,1,Wsq_diag2);
 G_W2=GMM_noL(x0,pars,momentest,Wall2,momentall,paramsall,1,Wsq_all2);
 
 W_=Wall2;
 Wsq=Wsq_all2;
 
-global Wadd
-Wadd=Wall;
 
-global GMIN ITER
-GMIN=99999;
-ITER=0;
+
+global Wadd GMINadd
+Wadd=Wall;
+GMINadd=G_W;
 
 %%
 io = fopen(filename1,'a');

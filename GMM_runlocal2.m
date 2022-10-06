@@ -12,8 +12,8 @@ fprintf('Running GMM estimation -fminsearch without L recomputing.\n');
 
 
 global filename1 filename2
-filename1 = "./estimation/progress_local_econstat5.txt";
-filename2 = "./estimation/progressmoment_local_econstat5.txt";
+filename1 = "./estimation/progress_mess_econstat5.txt";
+filename2 = "./estimation/progressmoment_mess_econstat5.txt";
 io = fopen(filename1,'a');
 fprintf(io," \n");
 fprintf(io,"Rerun routine. \n");
@@ -26,7 +26,7 @@ fclose(io);
 
 
 %%
-forparams =readtable('./input/PREP_econstat1.xlsx','Sheet','PARS','ReadVariableNames', true,'ReadRowNames',true);
+forparams =readtable('./input/PREP_econstat2.xlsx','Sheet','PARS','ReadVariableNames', true,'ReadRowNames',true);
 formom =readtable('./input/PREP.xlsx','Sheet','MOMS','ReadVariableNames', true,'ReadRowNames',true);
 forw =readtable('./input/PREP.xlsx','Sheet','W','ReadVariableNames', true,'ReadRowNames',true);
 
@@ -71,7 +71,7 @@ select('betahrs_w','blowW')={10^2};
 select('p_gradient_simple','blowW')={10^2};
 select('betalwg_w','blowW')={10^2};
 select('wlfp_dif','blowW')={10^2};
-Wall2=Wall.*diag(select.('blowW'));
+Wall2=Wall*diag(select.('blowW')); % NOTICE - THERE WAS AN ERROR HERE. NOT ELEMENT BY ELEMNT, HAS TO BE MATRIX MULTIPLICATION. FUCK
 Wsq_all2=chol(Wall2); %Wsq_all.*diag(select.('blowW'));
 %[SEs]=SEs(x0,pars,momentest,W,momentall,paramsall);
 
