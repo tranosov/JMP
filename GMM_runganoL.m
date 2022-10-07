@@ -61,19 +61,23 @@ Wsq_all=chol(Wall);
 select=momentest;
 select.('blowW')=ones(size(W__,1),1);
 select('L','blowW')={1};
-select('scommiles','blowW')={10^2};
+select('scommiles','blowW')={10^4};
 %select('swcommiles_difw','blowW')={10^3};
-select('shcommiles_dif','blowW')={10^3};
-select('hdj','blowW')={10^2};
-select('sdj_dif','blowW')={10^2};
-select('wlfp_dif','blowW')={10^1};
-select('wagegap_hw_withn','blowW')={10^2};
-select('betahrs_w','blowW')={10^2};
-select('betalwg_w','blowW')={10^3};
-select('p_gradient_simple','blowW')={10^2};
+select('shcommiles_dif','blowW')={10^4};
+select('hdj','blowW')={10^4};
+select('sdj_dif','blowW')={10^4};
+select('wlfp_dif','blowW')={10^4};
+select('wagegap_hw_withn','blowW')={10^4};
+select('betahrs_w','blowW')={10^4};
+select('betalwg_w','blowW')={10^4};
+select('p_gradient_simple','blowW')={10^4};
 %select('betalwg_w','blowW')={1};
-Wall2=Wall*diag(select.('blowW')); % NOTICE - THERE WAS AN ERROR HERE. NOT ELEMENT BY ELEMNT, HAS TO BE MATRIX MULTIPLICATION. FUCK
+Wall2=Wall+diag(select.('blowW')).*diag(Wall); % NOTICE - THERE WAS AN ERROR HERE. NOT ELEMENT BY ELEMNT, HAS TO BE MATRIX MULTIPLICATION. FUCK
 Wsq_all2=chol(Wall2);
+
+% does not work - I was doing stupid stuff, but what I had in mind is not
+% positive definite it seems.  - lets try an addition????? maybe not enough
+% but can try I guess for now?
 
 %momentest_noL=momentest;
 %momentest('L',:)=[];
