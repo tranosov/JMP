@@ -59,21 +59,21 @@ DOWN=10^3;
 Wall=table2array(forw( momentest.Properties.RowNames, momentest.Properties.RowNames));
 Wall=(DOWN.*Wall)\eye(size(momentest.Properties.RowNames,1));
 Wsq_all=chol(Wall);
-select=momentest;
-select.('blowW')=ones(size(W__,1),1);
-select('L','blowW')={1};
-select('scommiles','blowW')={10^4};
+
+scale=momentest;
+scale.('blowW')=zeros(size(momentest.Properties.RowNames,1),1);
+scale('scommiles','blowW')={1};
 %select('swcommiles_difw','blowW')={10^3};
-select('shcommiles_dif','blowW')={10^4};
-select('hdj','blowW')={10^4};
-select('sdj_dif','blowW')={10^4};
-select('wlfp_dif','blowW')={10^3};
-select('wagegap_hw_withn','blowW')={10^3};
-select('betahrs_w','blowW')={10^3};
-select('betalwg_w','blowW')={10^3};
-select('p_gradient_simple','blowW')={10^3};
-%select('betalwg_w','blowW')={1};
-Wall2=Wall+diag(select.('blowW')).*diag(Wall); % NOTICE - THERE WAS AN ERROR HERE. NOT ELEMENT BY ELEMNT, HAS TO BE MATRIX MULTIPLICATION. FUCK
+scale('shcommiles_dif','blowW')={1};
+scale('hdj','blowW')={0.1};
+scale('hdo','blowW')={0.1};
+scale('sdj_dif','blowW')={0.5};
+scale('wlfp_dif','blowW')={0}; %{10^3};
+scale('wagegap_hw_withn','blowW')={0}; %{10^3};
+scale('betahrs_w','blowW')={0.1}; %{10^2};
+scale('betalwg_w','blowW')={0.1};
+scale('p_gradient_simple','blowW')={0}; %{10^3};
+Wall2=Wall+diag(scale.('blowW').*diag(Wall));% NOTICE - THERE WAS AN ERROR HERE. NOT ELEMENT BY ELEMNT, HAS TO BE MATRIX MULTIPLICATION. FUCK
 Wsq_all2=chol(Wall2);
 
 % does not work - I was doing stupid stuff, but what I had in mind is not
