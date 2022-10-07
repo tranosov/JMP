@@ -54,6 +54,7 @@ Wsq_all=chol(Wall);
 
 %[SEs]=SEs(x0,pars,momentest,W,momentall,paramsall);
 
+
 DOWN=10^3;
 Wall=table2array(forw( momentest.Properties.RowNames, momentest.Properties.RowNames));
 Wall=(DOWN.*Wall)\eye(size(momentest.Properties.RowNames,1));
@@ -66,11 +67,11 @@ select('scommiles','blowW')={10^4};
 select('shcommiles_dif','blowW')={10^4};
 select('hdj','blowW')={10^4};
 select('sdj_dif','blowW')={10^4};
-select('wlfp_dif','blowW')={10^4};
-select('wagegap_hw_withn','blowW')={10^4};
-select('betahrs_w','blowW')={10^4};
-select('betalwg_w','blowW')={10^4};
-select('p_gradient_simple','blowW')={10^4};
+select('wlfp_dif','blowW')={10^3};
+select('wagegap_hw_withn','blowW')={10^3};
+select('betahrs_w','blowW')={10^3};
+select('betalwg_w','blowW')={10^3};
+select('p_gradient_simple','blowW')={10^3};
 %select('betalwg_w','blowW')={1};
 Wall2=Wall+diag(select.('blowW')).*diag(Wall); % NOTICE - THERE WAS AN ERROR HERE. NOT ELEMENT BY ELEMNT, HAS TO BE MATRIX MULTIPLICATION. FUCK
 Wsq_all2=chol(Wall2);
