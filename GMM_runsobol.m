@@ -70,17 +70,6 @@ Wsq_all2=chol(Wall2); %Wsq_all.*diag(select.('blowW'));
 %W_=(DOWN.*table2array(forw( momentest.Properties.RowNames, momentest.Properties.RowNames)))\eye(size(momentest.Properties.RowNames,1));
 %Wsq=chol(W_);
 
-%G_Wdiag2=GMM_noL(x0,pars,momentest,Wdiag2,momentall,paramsall,1,Wsq_diag2);
-G_W2=GMM_noL_MM(x0,pars,momentest,Wall2,momentall,paramsall,1,Wsq_all2);
-
-W_=Wall2;
-Wsq=Wsq_all2;
-
-global Wadd GMINadd
-Wadd=W_;
-GMINadd=G_W2;
-
-
 %momentest_noL=momentest;
 %momentest('L',:)=[];
 %W_noL=(DOWN.*table2array(forw( momentest_noL.Properties.RowNames, momentest_noL.Properties.RowNames)))\eye(size(momentest_noL.Properties.RowNames,1));
@@ -91,15 +80,23 @@ fprintf('W inverted.\n');
 pars=paramsest;
 global RESC
 RESC=10^3;
-global VERBOSE
-VERBOSE=0;
-
 
 %fopt=10^(-6); % no idea
 x0=table2array(paramsest);
 LB=table2array(forparams(paramsest.Properties.RowNames,'min'));
 UB=table2array(forparams(paramsest.Properties.RowNames,'max'));
-%GGnoL=GMM_noL(x0,pars,momentest,W_noL,momentall,paramsall);
+
+G_W2=GMM_noL_MM(x0,pars,momentest,Wall2,momentall,paramsall,1,Wsq_all2);
+
+W_=Wall2;
+Wsq=Wsq_all2;
+
+global Wadd GMINadd
+Wadd=W_;
+GMINadd=G_W2;
+
+global VERBOSE
+VERBOSE=0;
 
 
 % run a short version from my x0

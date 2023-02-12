@@ -351,3 +351,11 @@ GMM function value, L not recomputed=        46.27819316
 time =        82.86303370
  iter:      84.00000000
 GMM - W=inv(V)        42.29800087
+GMM function value, L not recomputed=       144.73005959
+time =       102.40013710
+ iter:      85.00000000
+GMM - W=inv(V)       140.55610462
+GMM function value, L not recomputed=        25.67463479
+time =       149.47567210
+ iter:      86.00000000
+GMM - W=inv(V)        21.72550920
