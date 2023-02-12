@@ -12,8 +12,8 @@ fprintf('Running GMM estimation - sobol points and fminsearch, with L=LA0.\n');
 
 
 global filename1 filename2
-filename1 = "./estimation/progress_bla.txt";
-filename2 = "./estimation/progressmoment_bla.txt";
+filename1 = "./estimation/progress_sobol_econstat5.txt";
+filename2 = "./estimation/progressmoment_sobol_econstat5.txt";
 io = fopen(filename1,'a');
 fprintf(io," \n");
 fprintf(io,"Rerun routine. \n");
@@ -36,19 +36,49 @@ paramsall=forparams(:,'value');
 paramsest=forparams(forparams.('toestimateR')==1,'value');
 momentall=formom(:,'value');
 momentest=formom(formom.('toestimate')==1,'value');
-global DOWN
-DOWN=10^3; % scale down W. it is reallyhigh. Now that I do not trat Q 
 
+global DOWN
+DOWN=10^3;
 io = fopen(filename1,'a');
 fprintf(io," \n");
 fprintf(io,"Scaling down weighting matrix by a factor %16.8f\n",DOWN);
 fclose(io);
 
+Wall=table2array(forw( momentest.Properties.RowNames, momentest.Properties.RowNames));
+Wall=(DOWN.*Wall)\eye(size(momentest.Properties.RowNames,1));
+% ADD MM CLEARING CONDITION
+    momentest('clmm',:)={0}; 
+    Wall(end+1,end+1)=DOWN*10;
 
-W_=(DOWN.*table2array(forw( momentest.Properties.RowNames, momentest.Properties.RowNames)))\eye(size(momentest.Properties.RowNames,1));
-Wsq=chol(W_);
-%[SEs]=SEs(x0,pars,momentest,W,momentall,paramsall);
+Wsq_all=chol(Wall);
+select=momentest;
+select.('blowW')=ones(size(Wall,1),1);
+select('L','blowW')={1};
+select('scommiles','blowW')={10^2};
+%select('swcommiles_difw','blowW')={10^3};
+select('shcommiles_dif','blowW')={10^3};
+select('hdj','blowW')={10^2};
+select('sdj_dif','blowW')={10^2};
+select('wagegap_hw_withn','blowW')={10^2};
+select('betahrs_w','blowW')={10^2};
+select('p_gradient_simple','blowW')={10^2};
+%select('betalwg_w','blowW')={1};
+Wall2=Wall.*diag(select.('blowW'));
+Wsq_all2=chol(Wall2); %Wsq_all.*diag(select.('blowW'));
 
+
+%W_=(DOWN.*table2array(forw( momentest.Properties.RowNames, momentest.Properties.RowNames)))\eye(size(momentest.Properties.RowNames,1));
+%Wsq=chol(W_);
+
+%G_Wdiag2=GMM_noL(x0,pars,momentest,Wdiag2,momentall,paramsall,1,Wsq_diag2);
+G_W2=GMM_noL_MM(x0,pars,momentest,Wall2,momentall,paramsall,1,Wsq_all2);
+
+W_=Wall2;
+Wsq=Wsq_all2;
+
+global Wadd GMINadd
+Wadd=W_;
+GMINadd=G_W2;
 
 
 %momentest_noL=momentest;
