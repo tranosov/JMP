@@ -32,9 +32,11 @@ mA_=mA(t,j,i);
 
 %[mIL_,mAL_,mI_,mA_]=matchdist(i,j,t,mA,mI,mAL,mIL, typeic,D,mm,JLs, betah);
 
-vw=vs(t,j,i); %us(1,d,a,cs(Yss(t,j,i),p),hdS(Yss(t,j,i),p),lss(t,j,i),ics(t,j,i)); 
+vw=vs(t,j,i,2); %us(1,d,a,cs(Yss(t,j,i),p),hdS(Yss(t,j,i),p),lss(t,j,i),ics(t,j,i)); 
 %vw0=vs(t,i,i,p); %us(1,d0,a,cs(Yss(t,i,i),p),hdS(Yss(t,i,i),p),lss(t,i,i),ics(t,i,i)); 
-vn=-1.0000e+10; %us(0,0,a,0,0,0,0);
+vn=-1.0000e+10; %us(0,0,a,0,0,0,0); vs(t,i,i,1); %  
+%[vbar,vbari]=max([vn,vw]);
+
 Pw=1;
 Pn=0;
 Pw0=0;

@@ -1,7 +1,7 @@
 function [moments_,time,EXITFLAG,params_final]=GMMmoments(pars_,pars,momentest,momentall,params,recalibrate,withmm)
 
-%recalibrate: 1 - all within estimation recalibration. 0.6 - only THETAHW THETA, 0.5 - only THETAHW
-
+%recalibrate: 1 - all within estimation recalibration. 0.6 - only THETAHW THETA, 0.5 - only THETAHW, 0.1 - only THETA
+%withmm: 0 is for not computing lambda moments numerically.
 % set model
 % solve model
 % create moments to compare to daya
@@ -11,12 +11,12 @@ global VERBOSE
 tic
 params(pars.Properties.RowNames,:)= array2table( reshape(pars_,max(size(pars_)),1), 'RowNames',pars.Properties.RowNames);
 
-if recalibrate==1
+if recalibrate>=0.9
     params=untransform(params);
 end
 
 %params(pars.Properties.RowNames,:) % already untransformed
-if recalibrate==1
+if recalibrate>=0.9
     parsc=calibrate1(params,momentall); %calibrate within
     params(parsc.Properties.RowNames,:)=parsc;
 end
@@ -33,11 +33,12 @@ if VERBOSE
 toc
 end
 
-if recalibrate>=0.6 % THETAHW and THETA will be recalibrated, so do not resolve lambda 
+if recalibrate>=0.6 | (recalibrate==0.1)  % THETAHW and THETA will be recalibrated oe other reason, so do not resolve lambda 
 [p,LA,EXITFLAG,time_]=solvemodel(params,EQS,PARREST,[params{'p0_1',:},params{'p0_2',:},params{'p0_3',:} ],params{'LA0',:},0,1,0); % just prices! % do not reset params
 
 elseif recalibrate==0.5 % only THETAHW should be recalibrated
 [p,LA,EXITFLAG,time_]=solvemodel(params,EQS,PARREST,[params{'p0_1',:},params{'p0_2',:},params{'p0_3',:} ],params{'LA0',:},0,1,0.5);
+
 
 else
     % so I have to solve with marriage market to have a new lambda - if I
@@ -59,7 +60,8 @@ if EXITFLAG==999
     params_final=params;
     return 
 else
-    FORCEFIT=(recalibrate>=0.6)+0.5*(recalibrate==0.5); %change THETAs to fit the required marriage behavior?
+
+    FORCEFIT=(recalibrate>=0.99)+ 0.6*(recalibrate==0.6)+0.5*(recalibrate==0.5)+ 0.1*(recalibrate==0.1)+ 0.9*(recalibrate==0.9); %change THETAs to fit the required marriage behavior?
     [moments_,~,time_,EXITFLAG,params_final]...
         =moments_withmm(p,LA,params,EQS,PARREST,withmm,1,FORCEFIT);
     time=time+time_;

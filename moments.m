@@ -14,7 +14,7 @@ global sizehs
 
 D=PARREST.('D');
 sigmal=PARREST.('sigmal');
-sigmam=PARREST.('sigmam');
+sigmam=PARREST.('params'){'sigmam',:}; %PARREST.('sigmam');
 JLs=PARREST.('JLs');
 mm=PARREST.('mm');
 Jw=PARREST.('Jw');
@@ -36,6 +36,8 @@ params=PARREST.('params');
 NLY=params{'NLY',:};
 lsbar=PARREST.('lsbar');
 
+wfh_share=PARREST.('wfh_share');
+
 W=3;
 sizehs=size(HS);
 wfh=PARREST.('wfh');
@@ -46,6 +48,7 @@ if wfh>0
     T=T*2;
 end
 
+w0=EQS.('w0') ;
 w1=EQS.('w1') ;
 w2=EQS.('w2') ;
 lei=EQS.('leis');
@@ -59,6 +62,7 @@ uhs=OUTS.('uhs') ;
 uxs=OUTS.('uxs') ;
 xs=OUTS.('xs') ;
 vs=OUTS.('vs') ;
+vs=vs(:,:,:,2); 
 
 Yc=OUTC.('Yc') ;
 xh=OUTC.('xh') ;
@@ -108,9 +112,10 @@ for j=1:I
         for i=1:I
             for w=2:W
                 j_=j*(w==3) + i*(w==2);
-                
+                types(j,t,i,w)=t;
                 if t>T0
-                    d=0;
+                    types(j,t,i,w)=t-T0;
+                    d=wfh_share*d;
                     L_low(j,t,i,w)=out5(@()matchdist(i,j,t-T0,mA,mI,mAL,mIL,typeic,D,mm,JLs,betah));
                     [~,~,~,~,~,low]=matchdist(i,j_,t-T0,mA,mI,mAL,mIL,typeic,D,mm,JLs,betah); % of what you really took
                 else
@@ -140,7 +145,7 @@ for j=1:I
                 uxS(j,t,i,w)=uxs(t,j_,i);
                 xS(j,t,i,w)=xs(t,j_,i);
                 aS(j,t,i,w)=AS(i);
-                wagehS(j,t,i,w)=w1(lsS(j,t,i,w),ic); 
+                wagehS(j,t,i,w)=w0(lsS(j,t,i,w),ic); 
                 uS_det(j,t,i,w)=vs(t,j_,i);
             end
                        
@@ -216,7 +221,7 @@ if wwi>0
     jw_=jw*(ww==3) + i*(ww==2|ww==1);
     
     if th>T0
-        dh=0;        
+        dh=wfh_share*dh;        
         [~,~,~,~,~,lowh]=matchdist(i,jh_,th-T0,mA,mI,mAL,mIL,typeic,D,mm,JLs,betah); % of what you really took
          L_lowhC(jh,jw,th,tw,i,wh,ww)=out5(@()matchdist(i,jh,th-T0,mA,mI,mAL,mIL,typeic,D,mm,JLs,betah)); % is the local labor market 'low' for me?
     else
@@ -225,7 +230,7 @@ if wwi>0
     end
 
     if tw>T0
-        dw=0;
+        dw=wfh_share*dw;
         [~,~,~,~,~,loww]=matchdist(i,jw_,tw-T0,mA,mI,mAL,mIL,typeic,D,mm,JLs,betah); % of what you really took
         L_lowwC(jh,jw,th,tw,i,wh,ww)=out5(@()matchdist(i,jw,tw-T0,mA,mI,mAL,mIL,typeic,D,mm,JLs,betah));
     else
@@ -303,7 +308,6 @@ sDCi=DCi/sum(DCi);
 scity_=(DSi+DCi)/(sum(DSi)+sum(DCi));
 scity=scity_(1);
 
-%% rescale  so that distribution is what I want it to be:
 
 %%
 workhC_raw=sum(sumC(DC.*workshC))/sum(DCi);
@@ -344,8 +348,9 @@ DSx_suburb=(DSx_location(2)*DCi_DSx(2)+DSx_location(3)*DCi_DSx(3))/(DCi_DSx(2)+D
 Dx_suburb=(Dx_location(2)*DCi(2)+Dx_location(3)*DCi(3))/(DCi(2)+DCi(3));
 
 
-
 hours0wC_location=sumC(DC.*lswC)./DCi;
+
+
 %%
 hours0hC_raw=sum(sumC(DC.*lshC))/sum(DCi); %0.25
 hours0wC_raw=sum(sumC(DC.*lswC))/sum(DCi) ;%0.14
@@ -363,7 +368,56 @@ commutehC_raw=sum(sumC(DC.*commutehC.*workshC))./sum(sumC(DC.*workshC));
 commutewC_raw=sum(sumC(DC.*commutewC.*workswC))./sum(sumC(DC.*workswC));
 
 
-% as usual - I need more commute differences and in general
+%% city vs suburb commuting gap - couples vs singles.
+commutehC_location=sumC(DC.*commutehC.*workshC)./sumC(DC.*workshC);
+commuteS_location=sumS(commuteS.*DS.*worksS)./sumS(DS.*worksS);
+DCi_workshC=sumC(DC.*workshC);
+DSi_worksS=sumS(DS.*worksS);
+
+commutehC_suburb=(commutehC_location(2)*DCi_workshC(2)+commutehC_location(3)*DCi_workshC(3))/(DCi_workshC(2)+DCi_workshC(3));
+commuteS_suburb=(commuteS_location(2)*DSi_worksS(2)+commuteS_location(3)*DSi_worksS(3))/(DSi_worksS(2)+DSi_worksS(3));
+
+
+%% commuting of s if locations as h X other way around
+
+
+NS=PARREST.('NS');
+NSh=PARREST.('NSh');
+NSw=PARREST.('NSw');
+NC=PARREST.('NC');
+
+
+PS=sum(DS,4)./repmat(sum(sum(DS,4),3),1,1,I);
+PS(isnan(PS))=0;
+
+PC=sum(sum(sum(sum(DC,6),7),4),2)./repmat(sum(sum(sum(sum(sum(DC,6),7),5),4),2),1,1,1,1,I);
+PC(isnan(PC))=0;
+PC=reshape(PC,size(PS));
+
+
+DSh_Cloc=Pws.*repmat(NSh,1,1,I,W).*repmat(PC,1,1,1,W);
+commuteS_Cloc=sum(sumS(commuteS.*DSh_Cloc.*worksS))./sum(sumS(DSh_Cloc.*worksS));
+% This does not quite work. There is a massive difference in how res
+% location is chosen that I did NOT appreciate! not so much in city vs
+% suburb. but int distance to own first offer between suburbs, Singles are
+% way less likely to go to the wrong suburb. PC-PS shows that.
+
+PC_t=sum(sum(sum(sum(sum(DC,6),7),4),2),1)./repmat(sum(sum(sum(sum(sum(sum(DC,6),7),5),4),2),1),1,1,1,1,I);
+PC_t(isnan(PC_t))=0;
+PC_t=reshape(repmat(PC_t,I,1,1,1,1),size(PS));
+
+PS_t=sum(sum(DS,4),1)./repmat(sum(sum(sum(DS,4),3),1),1,1,I);
+PS_t=reshape(repmat(PS_t,I,1,1),size(PS));
+PS_Csub=PS.*PC_t./PS_t;
+DSh_Csub=Pws.*repmat(NSh,1,1,I,W).*repmat(PS_Csub,1,1,1,W);
+commuteS_Csub=sum(sumS(commuteS.*DSh_Csub.*worksS))./sum(sumS(DSh_Csub.*worksS));
+
+
+
+%PC_Ssub=PC.*PS_t/PC_t; - come back to if time. drop now.
+%DC_Ssub=Pw.*repmat(NC,1,1,1,1,I,W,W).*repmat(PC_Ssub,1,1,1,1,1,W,W);
+%commutehC_Sloc=sum(sumC(DC_Ssub.*commutehC.*workshC))./sum(sumC(DC_Ssub.*workshC));
+
 %% utilities - frist from match
 DC_agr=sum(sum(DC,7),6);
 DC1_agr=sum(sum(DC1,7),6);
@@ -740,6 +794,8 @@ jobjob_hwact=sum(sumC(jobjob_hw_toact.*DC.*PwwC))./sum(sumC(DC.*PwwC)) ;
 %%
 
 % share of income spent on housing
+%todo-this isweighted by number of housing units - shouldn't I average by
+%people?
 pHSi=sumS(HSingle).*p;
 pHCi=sumC(HCouple).*p;
 sHS=sum(pHSi)/sum(sumS(YS.*DS));
@@ -837,18 +893,18 @@ groups=[groups;groups];
 weights=[DC_long;DC_long];
 weights_bothwork=[DC_worksboth_long;DC_worksboth_long];
 
-tbl=mat2dataset([[dosh_m_long;dosw_m_long],groups,[lsh_long;lsw_long],[commsh_long;commsw_long], ...
-    [zeros(I*I*T*T*I*W*W,1);ones(I*I*T*T*I*W*W,1)],[zeros(I*I*T*T*I*W*W,1);dosw_m_long],weights,weights_bothwork,...
-    [disth_long;distw_long],[zeros(I*I*T*T*I*W*W,1);distw_long],[location_long;location_long],...
-    [typeh_long;typew_long],[typeh_long;typeh_long],[typew_long;typew_long],[loh_long;loh_long],[low_long;low_long],...
-    [accepth_long;accepth_long],[acceptw_long;acceptw_long],[worksh_long;worksw_long],...
-    [housh_long;housw_long],[wageh_long; wagew_long],[ich_long;icw_long]]);
+%tbl=mat2dataset([[dosh_m_long;dosw_m_long],groups,[lsh_long;lsw_long],[commsh_long;commsw_long], ...
+%    [zeros(I*I*T*T*I*W*W,1);ones(I*I*T*T*I*W*W,1)],[zeros(I*I*T*T*I*W*W,1);dosw_m_long],weights,weights_bothwork,...
+%    [disth_long;distw_long],[zeros(I*I*T*T*I*W*W,1);distw_long],[location_long;location_long],...
+%    [typeh_long;typew_long],[typeh_long;typeh_long],[typew_long;typew_long],[loh_long;loh_long],[low_long;low_long],...
+%    [accepth_long;accepth_long],[acceptw_long;acceptw_long],[worksh_long;worksw_long],...
+%    [housh_long;housw_long],[wageh_long; wagew_long],[ich_long;icw_long]]);
 
 
-tbl.Properties.VarNames = {'dos_m','couple','ls','comm','woman','womandos_m',...
-    'weights','weights_bothwork','dj','womandj','location','type','typeh','typew','loh','low',...
-    'accepth','acceptw','works','hous','wage','ic'};
-tbl.couple=categorical(tbl.couple);
+%tbl.Properties.VarNames = {'dos_m','couple','ls','comm','woman','womandos_m',...
+%    'weights','weights_bothwork','dj','womandj','location','type','typeh','typew','loh','low',...
+%    'accepth','acceptw','works','hous','wage','ic'};
+%tbl.couple=categorical(tbl.couple);
 
 typedif=[[typeh_long==1] - [typew_long==1]];
 lsdif=[lsh_long- lsw_long];
@@ -1021,6 +1077,62 @@ pg(2,:)=b(end);
 %lm = fitlm(tbl,'  p ~ 1+ dj + sw +sw_djj');
 %pg(2,:)=table2array(lm.Coefficients('sw_djj',:)); % log-point per mile
 
+
+
+%% do regression
+DC_long=reshape(DC.*(DC>=0),I*I*T*T*I*W*W,1);
+DS_long=reshape(DSh.*(DSh>=0),I*T*I*W,1);
+commh_long=reshape(commutehC,I*I*T*T*I*W*W,1);
+comms_long=reshape(commuteS,I*T*I*W,1);
+worksh_long=reshape(workshC,I*I*T*T*I*W*W,1);
+workss_long=reshape(worksS,I*T*I*W,1);
+dosh_m_long=reshape(distohC_m,I*I*T*T*I*W*W,1);
+doss_m_long=reshape(distoS_m,I*T*I*W,1);
+typeh_long=reshape(typeh,I*I*T*T*I*W*W,1)-1;
+types_long=reshape(types,I*T*I*W,1)-1;
+couple_long=[ones(size(DC_long)); zeros(size(DS_long))];
+
+
+W_=[DC_long.*worksh_long;DS_long.*workss_long];
+y=[commh_long;comms_long];
+X=[ones(size(y)),couple_long,[dosh_m_long;doss_m_long]];
+y=y(W_>0,:);
+X=X(W_>0,:);
+
+WW=repmat(W_(W_>0),1,size(X,1)).*eye(size(X,1));
+
+try chol((X'*WW*X));
+    
+    b=((X'*WW*X)\eye(size(X'*WW*X)))*(X'*WW*y);
+    betas_comdo=[b(end-1),b(end)];
+
+catch ME
+    betas_comdo=[10^12,10^12];
+    disp('Matrix (X*WW*X) is not symmetric positive definite')
+end
+
+%{
+W_=[DC_long.*worksh_long;DS_long.*workss_long];
+y=[commh_long;comms_long];
+X=[ones(size(y)),[typeh_long;types_long],couple_long,[dosh_m_long;doss_m_long]];
+y=y(W_>0,:);
+X=X(W_>0,:);
+
+WW=repmat(W_(W_>0),1,size(X,1)).*eye(size(X,1));
+
+try chol((X'*WW*X));
+    
+    b=((X'*WW*X)\eye(size(X'*WW*X)))*(X'*WW*y);
+    betas2_comdo=[b(end-1),b(end)];
+
+catch ME
+    betas2_comdo=[10^12,10^12];
+    disp('Matrix (X*WW*X) is not symmetric positive definite')
+end
+%}
+% this does not work THAT great to be honest. leftover gap is still too
+% small. but whatever. would controlling for something help here? type?
+
 %%
 distohC=zeros(I,I,T,T,I,W,W);
 distowC=zeros(I,I,T,T,I,W,W);
@@ -1063,6 +1175,8 @@ if I==4
     d4=distalljC_m_location(4);
 else
     p(4)=0;
+    sDSi(4)=0;
+    sDCi(4)=0;
 end
 
 Keys = {'scity_dif', 'wlfp_dif', 'hlfp','whours_pww_dif',...
@@ -1090,7 +1204,10 @@ Keyso =  {'shnmarried_','swnmarried_','sshouseexp','cshouseexp','wagegap_actual'
     'epsC_raw','epshS_raw','epswS_raw',...
     'p_HC','p_HS','lwagehC','lwagewC','lwagehS','lwagewS',...
     'mindC_raw','mindCiswoman_raw',...
-    'bb_hours_hw_M','Dhours','bb_houseannual_hw_M','bb_employed_hw_M','bb_commiles_hw_M','bb_houseannual_hws_M','bb_hours_hws_M'};
+    'bb_hours_hw_M','Dhours','bb_houseannual_hw_M','bb_employed_hw_M','bb_commiles_hw_M','bb_houseannual_hws_M','bb_hours_hws_M',...
+    'comdifhC_CS','comdifS_CS','shcommiles_dif_do','commiles_doeffect',...
+    'shcommiles_Csub','shcommiles_dif_Csub','shcommiles_dif_sub','shcommiles_dif_city',...
+    'sC1','sS1', 'sC2','sS2', 'sC3','sS3', 'sC4','sS4'};
 
 model_m=[sDSi(1)-sDCi(1),workwC_raw-workhC_raw, workhC_raw, (hourswC_pww_raw-hourshC_pww_raw)*24*365,...
         commuteS_raw,commuteS_raw- commutehC_raw,commuteS_raw- commutewC_raw,...
@@ -1101,7 +1218,7 @@ model_m=[sDSi(1)-sDCi(1),workwC_raw-workhC_raw, workhC_raw, (hourswC_pww_raw-hou
         xwC_pww_raw*24*365, ( xwC_h0_raw - xwC_pww_raw)*24*365, (xwC_0w_raw - xwC_pww_raw)*24*365, (xhC_pww_raw-xwC_pww_raw)*24*365,( xhC_h0_raw - xhC_pww_raw)*24*365, (xhC_0w_raw - xhC_pww_raw)*24*365,...
         jobjob_all_m, jobjob_within_m,jobjob_hwithin_m, jobjob_hw_m, jobjob_hwact,...
         abs_hdo_wdo,sH,  pg(1,1),-wagegap_hw_within,xS_raw*24*365,...
-        shnmarried,scity,JLs_all_m(1,1),sd_hdo_wdo,p_gradient_simple,NLY_,...
+        (shnmarried+swnmarried)/2,scity,JLs_all_m(1,1),sd_hdo_wdo,p_gradient_simple,NLY_,...
         distalljS_m_raw-distalljC_m_raw];
 model_m_add=[shnmarried,swnmarried, sHS, sHC,wagegap_actual,wagegap_hw , pg(2,1) ];
 other=[    lsbar_hC_pww_raw,lsbar_wC_pww_raw,lsbar_hC_h0_raw,lsbar_wC_0w_raw,...
@@ -1119,7 +1236,10 @@ other=[    lsbar_hC_pww_raw,lsbar_wC_pww_raw,lsbar_hC_h0_raw,lsbar_wC_0w_raw,...
     lwagehC_raw,lwagewC_raw,lwagehS_raw,lwagewS_raw,...
     mindC_raw,mindCiswoman_raw,...
     -(Dhours0_location(1)-Dhours0_suburb)*24*365,-(Dhours_location(1)-Dhours_suburb)*24*365,-(Dx_location(1)-Dx_suburb)*24*365,...
-    -(Dwork_location(1)-Dwork_suburb),-(Dd_location(1)-Dd_suburb), -(DSx_location(1)-DSx_suburb), -(DShours_location(1)-DShours_suburb)];
+    -(Dwork_location(1)-Dwork_suburb),-(Dd_location(1)-Dd_suburb), -(DSx_location(1)-DSx_suburb), -(DShours_location(1)-DShours_suburb),...
+    commutehC_suburb - commutehC_location(1), commuteS_suburb - commuteS_location(1), betas_comdo(1), betas_comdo(2),...
+    commuteS_Csub,commuteS_Csub-commuteS_raw,commutehC_suburb-commuteS_suburb,commutehC_location(1)-commuteS_location(1),...
+    sDCi(1),sDSi(1),sDCi(2),sDSi(2),sDCi(3),sDSi(3),sDCi(4),sDSi(4)];
 
 moments_= array2table([model_m]', 'RowNames',Keys);
 other_= array2table([model_m_add,other], 'VariableNames',Keyso);

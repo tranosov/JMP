@@ -14,6 +14,7 @@ AC=PARREST.('AC');
 betah=PARREST.('betah');
 ceh=PARREST.('ceh');
 crra=PARREST.('crra');
+wfh_share=PARREST.('wfh_share');
 
 N=size(JLs);
 I=N(1);
@@ -186,6 +187,7 @@ for i=1:I
         for jw=1:I 
             for th=1:T
                 for tw=1:T
+                    
 if (hs_wfh==1) && ((th>T0)&& (tw<=T0))  && ((th<=T0)&& (tw>T0))   % these do not exist under household assignment - save time
     skip=1;
 else    
@@ -194,13 +196,13 @@ else
                 dh=D(i,jh);
                 dw=D(i,jw);
                 if th>T0
-                    dh=0;
+                    dh=wfh_share*dh; %0;
                     [~,~,~,~,~,lowh]=matchdist(i,jh,th-T0,0,0,0,0,typeic,D,mm,JLs,betah);
                 else
                     [~,~,~,~,~,lowh]=matchdist(i,jh,th,0,0,0,0,typeic,D,mm,JLs,betah);                    
                 end
                 if tw>T0
-                    dw=0;
+                    dw=wfh_share*dw; %0;
                     [~,~,~,~,~,loww]=matchdist(i,jw,tw-T0,0,0,0,0,typeic,D,mm,JLs, betah);
                 else
                     [~,~,~,~,~,loww]=matchdist(i,jw,tw,0,0,0,0,typeic,D,mm,JLs, betah);

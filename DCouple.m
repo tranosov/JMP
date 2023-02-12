@@ -10,7 +10,7 @@ Job offer in j X j X type t X t.
 function [DC, DC1, DC2,HCouple,Pw,hC,VC,cexp1,cexp2,OUTC]=DCouple(p,alloutput,lambda,EQS,PARREST) 
 %global D  AS  AC w1 w2 crra us ch cw cs hdS  Ys Yc lss_G lsah_G lsaw_G lsb_G alphaw betaw alphah betah tih tiw mu JLs Jw Jm HS Jc NC NS NSh NSw sigmaw sigmal mA mI kappa PHI mA mI mAL mIL
 %global typeic OUTC EQS JLs D AC betah WARNINGS mm sigmal NC mu
-global WARNINGS 
+global WARNINGS doublecouple
 
 D=PARREST.('D');
 sigmal=PARREST.('sigmal');
@@ -173,7 +173,7 @@ for jh=1:I
         for th=1:T
             for tw=1:T
                 for i=1:I
-            [V,workh_, workw_, Pnn, Pnw0,Pnw, Pw0n,Pw0w0,Pw0w, Pwn, Pww0,Pww,conexp1, conexp2,V1,V2]=Vcouple(th,tw,jh,jw,i,PARREST,OUTC); %in period 1
+            [V,workh_, workw_, Pnn, Pnw0,Pnw, Pw0n,Pw0w0,Pw0w, Pwn, Pww0,Pww,conexp1, conexp2,V1,V2]=Vcouple(th,tw,jh,jw,i,PARREST,OUTC, doublecouple); %in period 1
              VC(jh,jw,th,tw,i)=V;
            % workh_check(jh,jw,th,tw,i)=workh; %out2(@() Vcouple(th,tw,jh,jw,i,p(i)));
            % workw_check(jh,jw,th,tw,i)=workw; %out3(@() Vcouple(th,tw,jh,jw,i,p(i)));
@@ -237,7 +237,12 @@ lambda*(cexp1(2,3,1,2,2)-cexp1(2,3,1,2,3))+ (1-lambda)*(cexp2(2,3,1,2,2)-cexp2(2
 exp(VC(2,3,1,2,:)./sigmal)/sum(exp(VC(2,3,1,2,:)./sigmal))
 exp(VC(3,2,1,2,:)./sigmal)/sum(exp(VC(3,2,1,2,:)./sigmal)) % those that have atypical offers- more likely to prefer husband suburb
 %}
-doubleit=1;
+if doublecouple
+    doubleit=1;
+else
+    doubleit=0;
+end
+
 if doubleit==1
     PC=exp(VC./(repmat(sigmal*2,I,I,T,T,I)))./repmat(sum(exp(VC./(repmat(sigmal*2,I,I,T,T,I))),5),1,1,1,1,I);
 else
@@ -310,10 +315,15 @@ c(jh,jw,th,tw,i,wh,ww)=sum(sum(sum(DC1(jh,:,th,tw,i,:,:))));
 end
 %}
 
-DC2=Pw.*((mu^2)*repmat(pjt,1,1,1,1,I,W,W).*repmat(sum(sum(sum(sum(DC1,7),6))),I,I,1,1,1,W,W)+...
+if doublecouple
+    DC2=Pw.*((mu^2)*repmat(pjt,1,1,1,1,I,W,W).*repmat(sum(sum(sum(sum(DC1,7),6))),I,I,1,1,1,W,W)+...
     mu*(1-mu)*repmat(repmat(sum(pjt,2),1,I,1,1),1,1,1,1,I,W,W).*repmat(sum(sum(sum(DC1,6),7)),I,1,1,1,1,W,W)+...
     mu*(1-mu)*repmat(repmat(sum(pjt,1),I,1,1,1),1,1,1,1,I,W,W).*repmat(sum(sum(sum(DC1,6),7),2),1,I,1,1,1,W,W)+...
     ((1-mu)^2)*repmat(sum(sum(DC1,6),7),1,1,1,1,1,W,W)); %repmat(sum(sum(sum(DC1,6),7)),I,1,1,1,1,W,W) does not match exactly??
+else
+    DC2=DC1;
+end
+
 DC=DC1+DC2;
 
 

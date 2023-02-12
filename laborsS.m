@@ -11,6 +11,7 @@ AS=PARREST.('AS');
 betah=PARREST.('betah');
 crra=PARREST.('crra');
 ces=PARREST.('ces');
+wfh_share=PARREST.('wfh_share');
 
 N=size(JLs);
 I=N(1);
@@ -30,6 +31,8 @@ Ys=EQS.('Ys');
 us=EQS.('us');
 cs=EQS.('cs');
 hdS=EQS.('hdS');
+Leissh=EQS.('Leissh');
+mus0=EQS.('mus0');  
 
 wfh=PARREST.('wfh');
 T0=T;
@@ -37,7 +40,7 @@ if wfh>0
     T=T0*2;
 end
 
-vs=zeros(T,I,I);
+vs=zeros(T,I,I,2);
 Hs=zeros(T,I,I);
 if alloutput
     utilhs=EQS.('utilhs') ;
@@ -96,7 +99,7 @@ for j=1:I
             p=pp(i);
 
             if t>T0
-                d=0;
+                d=wfh_share*d; %0;
                 [~,~,~,~,~,low]=matchdist(i,j,t-T0,0,0,0,0,typeic,D,mm,JLs,betah);
             else
                 [~,~,~,~,~,low]=matchdist(i,j,t,0,0,0,0,typeic,D,mm,JLs,betah);
@@ -144,7 +147,7 @@ for j=1:I
             %xsw(t,j,i)=xsw_fun(lssw(t,j,i),d);
             inputs(t,j,i,:)=output;
             Hs(t,j,i)=hdS(output(1),p);
-            vs(t,j,i)= us(1,d,AS(i),cs(output(1)),Hs(t,j,i),lssh(output(1),output(2),d),output(2),0,ic);
+            vs(t,j,i,2)= us(1,d,AS(i),cs(output(1)),Hs(t,j,i),lssh(output(1),output(2),d),output(2),0,ic);
             
             if alloutput
                 mus(t,j,i)=output(1);
@@ -161,6 +164,16 @@ for j=1:I
                 uxs(t,j,i)=utilxs(output(2),0);
                 
             end
+
+        
+        % what if not working?    
+        %mu_=mus0(p);
+        %fn=@(x) [Leissh(mu_,x)-(1-x)];
+        %[x_,~,EXITFLAG]=fsolve(fn,x0,options); 
+
+        %vs(t,j,i,1)= us(0,d,AS(i),cs(mu_),Hs(t,j,i),0,x_,0,ic);
+
+
         end
     end
 end

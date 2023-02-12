@@ -14,6 +14,8 @@ wb=params{'wb',:};
 sstaysingleh=params{'sstaysingleh',:};
 sstaysinglew=params{'sstaysinglew',:};
 MtoF=params{'MtoF',:};
+Tx=params{'Tx',:};
+Tl=params{'Tl',:};
 
 % ESTIMATED
 AS1=params{'AS1',:};
@@ -72,6 +74,12 @@ le_=params{'le_',:};
 wfh=params{'wfh',:};
 hs_wfh=params{'hs_wfh',:};
 
+Sup1=params{'Sup1',:};
+Sup2=0;
+Sup3=0;
+SupS=params{'SupS',:};
+
+
 %AC3=0;
 %dmin=0;
 dminS=0;
@@ -97,15 +105,15 @@ pitheta_=0;
 qel_=0;
 d21=1;
 d31=1;
-Sup1=0;
-Sup2=0;
-Sup3=0;
-SupS=0;
 addS=0;
 out=1;
 daddS=1;
 aaddS=1;
-pophous=1; 
+if (Sup1==0) && (SupS==0)
+    pophous=1; 
+else
+    pophous=0; 
+end
 %wc=0;
 PID=0; 
 %lsbar=1;
@@ -136,6 +144,30 @@ toinputs=reinitialize;
 params('crrah_','value')={crrah_};
 params('ces_','value')={ces_};
 
+
+% RESCALE hours pars if hours measured in Tl
+%Xi=Xi*Tl; % i think this is not neaded in the end?
+
+% RESCALE Xi, sigmal, As, muw, sw
+Xi=Xi*ce_;
+AS1=AS1*ce_;
+A1=A1*ce_;
+AC_sub=AC_sub*ce_;
+sw=sw*ce_;
+sel=sel*ce_;
+PHID_=PHID_*ce_;
+muw=muw*ce_;
+
+params('Xi','value')={Xi};
+params('AS1','value')={AS1};
+params('A1','value')={A1};
+params('AC_sub','value')={AC_sub};
+params('sw','value')={sw};
+params('sel','value')={sel};
+params('PHID_','value')={PHID_};
+params('muw','value')={muw};
+
+
 if VERBOSE
     params
 end
@@ -145,10 +177,11 @@ end
     ces_,ceh_,cew_,leh,lew,eta_,etaC_, muprob,plocal_,sstaysingleh,sstaysinglew,mA_,mI_,kappa_,...
     gamd_,PHID_,deltaw_,PHI_,rhod_,PHIW_,line,muw,muwL,swL,crra_,crrat_,crrah_,crrax_,pih_,piw_,pi_,pish_,pisw_,piel_,pitheta_,qel_,...
     d21,d31,Sup1,Sup2,Sup3,SupS,addS,out,daddS,aaddS,pophous, Xi,wc, PID,typeic_,pid_,wgap_raw,mm_,lsbar,NLY,THETA,THETAHW,sigmam,MtoF,...
-    wfh,hs_wfh);
+    wfh,hs_wfh, Tx, Tl);
 
 
 PARREST.('params')=params;
+PARREST.('wfh_share')=params{'wfh_share',:};
 
 
 end

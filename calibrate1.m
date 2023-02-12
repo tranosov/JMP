@@ -2,6 +2,11 @@
 
 function parsc=calibrate1(params,momentall)
 global VERBOSE
+
+Xshift=0;
+Tx=params{'Tx',:};
+Tl=params{'Tl',:};
+le_=params{'le_',:}; %!
 b=params{'b',:};
 %ce_=params{'ce_',:};
 %crra_=params{'crra_',:};
@@ -59,27 +64,69 @@ xw0_h_=xw0_h;
 xw0=xw0_-xbar;
 xw0_h=xw0_h_-xbar;
 
-%crrat_=(log(w1/w2)+log((1-l)/l))/log((Lw0)/(Lh0) ) ; % take out of
+%crrat_=(log(w1/w2)+log((1-lam)/lam))/log((Lw0)/(Lh0) ) ; % take out of
 if (w1/w2)*(1-lam)/lam<1
     fprintf('Hours argument will not work')
 end
 
-% I think I did convinve myself, that if both work and there is an internal
-% solution, than increasing crrat should result in a smaller gap in hours!
-% however, if ls1=lsbar -> fixed and increasing crrat decreases ls2, so
-% INCREASES THE GAP!
-% thus the lsbar creates a non-monotonicity in matching this moment!
+w1_exp=@(ls)wa.*exp(wc*ic0_);
+wd1=@(ls)wa.*exp(wc*ic0_);
+w2_exp=@(ls)wa.*exp(wgap_raw+wc*ic0_);
+wd2=@(ls)wa.*exp(wgap_raw+wc*ic0_);
+
+
+NLY_=0; %momentall{'NLY_',:};
+NLY=( (1-ss)*((lsh0*w1+lsw0*w2)*spww  + (1-spww)*(lsh0_h*w1)) + ss*ls0*w1*2   )*NLY_/(1-NLY_); % move to actual calibraition outside!
+Y0=(lsh0*w1_exp(lsh0)+lsw0*w2_exp(lsw0)) + NLY;
+%mucouple_ke=((l^(1/crra_)+(1-lam)^(1/crra_))^crra_)/((Y0- 2)^crra_);
+%le_=(1/l)*(mucouple*(wd1(lsh0))+fxi(Xi*ic0_))*(1-a*lsh0 -b*dh0-xh0)^crrat_;
+
+if le_==1
+    mucouple=(1/(wd1(lsh0)))*((lam*le_.*Tl^(1-crrat_))/(1-a*lsh0 -b*dh0-xh0)^crrat_-fxi(Xi*ic0_)) ; % scale if leisure
+    if mucouple<0
+        fprintf('IMPLIES IMPOSSIBLE MUS')
+    end
+    ceh_=(mucouple*(Y0- 2)^crra_)/((lam^(1/crra_)+(1-lam)^(1/crra_))^crra_) ;
+    
+    mucouple=(1/(wd2(lsw0)))*(((1-lam)*le_.*Tl^(1-crrat_))/(Lw0)^crrat_-fxi(Xi*ic0_)) ; %scale if leisure
+    if mucouple<0
+        fprintf('IMPLIES IMPOSSIBLE MUS')
+    end
+    %eta_=2*mucouple*(1)^(crrah_); % BOTH RELIED ON MEN SATISFYING THEIR FOC IN MOST CASES (NOT BEING ON LSBAR)  - SWITCH TO WOMEN?
+    cew_=(mucouple*(Y0- 2)^crra_)/((lam^(1/crra_)+(1-lam)^(1/crra_))^crra_) ;
+    
+    
+    YS=(ls0*w1_exp(ls0))+ NLY*0.5;
+    musingle=(1/(wd1(ls0)))*((le_.*Tl^(1-crrat_))/(Ls0)^crrat_-fxi(Xi*ic0_)) ;
+    if mucouple<0
+        fprintf('IMPLIES IMPOSSIBLE MUS')
+    end
+    ces_=(musingle*(YS- 1)^crra_) ;
+    %eta_=musingle*(1)^(crrah_);
+    
+    % I think I did convinve myself, that if both work and there is an internal
+    % solution, than increasing crrat should result in a smaller gap in hours!
+    % however, if ls1=lsbar -> fixed and increasing crrat decreases ls2, so
+    % INCREASES THE GAP!
+    % thus the lsbar creates a non-monotonicity in matching this moment!
+
+else
+    ces_=1;
+    YS=(ls0*w1_exp(ls0))+ NLY*0.5;
+    musingle=ces_/((YS- 1)^crra_);
+    le_=musingle*(wd1(ls0))*((Ls0)^crrat_-fxi(Xi*ic0_))/(Tl^(1-crrat_)) ;
+end
 
 %the calibarion - it is too important!
-piel_=crrat_*log(((Lw0_h)*(Lh0))/((Lw0)*(Lh0_h)))/log((xh0*xw0_h)/(xh0_h*xw0)) ;
+piel_=crrat_*log(((Lw0_h)*(Lh0))/((Lw0)*(Lh0_h)))/log((xh0*xw0_h)/(xh0_h*xw0)) ; % INVARIANT TO SCALE OF TIME
 
 % this is a real issue - piel_check is pretty much fixed on a fairly low
 % value
 
-pih_=((lam/(1-lam))*(xh0/xw0)^piel_)/((lam/(1-lam))*(xh0/xw0)^piel_+((Lh0)/(Lw0))^crrat_ );
+pih_=((lam/(1-lam))*(xh0/xw0)^piel_)/((lam/(1-lam))*(xh0/xw0)^piel_+((Lh0)/(Lw0))^crrat_ ); %INVARIANT TO SCALE OF TIME
 piw_=1-pih_;
 
-piel_check= (log(piw_/pih_)+log(w1/w2))/log(xw0/xh0);
+piel_check= (log(piw_/pih_)+log(w1/w2))/log(xw0/xh0); %INVARIANT TO SCALE IN TIME
 if (abs(piel_-piel_check)>0.02) & (VERBOSE==1)
     piel_=piel_
     piel_check=piel_check
@@ -91,15 +138,14 @@ if (abs(piel_-piel_check)>0.02) & (VERBOSE==1)
     end
 end
 
-T0= (piw_.*xw0.^(1-piel_)+ (1-piw_).*xh0.^(1-piel_) ).^(1/(1-piel_));
+T0= (piw_.*xw0.^(1-piel_)+ (1-piw_).*xh0.^(1-piel_) ).^(1/(1-piel_)) ; 
 T0_h=(piw_.*xw0_h.^(1-piel_)+ (1-piw_).*xh0_h.^(1-piel_) ).^(1/(1-piel_));
 
-crrax_=(crrat_*log((Lh0_h)/(Lh0))+piel_*log(T0_h/T0)-piel_*log(xh0_h/xh0) )/(log(T0_h/T0) );
-pi_= (lam/pih_).*(T0^(crrax_-piel_))*(xh0^(piel_))/((Lh0)^crrat_); %TR: corrected! + treat as relative to value of time
-pish_=(xs0^(crrax_))/((1-a*ls0 -b*d0-xs0)^crrat_);
+crrax_=(crrat_*log((Lh0_h)/(Lh0))+piel_*log(T0_h/T0)-piel_*log(xh0_h/xh0) )/(log((T0_h+Xshift)/(T0+Xshift)) ); %SCALE INVARIANT % todo - check later
+pi_= (lam*le_.*Tl^(1-crrat_))*(1/pih_).*((T0*Tx+Xshift)^(crrax_)*T0^(-piel_))*(xh0^(piel_))/((Lh0)^crrat_*Tx^(1)); %TR: corrected! + treat as relative to value of time %scale change
+pish_=le_*Tl^(1-crrat_)*((xs0*Tx+Xshift)^(crrax_))/((1-a*ls0 -b*d0-xs0).^crrat_*Tx^(1)); %scale change - scale change works only without Xshift
 
-NLY_=momentall{'NLY_',:};
-NLY=( (1-ss)*((lsh0*w1+lsw0*w2)*spww  + (1-spww)*(lsh0_h*w1)) + ss*ls0*w1*2   )*NLY_/(1-NLY_);
+
 % depends on wage gap. and on wc
 
 %(lsh0*w1+lsw0*w2)*NLY_/(1-NLY_);
@@ -110,40 +156,13 @@ piw_=piw_-b*(dh0-dw0)*pid_;
 
 
 
-w1_exp=@(ls)wa.*exp(wc*ic0_);
-wd1=@(ls)wa.*exp(wc*ic0_);
-w2_exp=@(ls)wa.*exp(wgap_raw+wc*ic0_);
-wd2=@(ls)wa.*exp(wgap_raw+wc*ic0_);
-Y0=(lsh0*w1_exp(lsh0)+lsw0*w2_exp(lsw0)) + NLY;
-%mucouple_ke=((l^(1/crra_)+(1-l)^(1/crra_))^crra_)/((Y0- 2)^crra_);
-%le_=(1/l)*(mucouple*(wd1(lsh0))+fxi(Xi*ic0_))*(1-a*lsh0 -b*dh0-xh0)^crrat_;
-
-le_=1;
-mucouple=(1/(wd1(lsh0)))*((lam*le_)/(1-a*lsh0 -b*dh0-xh0)^crrat_-fxi(Xi*ic0_)) ;
-if mucouple<0
-    fprintf('IMPLIES IMPOSSIBLE MUS')
-end
-ceh_=(mucouple*(Y0- 2)^crra_)/((lam^(1/crra_)+(1-lam)^(1/crra_))^crra_) ;
-
-mucouple=(1/(wd2(lsw0)))*(((1-lam)*le_)/(Lw0)^crrat_-fxi(Xi*ic0_)) ;
-if mucouple<0
-    fprintf('IMPLIES IMPOSSIBLE MUS')
-end
-%eta_=2*mucouple*(1)^(crrah_); % BOTH RELIED ON MEN SATISFYING THEIR FOC IN MOST CASES (NOT BEING ON LSBAR)  - SWITCH TO WOMEN?
-cew_=(mucouple*(Y0- 2)^crra_)/((lam^(1/crra_)+(1-lam)^(1/crra_))^crra_) ;
 
 
-YS=(ls0*w1_exp(ls0))+ NLY*0.5;
-musingle=(1/(wd1(ls0)))*((le_)/(Ls0)^crrat_-fxi(Xi*ic0_)) ;
-if mucouple<0
-    fprintf('IMPLIES IMPOSSIBLE MUS')
-end
-ces_=(musingle*(YS- 1)^crra_) ;
-%eta_=musingle*(1)^(crrah_);
 
 
-parsc = array2table([NLY,pish_,piel_,crrax_,piw_,pi_,ces_]','VariableNames',{'value'}, 'RowNames',...
-    {'NLY','pish_','piel_','crrax_','piw_','pi_','ce_'}); %,'ce_'}); %'crrat_',log(ce_) %'ces_','crrah_'
+
+parsc = array2table([NLY,pish_,piel_,crrax_,piw_,pi_,ces_,le_]','VariableNames',{'value'}, 'RowNames',...
+    {'NLY','pish_','piel_','crrax_','piw_','pi_','ce_','le_'}); %,'ce_'}); %'crrat_',log(ce_) %'ces_','crrah_'
 
 
 % maybe come up with a way to do other rought calibrations here?

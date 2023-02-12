@@ -13,33 +13,43 @@ if isempty(RESC)
     RESC=10^6;
 end
 
-%{
-WARNINGS=0;
-    kk=1
-    cl=F(x0) % in lss: this is already off
-    while (sum(abs(cl(end)))>1) && (kk<5)
-        x0=x0 +cl.*([0,0,0,(RESC)*PARREST.('sigmam')/(1000*kk)]) 
-        cl=F(x0) 
-        kk=kk+1;
-    end
-    kk=1;
-    while (sum(abs(cl(1:end-1)))>1) && (kk<5)
-        A=1/(1000*kk);
-        x0=x0 +cl.*(A*[1,1,1,0])
-        [cl]=F(x0) 
-        kk=kk+1;
-    end  
-    WARNINGS=0;
-
-toc
-time=toc;
-
-%}   
 tic
+TOL=10^(-8);
+options = optimoptions('fsolve','MaxIter',500,'MaxFunctionEvaluations',500,...
+                           'FunctionTolerance',TOL,   'Display','iter',...
+                           'FunValCheck','on','Algorithm','trust-region'); % switch to fminsearch? not yet.
+    
+    
+F=@(x) Clearing_withmm(x,EQS,PARREST); 
+[output,FVAL,EXITFLAG,OUTPUT]= fsolve(F,x0,options);
+x0=output;
+% update sstaysingle
+
+
+params=PARREST.('params');
+LA0_=params('LA0','value');
+params('LA0','value')={x0(end)/(RESC)};
+params('p0_1','value')={exp(x0(1))};
+params('p0_2','value')={exp(x0(2))};
+params('p0_3','value')={exp(x0(3))};
+if size(x0)>3
+    params('p0_4','value')={exp(x0(4))};
+end
+
+PARREST.('params')=params;
+ssh_=PARREST.('sstaysingleh');
+ssw_=PARREST.('sstaysinglew');
+F=@(x) Clearing_withmm(x,EQS,PARREST); 
+[cl,ssh,ssw]=F(x0);
+PARREST.('sstaysingleh')=ssh;
+PARREST.('sstaysinglew')=ssw;
+
+
+% refine L and p separately
 Fp=@(x) Clearing(x,EQS,PARREST); 
 tol=1;
-cl=Fp(x0(1:end-1));    
-if norm(cl)^2 >tol
+clp=cl(1:end-1);  
+if norm(clp)^2 >tol
     tolmult=10^(-1);
     [x0(1:end-1),~,~]=solvep(x0(1:end-1),EQS,PARREST,tolmult);
     %time=time+time_;
@@ -62,9 +72,11 @@ if mup==(-1)
     %x03_=[0.9*x0(end),min(x0(end)*1.5,0.999*RESC)];
 end
 
+PARREST.('sstaysingleh')=ssh_;
+PARREST.('sstaysinglew')=ssw_;
 Fm=@(x) Clearing_justmm(x,EQS,PARREST); 
 tol=10^(-8); % stricter than overall
-if norm(Fm(x0(end)))^2 >tol 
+if norm(cl(end))^2 >tol 
     optionsz = optimset('TolX',tol,'Display',iter_);
     if isempty(mup)
         try
@@ -148,13 +160,13 @@ if norm(Fm(x0(end)))^2 >tol
 end 
 
 params=PARREST.('params');
-LA0_=params('LA0','value');
+%LA0_=params('LA0','value');
 params('LA0','value')={x0(end)/(RESC)};
 PARREST.('params')=params;
-ssh_=PARREST.('sstaysingleh');
-ssw_=PARREST.('sstaysinglew');
+PARREST.('sstaysingleh')=ssh_;
+PARREST.('sstaysinglew')=ssw_;
 F=@(x) Clearing_withmm(x,EQS,PARREST); 
-[cl,ssh,ssw]=F(x0);
+[~,ssh,ssw]=F(x0);
 PARREST.('sstaysingleh')=ssh;
 PARREST.('sstaysinglew')=ssw;
 time=time+toc;
@@ -163,10 +175,10 @@ toc
 end
 
 tic
-%Fp=@(x) Clearing(x,EQS,PARREST); 
+Fp=@(x) Clearing(x,EQS,PARREST); 
 tol=1;
-%cl=Fp(x0(1:end-1));    
-if norm(cl(1:end-1))^2 >10^(-1)*tol
+clp=Fp(x0(1:end-1));    
+if norm(clp)^2 >10^(-1)*tol
     tolmult=10^(-1);
     [x0(1:end-1),EXITFLAG,time_]=solvep(x0(1:end-1),EQS,PARREST,tolmult);
     time=time+time_;
@@ -196,7 +208,7 @@ else
     if norm(cl)^2 >tol  
                 tic
         %if VERBOSE
-        fprintf('Have to do joint solution...') % this often happens, because overall share of peopl single changes
+        fprintf('Have to do joint solution again...') % this often happens, because overall share of peopl single changes
         cl
         %end
 

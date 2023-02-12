@@ -13,6 +13,12 @@ if isempty(RESC)
     RESC=10^6;
 end
 
+global VERBOSE doepses
+if isempty(doepses)
+    doepses=0;
+end
+
+
 
 HS=PARREST.('HS');
 Jw=PARREST.('Jw');
@@ -101,6 +107,24 @@ DC2_agr=sum(sum(DC2,7),6);
 
 uhC=sum(sum(sum(sum(sum(DC1_agr.*uhC_)))))./sum(sum(sum(sum(sum(DC1_agr)))))+sum(sum(sum(sum(sum(DC2_agr.*uhC_)))))./sum(sum(sum(sum(sum(DC2_agr)))));
 uwC=sum(sum(sum(sum(sum(DC1_agr.*uwC_)))))./sum(sum(sum(sum(sum(DC1_agr)))))+sum(sum(sum(sum(sum(DC2_agr.*uwC_)))))./sum(sum(sum(sum(sum(DC2_agr)))));
+
+
+if doepses==1 
+    [OUTC,OUTS]=eps_condmean(OUTC,OUTS,PARREST,VS,VC);   
+    epsS=OUTS.('epsS');
+    epsC=OUTC.('epsC');
+    epsC_raw= sum(sum(sum(sum(sum(DC1_agr.*epsC)))))./sum(sum(sum(sum(sum(DC1_agr))))); %in second period of being in a couple - this should be the same?
+    epshS_raw= sum(sum(sum(DSh_agr.*epsS)))./sum(sum(sum(DSh_agr)));
+    epswS_raw= sum(sum(sum(DSw_agr.*epsS)))./sum(sum(sum(DSw_agr)));
+    %expectedly - singles sould get less, because they get more in
+    %systematic benefits
+    
+    uhS=uhS+2*epshS_raw;
+    uwS=uwS+2*epswS_raw;
+    uhC=uhC+2*epsC_raw;
+    uwC=uwC+2*epsC_raw;
+end
+
 %{
 OUTC.('lambda')*1000
 uhC1=sum(sum(sum(sum(sum(DC1_agr.*uhC1)))))./sum(sum(sum(sum(sum(DC1_agr)))))+sum(sum(sum(sum(sum(DC2_agr.*uhC1)))))./sum(sum(sum(sum(sum(DC2_agr)))))
@@ -113,7 +137,7 @@ uwC2=sum(sum(sum(sum(sum(DC1_agr.*uwC2)))))./sum(sum(sum(sum(sum(DC1_agr)))))+su
 % no - need to do it separately for DC1 and DC2! check if same?
 
 % Notice - the distribution does not depend on the share that gets married
-% here! (given lambda of course)
+% here! (given lambda of course) WHY? I am confused what I meant. 
 
 
 M=sum(sum(sum(DSh_agr)))*(1/(1/3 + ssh_*2/3)) ; %+ sum(sum(sum(sum(sum(DC_agr)))));
@@ -139,7 +163,7 @@ clearing=(HSi+HCi-HS);
 %divide by ssingle- global and multiply by new ssingle
 
 
-clearing=[clearing,clmm*(1/3)]; % make it a bit easier on mm clearing
+clearing=[clearing,clmm*(1/3)*10]; % make it a bit easier on mm clearing
 
 %todo - make a version where lambda is being identified separately - and
 %instead of here changing lambda - change

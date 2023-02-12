@@ -1,5 +1,5 @@
 function [DC, DC1, DC2,HCouple,Pw,hC,VC,cexp1,cexp2,...
-    OUTC, DS,HSingle, DSh, DSw, VS,Pws,cexps,OUTS,EQS,PARREST,hS] = populations(p,LA,EQS,PARREST,FORCEFIT)
+    OUTC, DS,HSingle, DSh, DSw, VS,Pws,cexps,OUTS,EQS,PARREST,hS, clmm] = populations(p,LA,EQS,PARREST,FORCEFIT)
 global VERBOSE doepses
 if isempty(doepses)
     doepses=0;
@@ -120,6 +120,36 @@ if FORCEFIT==1 % recalibrate THETA and THETAHW (for within estimation routine)
        
 end
 
+if FORCEFIT==0.9 % recalibrate THETA only
+    params=PARREST.('params');
+    THETA=params{'THETA',:};  
+
+    % make one of them match
+    if uhC>uwC
+        u=uhC-uhS;
+    else
+        u=uwC-uwS;    
+    end
+    if u<=0
+        fprintf('WARNING: sigmam cannot be fit')
+    end
+
+    if exist('momentall','var')
+        smarried=momentall{'smarried',:};
+    else
+        smarried=1-ssw_;
+    end
+    dTHETA= log((smarried)/(1-smarried))*sigmam - (u);
+    params{'THETA',:}=THETA + dTHETA;
+    
+    PARREST.('params')=params;
+    uhC=uhC+dTHETA; %+dTHETAHW;
+    uwC=uwC+ dTHETA ;  % does this work?
+    OUTC.('uh')=uh+(dTHETA)/2 ; % per period!
+    OUTC.('uw')= uw+ (dTHETA)/2  ;
+       
+end
+
 
 if FORCEFIT==0.5 % only THETAHW, not THETA - just so I can treat lambda as a parameter.
     params=PARREST.('params');
@@ -135,11 +165,42 @@ if FORCEFIT==0.5 % only THETAHW, not THETA - just so I can treat lambda as a par
        
 end
 
+if FORCEFIT==0.1 % recalibrate sigmam!
+    params=PARREST.('params');
+    THETA=params{'THETA',:};  
+    if uhC>uwC
+        u=uhC-uhS;
+    else
+        u=uwC-uwS;    
+    end
+    if u<=0
+        fprintf('WARNING: sigmam cannot be fit')
+    end
+
+
+    %THETAHW=params{'THETAHW',:};  
+    %dTHETAHW=-(uhC-uhS) - log( (M/F)*(1+exp(-(uwC-uwS)/sigmam))  -1)*sigmam; % making marriage market clear
+    %params{'THETAHW',:}=THETAHW + dTHETAHW;
+    % make women match
+    if exist('momentall','var')
+        smarried=momentall{'smarried',:};
+    else
+        smarried=1-ssw_;
+    end
+
+    sigmam=u/log((smarried)/(1-smarried));
+    params{'sigmam',:}=sigmam;    
+    PARREST.('params')=params;
+    PARREST.('sigmam')=sigmam;
+
+       
+end
+
 ssh=1/(1+exp((uhC-uhS)/sigmam)) ;
 ssw=1/(1+exp((uwC-uwS)/sigmam)) ;
 clmm=  F*(exp((uwC-uwS)/sigmam)/(1+exp((uwC-uwS)/sigmam)))  - M*(exp((uhC-uhS)/sigmam)/(1+exp((uhC-uhS)/sigmam)));
 
-if norm(clmm)>10^(-2) 
+if (norm(clmm)>10^(-2)) || (FORCEFIT~=0.9) % 0.9 - not cleared - will be added as a strong moment
     fprintf('Marrriage market uncleared or changed a lot - on purpose? I am not recomputing quantities')
     FORCEFIT=FORCEFIT
     clmm=clmm
@@ -159,42 +220,41 @@ else
         ssw=ssw
     end
     
-
-%log((1-0.15)/0.15)*sigmam = dU
-
-CONSTSH=(ssh*M*(2/3)+(1/3)*M  )/(sum(sum(sum(DSh_agr))));
-CONSTSW=(ssw*F*(2/3)+(1/3)*F  )/(sum(sum(sum(DSw_agr))));
-CONSTC=(1/2)*(M*(2/3)*(1-ssh)+F*(2/3)*(1-ssw))/(sum(sum(sum(sum(sum(DC_agr)))))) ;
-
-if norm([CONSTSH-1,CONSTSW-1,CONSTC-1])^2>0.1
-    fprintf('Adjusting quantities?')
+    
+    %log((1-0.15)/0.15)*sigmam = dU
+    
+    CONSTSH=(ssh*M*(2/3)+(1/3)*M  )/(sum(sum(sum(DSh_agr))));
+    CONSTSW=(ssw*F*(2/3)+(1/3)*F  )/(sum(sum(sum(DSw_agr))));
+    CONSTC=(1/2)*(M*(2/3)*(1-ssh)+F*(2/3)*(1-ssw))/(sum(sum(sum(sum(sum(DC_agr)))))) ;
+    
+    if norm([CONSTSH-1,CONSTSW-1,CONSTC-1])^2>0.1
+        fprintf('Adjusting quantities?')
+    end
+    % it should be true that M*(2)*(1-ssh) = F*(2)*(1-ssw)
+    
+    HSingleH=hS.*DSh*CONSTSH ;
+    HSingleW=hS.*DSw*CONSTSW ;
+    
+    HSingle=HSingleH+HSingleW;
+    HCouple=(HCouple)*CONSTC; % todo: make a function for all these sums
+    
+    DSh=DSh*CONSTSH; % has to be gender specific!
+    DSw=DSw*CONSTSW;
+    DS=DSh+DSw;
+    DC=DC*CONSTC;
+    DC1=DC1*CONSTC;
+    DC2=DC2*CONSTC;
+    
+    % issue: marriage market does not clear here, if it is not forced to. I
+    % should have resolved.
+    
+    
+    % does housing market clear here? shouldn't constants be zero?
+    %HSi=reshape(sum(sum(sum(HSingleH,4))),size(HS))+reshape(sum(sum(sum(HSingleW,4))),size(HS));
+    %HCi=reshape(sum(sum(sum(sum(sum(sum(HCouple,7),6))))),size(HS)); 
+    %clearing=(HSi+HCi-HS);
+    
+    PARREST.('sstaysingleh')=ssh;
+    PARREST.('sstaysinglew')=ssw;
 end
-% it should be true that M*(2)*(1-ssh) = F*(2)*(1-ssw)
-
-HSingleH=hS.*DSh*CONSTSH ;
-HSingleW=hS.*DSw*CONSTSW ;
-
-HSingle=HSingleH+HSingleW;
-HCouple=(HCouple)*CONSTC; % todo: make a function for all these sums
-
-DSh=DSh*CONSTSH; % has to be gender specific!
-DSw=DSw*CONSTSW;
-DS=DSh+DSw;
-DC=DC*CONSTC;
-DC1=DC1*CONSTC;
-DC2=DC2*CONSTC;
-
-% issue: marriage market does not clear here, if it is not forced to. I
-% should have resolved.
-
-
-% does housing market clear here? shouldn't constants be zero?
-%HSi=reshape(sum(sum(sum(HSingleH,4))),size(HS))+reshape(sum(sum(sum(HSingleW,4))),size(HS));
-%HCi=reshape(sum(sum(sum(sum(sum(sum(HCouple,7),6))))),size(HS)); 
-%clearing=(HSi+HCi-HS);
-
-PARREST.('sstaysingleh')=ssh;
-PARREST.('sstaysinglew')=ssw;
 end
-
- end

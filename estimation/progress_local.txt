@@ -1,0 +1,181 @@
+ 
+Scaling down weighting matrix by a factor       1.00000000
+GMM function value, L not recomputed=        20.95920911
+time =        60.84700090
+ iter: 
+GMM function value, L not recomputed=        24.95514984
+time =        44.35976520
+ iter: 
+ FLAG: MINIMUM 
+GMM function value, L not recomputed=        24.95421374
+time =        43.88431760
+ iter:       0.00000000
+ FLAG: MINIMUM 
+GMM - W=inv(V)        20.95643286
+ FLAG: MINIMUM in W=inv(V) 
+GMM function value, L not recomputed=         8.23679653
+time =       112.36086250
+ iter:       1.00000000
+ FLAG: MINIMUM 
+GMM - W=inv(V)         4.56066838
+ FLAG: MINIMUM in W=inv(V) 
+GMM function value, L not recomputed=       314.88115673
+time =       139.67241690
+ iter:       2.00000000
+GMM - W=inv(V)       311.06366612
+GMM function value, L not recomputed=       239.93036274
+time =        72.10902950
+ iter:       3.00000000
+GMM - W=inv(V)       236.10608150
+GMM function value, L not recomputed=   1277392.68651569
+time =        96.14115150
+ iter:       4.00000000
+GMM - W=inv(V)   1277388.67942889
+GMM function value, L not recomputed=      1733.31205030
+time =       174.76152200
+ iter:       5.00000000
+GMM - W=inv(V)      1666.78793488
+GMM function value, L not recomputed=        26.29416096
+time =        91.16497650
+ iter:       6.00000000
+GMM - W=inv(V)        22.34330786
+GMM function value, L not recomputed=        37.16552734
+time =       166.48450780
+ iter:       7.00000000
+GMM - W=inv(V)        33.68774255
+GMM function value, L not recomputed=        18.93512327
+time =       161.50251480
+ iter:       8.00000000
+GMM - W=inv(V)        15.13957212
+GMM function value, L not recomputed=        54.34274538
+time =       124.86835200
+ iter:       9.00000000
+GMM - W=inv(V)        50.12958606
+GMM function value, L not recomputed=        18.47546820
+time =        56.27824000
+ iter:      10.00000000
+GMM - W=inv(V)        14.49537089
+GMM function value, L not recomputed=       821.97341133
+time =       178.63491230
+ iter:      11.00000000
+GMM - W=inv(V)       817.39971569
+GMM function value, L not recomputed=        58.43557479
+time =        68.65321680
+ iter:      12.00000000
+GMM - W=inv(V)        54.49453831
+GMM function value, L not recomputed=       323.54057308
+time =       169.86065640
+ iter:      13.00000000
+GMM - W=inv(V)       317.62281074
+GMM function value, L not recomputed=        86.92168403
+time =        70.85799220
+ iter:      14.00000000
+GMM - W=inv(V)        82.86775849
+GMM function value, L not recomputed=      9925.75524270
+time =        98.75176190
+ iter:      15.00000000
+GMM - W=inv(V)      9921.73701473
+GMM function value, L not recomputed=      4947.20988368
+time =       114.54140480
+ iter:      16.00000000
+GMM - W=inv(V)      4942.44501206
+GMM function value, L not recomputed=        18.24978782
+time =       114.16614090
+ iter:      17.00000000
+GMM - W=inv(V)        11.69596498
+GMM function value, L not recomputed=     11820.67973167
+time =       150.14226510
+ iter:      18.00000000
+GMM - W=inv(V)     11815.01872249
+GMM function value, L not recomputed=    728292.49850263
+time =        65.02741090
+ iter:      19.00000000
+GMM - W=inv(V)    728288.52041780
+GMM function value, L not recomputed=   1149532.25959858
+time =        98.28776710
+ iter:      20.00000000
+GMM - W=inv(V)   1149525.71608609
+GMM function value, L not recomputed=    242598.75644155
+time =        92.65108440
+ iter:      21.00000000
+GMM - W=inv(V)    242593.80900198
+GMM function value, L not recomputed=    745076.70912838
+time =       115.90479300
+ iter:      22.00000000
+GMM - W=inv(V)    745071.77614384
+GMM function value, L not recomputed=    174388.45100272
+time =       123.06274710
+ iter:      23.00000000
+GMM - W=inv(V)    174384.51460567
+GMM function value, L not recomputed=    308756.50495385
+time =       114.20262230
+ iter:      24.00000000
+GMM - W=inv(V)    308752.79729578
+GMM function value, L not recomputed=     50288.54839485
+time =        95.15152060
+ iter:      25.00000000
+GMM - W=inv(V)     50284.12903126
+GMM function value, L not recomputed=    164962.92903156
+time =        99.02373240
+ iter:      26.00000000
+GMM - W=inv(V)    164958.56168691
+GMM function value, L not recomputed=     40142.43776027
+time =        90.49338730
+ iter:      27.00000000
+GMM - W=inv(V)     40138.24440540
+GMM function value, L not recomputed=     53729.56203644
+time =        84.88845350
+ iter:      28.00000000
+GMM - W=inv(V)     53725.74551504
+GMM function value, L not recomputed=     11804.96953586
+time =        93.44834890
+ iter:      29.00000000
+GMM - W=inv(V)     11800.74615976
+GMM function value, L not recomputed=     49269.21306218
+time =        75.91133600
+ iter:      30.00000000
+GMM - W=inv(V)     49265.24276094
+GMM function value, L not recomputed=      9004.95781799
+time =        87.30411670
+ iter:      31.00000000
+GMM - W=inv(V)      9000.83619231
+GMM function value, L not recomputed=      8904.82847156
+time =       159.03358760
+ iter:      32.00000000
+GMM - W=inv(V)      8897.82733774
+GMM function value, L not recomputed=     11989.39934752
+time =       102.00341600
+ iter:      33.00000000
+GMM - W=inv(V)     11985.30164292
+GMM function value, L not recomputed=      2899.81844757
+time =        85.06602320
+ iter:      34.00000000
+GMM - W=inv(V)      2895.64028433
+GMM function value, L not recomputed=     13682.30296087
+time =        50.63979460
+ iter:      35.00000000
+GMM - W=inv(V)     13677.04819484
+GMM function value, L not recomputed=      2120.86775869
+time =        91.18751730
+ iter:      36.00000000
+GMM - W=inv(V)      2116.87340651
+GMM function value, L not recomputed=      9040.23040855
+time =       158.56339160
+ iter:      37.00000000
+GMM - W=inv(V)      9035.98816572
+GMM function value, L not recomputed=      2271.82341288
+time =        80.33518180
+ iter:      38.00000000
+GMM - W=inv(V)      2267.68121430
+GMM function value, L not recomputed=     10670.24512552
+time =       162.55242970
+ iter:      39.00000000
+GMM - W=inv(V)     10664.73941736
+GMM function value, L not recomputed=      2082.22815221
+time =       280.12404730
+ iter:      40.00000000
+GMM - W=inv(V)      2077.19226039
+GMM function value, L not recomputed=      5812.14432982
+time =       231.86258030
+ iter:      41.00000000
+GMM - W=inv(V)      5807.45471677

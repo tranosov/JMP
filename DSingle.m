@@ -73,6 +73,11 @@ for j=1:I
     end
 end
 %}
+scaleof=exp(VS(1,1,1))>10^6;
+if scaleof
+    VS_=VS;
+    VS=VS-VS(1,1,1); % for couples - I do it in laborsS, but I need to rescale this one back for single-couple comparison.
+end
 PS=exp(VS./repmat(sigmal,I,T,I))./repmat(sum(exp(VS./repmat(sigmal,I,T,I)),3),1,1,I);
 
 %{
@@ -145,6 +150,10 @@ HSingle=hS; %DS.*
 % at all 'data', but still probably makes sense.
 % Still I guess it is ok to aggregate them a bit? 
 %PwS=Pw;
+
+if scaleof
+    VS=VS_;
+end
 end
 
 %todo: single men vs women!

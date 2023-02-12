@@ -8,7 +8,7 @@ Function computing the difference between demand and supply in locations
 
 function [clearing] = Clearing_justmm(LA0,EQS,PARREST)
 %global D  AS  AC uw uh us ch cw cs h hs alphaw betaw alphah betah mu lambda JLs Jw Jm HS Jc NC NS NSh NSw sigmaw 
-global RESC %D Jw HS  %ssingle % WARNINGS 
+global RESC doepses %D Jw HS  %ssingle % WARNINGS 
 if isempty(RESC)
     RESC=10^6;
 end
@@ -18,6 +18,8 @@ Jw=PARREST.('Jw');
 sigmam=PARREST.('sigmam');
 ssh_=PARREST.('sstaysingleh');
 ssw_=PARREST.('sstaysinglew');
+ss_=(ssh_+ssw_)/2;
+
 LA=LA0/(RESC);
 wfh=PARREST.('wfh');
 
@@ -30,12 +32,12 @@ W=3;
 
 
 % should I recalculate here the DC?
-[~,~, DSh, DSw, VS,~]=DSingle(99,0,EQS,PARREST);
+[DS,HSingle, DSh, DSw, VS,Pws,cexps,OUTS]=DSingle(99,0,EQS,PARREST);
 if (size(DSh,1)==1) 
     clearing=[1]*10^6; % penalty
     return
 end
-[DC, DC1, DC2,~,Pw,~,~,cexp1,cexp2,OUTC]=DCouple(99,1,LA,EQS,PARREST); 
+[DC, DC1, DC2,HCouple,Pw,hC,VC,cexp1,cexp2,OUTC]=DCouple(99,1,LA,EQS,PARREST); 
 if (size(DC,1)==1) 
     clearing=[1]*10^6; % penalty
     return
@@ -91,16 +93,25 @@ uwC=round(uwC,6);
 uhS=round(uhS,6);
 uwS=round(uwS,6);
 
+if doepses==1 
+    [OUTC,OUTS]=eps_condmean(OUTC,OUTS,PARREST,VS,VC);   
+    epsS=OUTS.('epsS');
+    epsC=OUTC.('epsC');
+    epsC_raw= sum(sum(sum(sum(sum(DC1_agr.*epsC)))))./sum(sum(sum(sum(sum(DC1_agr))))); %in second period of being in a couple - this should be the same?
+    epshS_raw= sum(sum(sum(DSh_agr.*epsS)))./sum(sum(sum(DSh_agr)));
+    epswS_raw= sum(sum(sum(DSw_agr.*epsS)))./sum(sum(sum(DSw_agr)));
+    %expectedly - singles sould get less, because they get more in
+    %systematic benefits
+    
+    uhS=uhS+2*epshS_raw;
+    uwS=uwS+2*epswS_raw;
+    uhC=uhC+2*epsC_raw;
+    uwC=uwC+2*epsC_raw;
+end
 
 
-% no - need to do it separately for DC1 and DC2! check if same?
-
-% Notice - the distribution does not depend on the share that gets married
-% here! (given lambda of course)
-
-%sigmam=1;
-M=sum(sum(sum(DSh_agr)))*(1/(1/3 + ssh_*2/3)) ; %+ sum(sum(sum(sum(sum(DC_agr)))));
-F=sum(sum(sum(DSw_agr)))*(1/(1/3 + ssw_*2/3)) ; %+ sum(sum(sum(sum(sum(DC_agr)))));
+M=sum(sum(sum(DSh_agr)))*(1/(1/3 + ss_*2/3)) ; %+ sum(sum(sum(sum(sum(DC_agr)))));
+F=sum(sum(sum(DSw_agr)))*(1/(1/3 + ss_*2/3)) ; %+ sum(sum(sum(sum(sum(DC_agr)))));
 
 clmm=  F*(exp((uwC-uwS)/sigmam)/(1+exp((uwC-uwS)/sigmam)))  - M*(exp((uhC-uhS)/sigmam)/(1+exp((uhC-uhS)/sigmam)));
 

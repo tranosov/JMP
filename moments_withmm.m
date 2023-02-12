@@ -3,7 +3,7 @@ function [moments_,other,time,EXITFLAG,params]...
     =moments_withmm(p,LA,params,EQS,PARREST,withmm,fast,FORCEFIT)
 global RESC VERBOSE
 tic
-[DC, DC1, DC2,HCouple,Pw,hC,VC,cexp1,cexp2,OUTC, DS,HSingle, DSh, DSw, VS,Pws,cexps,OUTS,EQS,PARREST] = ...
+[DC, DC1, DC2,HCouple,Pw,hC,VC,cexp1,cexp2,OUTC, DS,HSingle, DSh, DSw, VS,Pws,cexps,OUTS,EQS,PARREST,hS, clmm] = ...
     populations(p,LA,EQS,PARREST,FORCEFIT);
 other=99;
 [moments_,other]...
@@ -90,5 +90,7 @@ else
     
 end
 
-
+if FORCEFIT==0.1 || FORCEFIT==0.9 % uncleared market on purpose
+    moments_('clmm',:)={clmm};
+end
 end

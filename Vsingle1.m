@@ -32,9 +32,9 @@ mA_=mA(t,j,i);
 
 %[mIL_,mAL_,mI_,mA_]=matchdist(i,j,t,mA,mI,mAL,mIL, typeic,D,mm,JLs, betah);
 
-vw=vs(t,j,i); %us(1,d,a,cs(Yss(t,j,i),p),hdS(Yss(t,j,i),p),lss(t,j,i),ics(t,j,i)); 
-vw0=vs(t,i,i); %us(1,d0,a,cs(Yss(t,i,i),p),hdS(Yss(t,i,i),p),lss(t,i,i),ics(t,i,i)); 
-vn=-1.0000e+10; %us(0,0,a,0,0,0,0);
+vw=vs(t,j,i,2); %us(1,d,a,cs(Yss(t,j,i),p),hdS(Yss(t,j,i),p),lss(t,j,i),ics(t,j,i)); 
+vw0=vs(t,i,i,2); %us(1,d0,a,cs(Yss(t,i,i),p),hdS(Yss(t,i,i),p),lss(t,i,i),ics(t,i,i)); 
+vn= -1.0000e+10; %us(0,0,a,0,0,0,0); vs(t,i,i,1); % 
 [vbar,vbari]=max([vn,vw]);
 conexp_=(mA_+mI_)/2; %between vw and not working - always pick vw
 vbar=vbar+conexp_; % todo: change this (and the couples integrals) to deciding simultaneously??
@@ -51,8 +51,8 @@ conexp=Pw0*(mA_+max(mIL_,min(mAL_,(vbar-vw0))))/2;
 VS=Pw*vbar+Pw0*vw0+conexp;
 conexp=Pw*conexp_+ conexp;
 if show==1
-vw0-vw    
-Pw=Pw %- for this to be enough need to be around 37-42 for a third of them getting an offer
+    vw0-vw    
+    Pw=Pw %- for this to be enough need to be around 37-42 for a third of them getting an offer
 end
 end
 
