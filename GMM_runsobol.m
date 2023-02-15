@@ -86,14 +86,19 @@ x0=table2array(paramsest);
 LB=table2array(forparams(paramsest.Properties.RowNames,'min'));
 UB=table2array(forparams(paramsest.Properties.RowNames,'max'));
 
+
+%G_Wdiag=GMM_noL(x0,pars,momentest,Wdiag,momentall,paramsall,1,Wsq_diag);
+G_W=GMM_noL_MM(x0,pars,momentest,Wall,momentall,paramsall,1,Wsq_all);
+
+%G_Wdiag2=GMM_noL(x0,pars,momentest,Wdiag2,momentall,paramsall,1,Wsq_diag2);
 G_W2=GMM_noL_MM(x0,pars,momentest,Wall2,momentall,paramsall,1,Wsq_all2);
 
 W_=Wall2;
 Wsq=Wsq_all2;
 
 global Wadd GMINadd
-Wadd=W_;
-GMINadd=G_W2;
+Wadd=Wall;
+GMINadd=G_W;
 
 global VERBOSE
 VERBOSE=0;
@@ -155,7 +160,7 @@ for sobn=1:SOBN
     x00=UB.*sob_(1,:)'+LB.*(1-sob_(1,:))';
     % options
     options = optimset('Display','iter');
-        ObjectiveFunction=@(x)GMM_noL(x,pars,momentest,W_,momentall,paramsall,1,Wsq); % pars has the list!
+        ObjectiveFunction=@(x)GMM_noL_MM(x,pars,momentest,W_,momentall,paramsall,1,Wsq); % pars has the list!
         rng(354);
         options.TolFun=10^(-1); % lenient!
         options.TolX=10^(0); % hopefully  - should not matetr
