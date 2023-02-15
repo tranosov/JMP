@@ -12,8 +12,8 @@ fprintf('Running GMM estimation - ga, with L=LA0.\n');
 
 
 global filename1 filename2
-filename1 = "./estimation/progress_ganoL_econstat5.txt";
-filename2 = "./estimation/progressmoment_ganoL_econstat5.txt";
+filename1 = "./estimation/progress_ganoL_econstat6.txt";
+filename2 = "./estimation/progressmoment_ganoL_econstat6.txt";
 io = fopen(filename1,'a');
 fprintf(io," \n");
 fprintf(io,"Rerun routine.  \n");
@@ -36,49 +36,39 @@ paramsall=forparams(:,'value');
 paramsest=forparams(forparams.('toestimateR')==1,'value');
 momentall=formom(:,'value');
 momentest=formom(formom.('toestimate')==1,'value');
+
 global DOWN
-DOWN=1; %10^3; % scale down W. it is reallyhigh. now that I simplify W - get rid of
-
-
+DOWN=10^3;
 io = fopen(filename1,'a');
 fprintf(io," \n");
 fprintf(io,"Scaling down weighting matrix by a factor %16.8f\n",DOWN);
 fclose(io);
 
-
-DOWN=10^3;
-W__=diag(diag(table2array(forw( momentest.Properties.RowNames, momentest.Properties.RowNames))));
 Wall=table2array(forw( momentest.Properties.RowNames, momentest.Properties.RowNames));
 Wall=(DOWN.*Wall)\eye(size(momentest.Properties.RowNames,1));
+% ADD MM CLEARING CONDITION
+    momentest('clmm',:)={0}; 
+    Wall(end+1,end+1)=DOWN*10;
+
 Wsq_all=chol(Wall);
-
-%[SEs]=SEs(x0,pars,momentest,W,momentall,paramsall);
-
-
-DOWN=10^3;
-Wall=table2array(forw( momentest.Properties.RowNames, momentest.Properties.RowNames));
-Wall=(DOWN.*Wall)\eye(size(momentest.Properties.RowNames,1));
-Wsq_all=chol(Wall);
-
-scale=momentest;
-scale.('blowW')=zeros(size(momentest.Properties.RowNames,1),1);
-scale('scommiles','blowW')={1};
+select=momentest;
+select.('blowW')=ones(size(Wall,1),1);
+select('L','blowW')={1};
+select('scommiles','blowW')={10^2};
 %select('swcommiles_difw','blowW')={10^3};
-scale('shcommiles_dif','blowW')={1};
-scale('hdj','blowW')={0.1};
-scale('hdo','blowW')={0.1};
-scale('sdj_dif','blowW')={0.5};
-scale('wlfp_dif','blowW')={0}; %{10^3};
-scale('wagegap_hw_withn','blowW')={0}; %{10^3};
-scale('betahrs_w','blowW')={0.1}; %{10^2};
-scale('betalwg_w','blowW')={0.1};
-scale('p_gradient_simple','blowW')={0}; %{10^3};
-Wall2=Wall+diag(scale.('blowW').*diag(Wall));% NOTICE - THERE WAS AN ERROR HERE. NOT ELEMENT BY ELEMNT, HAS TO BE MATRIX MULTIPLICATION. FUCK
-Wsq_all2=chol(Wall2);
+select('shcommiles_dif','blowW')={10^3};
+select('hdj','blowW')={10^2};
+select('sdj_dif','blowW')={10^2};
+select('wagegap_hw_withn','blowW')={10^2};
+select('betahrs_w','blowW')={10^2};
+select('p_gradient_simple','blowW')={10^2};
+%select('betalwg_w','blowW')={1};
+Wall2=Wall.*diag(select.('blowW'));
+Wsq_all2=chol(Wall2); %Wsq_all.*diag(select.('blowW'));
 
-% does not work - I was doing stupid stuff, but what I had in mind is not
-% positive definite it seems.  - lets try an addition????? maybe not enough
-% but can try I guess for now?
+
+%W_=(DOWN.*table2array(forw( momentest.Properties.RowNames, momentest.Properties.RowNames)))\eye(size(momentest.Properties.RowNames,1));
+%Wsq=chol(W_);
 
 %momentest_noL=momentest;
 %momentest('L',:)=[];
@@ -90,33 +80,37 @@ fprintf('W inverted.\n');
 pars=paramsest;
 global RESC
 RESC=10^3;
-global VERBOSE
-VERBOSE=0;
-
 
 %fopt=10^(-6); % no idea
 x0=table2array(paramsest);
 LB=table2array(forparams(paramsest.Properties.RowNames,'min'));
 UB=table2array(forparams(paramsest.Properties.RowNames,'max'));
-%GGnoL=GMM_noL(x0,pars,momentest,W_noL,momentall,paramsall);
 
 
-G_W=GMM_noL(x0,pars,momentest,Wall,momentall,paramsall,1,Wsq_all);
+%G_Wdiag=GMM_noL(x0,pars,momentest,Wdiag,momentall,paramsall,1,Wsq_diag);
+G_W=GMM_noL_MM(x0,pars,momentest,Wall,momentall,paramsall,1,Wsq_all);
 
 %G_Wdiag2=GMM_noL(x0,pars,momentest,Wdiag2,momentall,paramsall,1,Wsq_diag2);
-G_W2=GMM_noL(x0,pars,momentest,Wall2,momentall,paramsall,1,Wsq_all2);
+G_W2=GMM_noL_MM(x0,pars,momentest,Wall2,momentall,paramsall,1,Wsq_all2);
 
-W_=Wall2; % WEIGHTED!
+W_=Wall2;
 Wsq=Wsq_all2;
 
 global Wadd GMINadd
 Wadd=Wall;
 GMINadd=G_W;
 
-%%
+global VERBOSE
+VERBOSE=0;
+
+
+% run a short version from my x0
 global GMIN ITER
 GMIN=99999;
 ITER=0;
+
+
+%%
 
 
 io = fopen(filename1,'a');
@@ -125,7 +119,7 @@ fprintf(io," FLAG: MINIMUM \n");
 fclose(io);
 
 
-    ObjectiveFunction=@(x)GMM_noL(x,pars,momentest,W_,momentall,paramsall,1,Wsq); % pars has the list!
+    ObjectiveFunction=@(x)GMM_noL_MM(x,pars,momentest,W_,momentall,paramsall,1,Wsq); % pars has the list!
     rng(300);
     options = optimoptions(@ga,'Display','iter');
     % increase temp to have more acceptence

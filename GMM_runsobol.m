@@ -10,7 +10,7 @@ clear global;
 rng(357)
 fprintf('Running GMM estimation - sobol points and fminsearch, with L=LA0.\n');
 
-
+%%
 global filename1 filename2
 filename1 = "./estimation/progress_sobol_econstat5.txt";
 filename2 = "./estimation/progressmoment_sobol_econstat5.txt";
@@ -109,7 +109,7 @@ global GMIN ITER
 GMIN=99999;
 ITER=0;
 
-
+%%
 io = fopen(filename1,'a');
 fprintf(" \n");
 fprintf(io," FLAG: MINIMUM \n");
@@ -139,7 +139,7 @@ fprintf(io," \n");
 fclose(io);
 
 
-
+%%
 
 NP=size(table2array(pars),1);
 sob = sobolset(NP,'Skip',1e3,'Leap',1e2);
