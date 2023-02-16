@@ -33,7 +33,7 @@ a=1;
 
 if EXITFLAG==999
     params_;
-    G=10^(6);
+    G=10^(12);
     clear('global', 'IN')
 else
     G=(moments_-table2array(momentest))'*W*(moments_-table2array(momentest)); % have to make sure there is W value
