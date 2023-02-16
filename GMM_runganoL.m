@@ -87,17 +87,17 @@ LB=table2array(forparams(paramsest.Properties.RowNames,'min'));
 UB=table2array(forparams(paramsest.Properties.RowNames,'max'));
 
 %G_Wdiag=GMM_noL(x0,pars,momentest,Wdiag,momentall,paramsall,1,Wsq_diag);
-G_W=GMM_noL_MM(x0,pars,momentest,Wall,momentall,paramsall,1,Wsq_all);
+%G_W=GMM_noL_MM(x0,pars,momentest,Wall,momentall,paramsall,1,Wsq_all);
 
 %G_Wdiag2=GMM_noL(x0,pars,momentest,Wdiag2,momentall,paramsall,1,Wsq_diag2);
-G_W2=GMM_noL_MM(x0,pars,momentest,Wall2,momentall,paramsall,1,Wsq_all2);
+%G_W2=GMM_noL_MM(x0,pars,momentest,Wall2,momentall,paramsall,1,Wsq_all2);
 
 W_=Wall2;
 Wsq=Wsq_all2;
 
 global Wadd GMINadd
 Wadd=Wall;
-GMINadd=G_W;
+GMINadd=999; %G_W;
 
 global VERBOSE
 VERBOSE=0;
@@ -111,12 +111,13 @@ ITER=0;
 
 %%
 
-
 io = fopen(filename1,'a');
 fprintf(" \n");
 fprintf(io," FLAG: MINIMUM \n");
 fclose(io);
 
+G_min=GMM_noL_MM(LB,pars,momentest,W_,momentall,paramsall,1,Wsq);
+G_max=GMM_noL_MM(UB,pars,momentest,W_,momentall,paramsall,1,Wsq);
 
     ObjectiveFunction=@(x)GMM_noL_MM(x,pars,momentest,W_,momentall,paramsall,1,Wsq); % pars has the list!
     rng(300);
