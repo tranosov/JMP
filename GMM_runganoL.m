@@ -48,8 +48,8 @@ Wall=table2array(forw( momentest.Properties.RowNames, momentest.Properties.RowNa
 Wall=(DOWN.*Wall)\eye(size(momentest.Properties.RowNames,1));
 % ADD MM CLEARING CONDITION
     momentest('clmm',:)={0}; 
-    Wall(end+1,end+1)=DOWN*10;
-
+    Wall(end+1,end+1)=DOWN*10; 
+ 
 Wsq_all=chol(Wall);
 select=momentest;
 select.('blowW')=ones(size(Wall,1),1);
@@ -85,7 +85,6 @@ RESC=10^3;
 x0=table2array(paramsest);
 LB=table2array(forparams(paramsest.Properties.RowNames,'min'));
 UB=table2array(forparams(paramsest.Properties.RowNames,'max'));
-
 
 %G_Wdiag=GMM_noL(x0,pars,momentest,Wdiag,momentall,paramsall,1,Wsq_diag);
 G_W=GMM_noL_MM(x0,pars,momentest,Wall,momentall,paramsall,1,Wsq_all);
