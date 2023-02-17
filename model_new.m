@@ -508,6 +508,9 @@ if toinputs==1
     options = optimoptions('fsolve','MaxIter',500,'MaxFunctionEvaluations',500,...
             'FunctionTolerance',10^(-6),'Display','off','Algorithm','levenberg-marquardt',...
             'StepTolerance', 10^(-12)); %,'ScaleProblem','jacobian'); %'trust-region'); %'StepTolerance',10^(-15),'ScaleProblem','jacobian',
+    options2 = optimoptions('fsolve','MaxIter',500,'MaxFunctionEvaluations',500,...
+            'FunctionTolerance',10^(-6),'Display','off','Algorithm','trust-region',...
+            'StepTolerance', 10^(-12)); 
     x0=0.05;
     mu0=ces*(1/( Ys(lssh(1,x0,8),ic0)-1))^(crra); %0.7402; % figure out!
     mu0=ces*(1/( Ys(lssh(1,x0,8),ic0)-hdS(mu0,1)))^(crra);
@@ -524,34 +527,41 @@ if toinputs==1
                 fn=@(in) fn(in(1),in(2));
                 rng(357);
                 [output,FVAL,EXITFLAG,OUTPUT]=fsolve(fn,[mu0,x0],options); 
-                output_=output;
+                output__=real(output);
+                
                 if (~isreal(output)) | (output(1)<=0) | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                        if VERBOSE
-                            fprintf('INIT: Warning on singles')
-                        end
-                        if (i>1) || (j>1) || (t>1)
-                            [output,FVAL,EXITFLAG,OUTPUT]=fsolve(fn,output__,options);
-                        else
-                            [output,FVAL,EXITFLAG,OUTPUT]=fsolve(fn,[mu0,x0].*sign(fn([mu0,x0])).*[-1,1]*1.1,options); 
-                        end
-                         if (~isreal(output)) | (output(1)<=0) | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
+                        
+                        [output,FVAL,EXITFLAG,OUTPUT]=fsolve(fn,[mu0,x0],options2); 
+                        
+                        
+                        if (~isreal(output)) | (output(1)<=0) | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
                             if VERBOSE
-                                fprintf('INIT: Warning on singles - 2')
+                                fprintf('INIT: Warning on singles')
                             end
-                            
-                            [output,FVAL,EXITFLAG,OUTPUT]=fsolve(fn,[mu0,x0].*sign(fn([mu0,x0])).*[-1,1]*1.0005,options); 
+                            if (i>1) || (j>1) || (t>1)
+                                [output,FVAL,EXITFLAG,OUTPUT]=fsolve(fn,output__,options);
+                            else
+                                [output,FVAL,EXITFLAG,OUTPUT]=fsolve(fn,[mu0,x0].*sign(fn([mu0,x0])).*[-1,1]*1.1,options); 
+                            end
                              if (~isreal(output)) | (output(1)<=0) | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                                fprintf('INIT: Warning on singles - 3')
-                                output=output_;
+                                if VERBOSE
+                                    fprintf('INIT: Warning on singles - 2')
+                                end
+
+                                [output,FVAL,EXITFLAG,OUTPUT]=fsolve(fn,[mu0,x0].*sign(fn([mu0,x0])).*[-1,1]*1.0005,options); 
+                                 if (~isreal(output)) | (output(1)<=0) | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
+                                    fprintf('INIT: Warning on singles - 3')
+                                    output=output_;
+                                 else
+                                    %fprintf('Solved');   
+                                 end
                              else
-                                %fprintf('Solved');   
+                                 %fprintf('Solved');    
                              end
-                         else
-                             %fprintf('Solved');    
-                         end
+                        end
                 end
 
-                output__=real(output);
+                output_=real(output);
                 inputs0S(t,j,i,:)=real(output);
 
             end
@@ -618,65 +628,70 @@ if toinputs==1
                         if piw_(dh,0)>0 && piw_(dh,0)<1 
                             fn=@(mu,xh,xw) [lsah_eq(mu,xh,xw,p,dh,0,ich,lambda) ,multC_eq(Yc(lsh(mu,xh,xw,dh,0,lambda),0,ich,icw),p,mu,xh,xw,lambda)];
                             fn=@(x) fn(x(1),x(2)/100,x(3)/100);
-                            [output1,~,EXITFLAG]=fsolve(fn,inputs0(th,tw,jh,jw,i,1,:),options) ;
+                            in_=inputs0(th,tw,jh,jw,i,1,:);
+                            
                         end
                         if piw_(dh,0)==1
                             %fprintf('xh=0');
                             fn=@(mu,Lh,xw) [lsah_eq_xh0(mu,Lh,xw,p,dh,0,ich,lambda) ,multC_eq(Yc(1-betah*dh - Lh,0,ich,icw),p,mu,0,xw,lambda)];
                             fn=@(x)fn(x(1),x(2)/100,x(3)/100);
-                            [output1,~,EXITFLAG]=fsolve(fn,[inputs0(th,tw,jh,jw,i,1,1),(1-betah*dh-0.26)*100,inputs0(th,tw,jh,jw,i,1,3)],options) ;
+                            in_=[inputs0(th,tw,jh,jw,i,1,1),(1-betah*dh-0.26)*100,inputs0(th,tw,jh,jw,i,1,3)];
                         end
                         if piw_(dh,0)==0
                             %fprintf('xw=0');
                             fn=@(mu,xh,xw) [lsah_eq_xw0(mu,xh,xw,p,dh,0,ich,lambda) ,multC_eq(Yc(lsh(mu,xh,xw,dh,0,lambda),0,ich,icw),p,mu,xh,xw,lambda)]; % one equation is just xw=0
                             fn=@(x) fn(x(1),x(2)/100,x(3)/100);
-                            [output1,~,EXITFLAG]=fsolve(fn,[inputs0(th,tw,jh,jw,i,1,1),inputs0(th,tw,jh,jw,i,1,2),0],options) ;
+                            in_=[inputs0(th,tw,jh,jw,i,1,1),inputs0(th,tw,jh,jw,i,1,2),0];
                         end
-                        output1_=output1;
+                        [output1,~,EXITFLAG]=fsolve(fn,in_,options) ;
+                        
                         if ~isreal(output1) | output1(1)<=0 | output1(2)<=0 | lsh(output1(1),output1(2)/100,output1(3)/100,dh,0,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                            if VERBOSE
-                                    fprintf(' INIT: Warning w0');
-                             end
-                            %fprintf('Warning');
-                            %cl=fn(output2);
-                            if (i>1) || (jh>1) || (jw>1) || (th>1) || (tw>1)
-                                [output1,~,EXITFLAG]=fsolve(fn, output1__,options);
-                            else
-                                in_=inputs0(th,tw,jh,jw,i,1,:);
-                                mu0_=  (lambda*ceh)*((1+((1-lambda)/lambda)^(1/crra))/(Yc(lsh(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda),0,ich0,icw0)-hdC(output1(1),1)))^(crra); %l*(1/(w1_d(0.258,0)))*(1/(0.69)^crrat); %0.42; %0.3902;0.6856
-                                if lsh(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0
-                                    [output1,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2)*0.1,in_(3)],options);
-                                else
-                                    [output1,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2)*2,in_(3)],options);
-                                end
-                            end
+                            [output1,~,EXITFLAG]=fsolve(fn,in_,options2) ;
+                            output1_=output1;
                             
                             if ~isreal(output1) | output1(1)<=0 | output1(2)<=0 | lsh(output1(1),output1(2)/100,output1(3)/100,dh,0,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
+
                                 if VERBOSE
-                                    fprintf(' INIT: Warning w0 2');
+                                        fprintf(' INIT: Warning w0');
                                 end
-                                in_=inputs0(th,tw,jh,jw,i,1,:);
-                                mu0_=  (lambda*ceh)*((1+((1-lambda)/lambda)^(1/crra))/(Yc(lsh(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda),0,ich0,icw0)-hdC(output1(1),1)))^(crra); %l*(1/(w1_d(0.258,0)))*(1/(0.69)^crrat); %0.42; %0.3902;0.6856
-                                if lsh(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0
-                                    [output1,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2)*0.5,in_(3)],options);
+                                %fprintf('Warning');
+                                %cl=fn(output2);
+                                if (i>1) || (jh>1) || (jw>1) || (th>1) || (tw>1)
+                                    [output1,~,EXITFLAG]=fsolve(fn, output1__,options);
                                 else
-                                    [output1,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2)*1.1,in_(3)],options);
+                                    in_=inputs0(th,tw,jh,jw,i,1,:);
+                                    mu0_=  (lambda*ceh)*((1+((1-lambda)/lambda)^(1/crra))/(Yc(lsh(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda),0,ich0,icw0)-hdC(output1(1),1)))^(crra); %l*(1/(w1_d(0.258,0)))*(1/(0.69)^crrat); %0.42; %0.3902;0.6856
+                                    if lsh(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0
+                                        [output1,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2)*0.1,in_(3)],options);
+                                    else
+                                        [output1,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2)*2,in_(3)],options);
+                                    end
                                 end
 
                                 if ~isreal(output1) | output1(1)<=0 | output1(2)<=0 | lsh(output1(1),output1(2)/100,output1(3)/100,dh,0,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
                                     if VERBOSE
                                         fprintf(' INIT: Warning w0 2');
                                     end
-                                    [output1,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2)*0.8,in_(3)],options);
-                                    if ~isreal(output1) | output1(1)<=0 | output1(2)<=0 | lsh(output1(1),output1(2)/100,output1(3)/100,dh,0,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                                        fprintf(' INIT: Warning w0 3')
-                                        output1=output1_;
+                                    in_=inputs0(th,tw,jh,jw,i,1,:);
+                                    mu0_=  (lambda*ceh)*((1+((1-lambda)/lambda)^(1/crra))/(Yc(lsh(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda),0,ich0,icw0)-hdC(output1(1),1)))^(crra); %l*(1/(w1_d(0.258,0)))*(1/(0.69)^crrat); %0.42; %0.3902;0.6856
+                                    if lsh(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0
+                                        [output1,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2)*0.5,in_(3)],options);
+                                    else
+                                        [output1,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2)*1.1,in_(3)],options);
                                     end
-                                else
-                                    %fprintf('Solved');
+
+                                    if ~isreal(output1) | output1(1)<=0 | output1(2)<=0 | lsh(output1(1),output1(2)/100,output1(3)/100,dh,0,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
+                                        if VERBOSE
+                                            fprintf(' INIT: Warning w0 2');
+                                        end
+                                        [output1,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2)*0.8,in_(3)],options);
+                                        if ~isreal(output1) | output1(1)<=0 | output1(2)<=0 | lsh(output1(1),output1(2)/100,output1(3)/100,dh,0,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
+                                            fprintf(' INIT: Warning w0 3')
+                                            output1=output1_;
+                                        end
+                                    end
                                 end
-                            else
-                                %fprintf('Solved');
+                                
                             end
                         end
                         output1__=real(output1);
@@ -687,63 +702,68 @@ if toinputs==1
                         if piw_(0,dw)>0 && piw_(0,dw)<1 
                             fn=@(mu,xh,xw) [lsaw_eq(mu,xh,xw,p,0,dw,icw,lambda) ,multC_eq(Yc(0,lsw(mu,xh,xw,0,dw,lambda),ich,icw),p,mu,xh,xw,lambda)];
                             fn=@(x) fn(x(1),x(2)/100,x(3)/100);
-                            [output2,~,EXITFLAG]=fsolve(fn,inputs0(th,tw,jh,jw,i,2,:),options); 
+                            in_=inputs0(th,tw,jh,jw,i,2,:);                           
                         end
                         if piw_(0,dw)==1
                             %fprintf('xh=0');
                             fn=@(mu,xh,xw) [lsaw_eq_xh0(mu,xh,xw,p,0,dw,icw,lambda) ,multC_eq(Yc(0,lsw(mu,xh,xw,0,dw,lambda),ich,icw),p,mu,xh,xw,lambda)];
                             fn=@(x) fn(x(1),x(2)/100,x(3)/100);
-                            [output2,~,EXITFLAG]=fsolve(fn,[inputs0(th,tw,jh,jw,i,2,1),0,inputs0(th,tw,jh,jw,i,2,3)],options); 
+                            in_=[inputs0(th,tw,jh,jw,i,2,1),0,inputs0(th,tw,jh,jw,i,2,3)];
                         end
                         if piw_(0,dw)==0
                             %fprintf('xw=0');
                             fn=@(mu,xh,Lw) [lsaw_eq_xw0(mu,xh,Lw,p,0,dw,icw,lambda) ,multC_eq(Yc(0,1-betah*dw - Lw,ich,icw),p,mu,xh,0,lambda)];
                             fn=@(x) fn(x(1),x(2)/100,x(3)/100);
-                            [output2,~,EXITFLAG]=fsolve(fn,[inputs0(th,tw,jh,jw,i,2,1),inputs0(th,tw,jh,jw,i,2,2),1-betaw*dw-0.26],options); 
+                            in_=[inputs0(th,tw,jh,jw,i,2,1),inputs0(th,tw,jh,jw,i,2,2),1-betaw*dw-0.26];
                         end
-                        output2_=output2;
-
+                        [output2,~,EXITFLAG]=fsolve(fn,in_,options); 
+                        
                         if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                            if VERBOSE
-                                fprintf('INIT: Warning 0w');
-                            end
-                            
-                            if (i>1) || (jh>1) || (jw>1) || (th>1) || (tw>1)
-                                [output2,~,EXITFLAG]=fsolve(fn, output2__,options);
-                            else
-                                in_=inputs0(th,tw,jh,jw,i,2,:);
-                                mu0_=  (lambda*ceh)*((1+((1-lambda)/lambda)^(1/crra))/(Yc(0,lsw(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda),ich0,icw0)-hdC(output2(1),1)))^(crra); %l*(1/(w1_d(0.258,0)))*(1/(0.69)^crrat); %0.42; %0.3902;0.6856
-                                if lsw(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0
-                                    [output2,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2),in_(3)*0.1],options);
-                                else
-                                    [output2,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2),in_(3)*2],options);
-                                end
-                            end
-
+                            [output2,~,EXITFLAG]=fsolve(fn,in_,options2); 
+                            output2_=output2;
                             if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
+                            
                                 if VERBOSE
-                                    fprintf('INIT: Warning 0w 2');
+                                    fprintf('INIT: Warning 0w');
                                 end
-                                %cl=fn(output2);
-                                in_=inputs0(th,tw,jh,jw,i,2,:);
-                                mu0_=  (lambda*ceh)*((1+((1-lambda)/lambda)^(1/crra))/(Yc(0,lsw(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda),ich0,icw0)-hdC(output2(1),1)))^(crra); %l*(1/(w1_d(0.258,0)))*(1/(0.69)^crrat); %0.42; %0.3902;0.6856
-                                if lsw(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0
-                                    [output2,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2),in_(3)*0.1],options);
+
+                                if (i>1) || (jh>1) || (jw>1) || (th>1) || (tw>1)
+                                    [output2,~,EXITFLAG]=fsolve(fn, output2__,options);
                                 else
-                                    [output2,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2),in_(3)*2],options);
+                                    in_=inputs0(th,tw,jh,jw,i,2,:);
+                                    mu0_=  (lambda*ceh)*((1+((1-lambda)/lambda)^(1/crra))/(Yc(0,lsw(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda),ich0,icw0)-hdC(output2(1),1)))^(crra); %l*(1/(w1_d(0.258,0)))*(1/(0.69)^crrat); %0.42; %0.3902;0.6856
+                                    if lsw(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0
+                                        [output2,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2),in_(3)*0.1],options);
+                                    else
+                                        [output2,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2),in_(3)*2],options);
+                                    end
                                 end
 
                                 if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
                                     if VERBOSE
                                         fprintf('INIT: Warning 0w 2');
                                     end
-                                    
-                                    [output2,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2),in_(3)*0.8],options);
-                                    if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                                        fprintf('INIT: Warning 0w 3')
-                                        output2=output2_;
+                                    %cl=fn(output2);
+                                    in_=inputs0(th,tw,jh,jw,i,2,:);
+                                    mu0_=  (lambda*ceh)*((1+((1-lambda)/lambda)^(1/crra))/(Yc(0,lsw(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda),ich0,icw0)-hdC(output2(1),1)))^(crra); %l*(1/(w1_d(0.258,0)))*(1/(0.69)^crrat); %0.42; %0.3902;0.6856
+                                    if lsw(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0
+                                        [output2,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2),in_(3)*0.1],options);
+                                    else
+                                        [output2,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2),in_(3)*2],options);
                                     end
 
+                                    if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
+                                        if VERBOSE
+                                            fprintf('INIT: Warning 0w 2');
+                                        end
+
+                                        [output2,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2),in_(3)*0.8],options);
+                                        if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
+                                            fprintf('INIT: Warning 0w 3')
+                                            output2=output2_;
+                                        end
+
+                                    end
                                 end
                             end
                             
@@ -758,65 +778,75 @@ if toinputs==1
                             fn=@(mu,xh,xw) [lsb_eq(mu,xh,xw,p,dh,dw,ich,icw,lambda),...
                                 multC_eq(Yc(lsh(mu,xh,xw,dh,dw,lambda),lsw(mu,xh,xw,dh,dw,lambda),ich,icw),p,mu,xh,xw,lambda)];
                             fn=@(x) fn(x(1),x(2)/100,x(3)/100);
-                            [output3,~,EXITFLAG]=fsolve(fn,inputs0(th,tw,jh,jw,i,3,:),options);
+                            in_=inputs0(th,tw,jh,jw,i,3,:);                  
                         end
                         if piw_(dh,dw)==1
                             fprintf('xh=0');
                             fn=@(mu,Lh,xw) [lsb_eq_xh0(mu,Lh,xw,p,dh,dw,ich,icw,lambda),...
                                 multC_eq(Yc(1-Lh-betah*dh,lsw(mu,0,xw,dh,dw,lambda),ich,icw),p,mu,0,xw,lambda)];
                             fn=@(x) fn(x(1),x(2)/100,x(3)/100);
-                           [output3,~,EXITFLAG]=fsolve(fn,[inputs0(th,tw,jh,jw,i,3,1),(1-betah*dh-0.26)*100,inputs0(th,tw,jh,jw,i,3,3)],options);
+                           in_=[inputs0(th,tw,jh,jw,i,3,1),(1-betah*dh-0.26)*100,inputs0(th,tw,jh,jw,i,3,3)];
                         end
                         if piw_(dh,dw)==0
                             fprintf('xw=0');
                             fn=@(mu,xh,Lw) [lsb_eq_xw0(mu,xh,Lw,p,dh,dw,ich,icw,lambda),...
                                 multC_eq(Yc(lsh(mu,xh,0,dh,dw,lambda),1-betah*dw - Lw,ich,icw),p,mu,xh,0,lambda)];
                             fn=@(x) fn(x(1),x(2)/100,x(3)/100);
-                            [output3,~,EXITFLAG]=fsolve(fn,[inputs0(th,tw,jh,jw,i,3,1),inputs0(th,tw,jh,jw,i,3,2),(1-betaw*dw-0.23)*100],options);
+                            in_=[inputs0(th,tw,jh,jw,i,3,1),inputs0(th,tw,jh,jw,i,3,2),(1-betaw*dw-0.23)*100];
                         end
-                        output3_=output3;
+                        [output3,~,EXITFLAG]=fsolve(fn,in_,options);
+
                         if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 |  lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  |...
                                 lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                            if VERBOSE
-                                fprintf('INIT: Warning');
-                            end
                             
-                            if (i>1) || (jh>1) || (jw>1) || (th>1) || (tw>1)
-                                [output3,~,EXITFLAG]=fsolve(fn, output3__,options);
-                            else                
-                                in_=inputs0(th,tw,jh,jw,i,3,:);
-                                [output3,~,EXITFLAG]=fsolve(fn,[in_(1),output3_(2), output3_(3)],options);
-                            end
-    
+                            [output3,~,EXITFLAG]=fsolve(fn,in_,options2);
+                            output3_=output3;
+                            
                             if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 |  lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  |...
                                 lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
+                            
                                 if VERBOSE
-                                    fprintf('INIT: Warning 2');
-                                end
-                                in_=inputs0(th,tw,jh,jw,i,3,:);
-                                mu0_=  in_(1); %(lambda*ceh)*((1+((1-lambda)/lambda)^(1/crra))/(Yc(lsh(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda),lsw(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda),ich0,icw0)-hdC(output3_(1),1)))^(crra); %l*(1/(w1_d(0.258,0)))*(1/(0.69)^crrat); %0.42; %0.3902;0.6856
-                                if lsw(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0 
-                                    [output3,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2),in_(3)*0.1],options);
-                                elseif lsh(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0
-                                    [output3,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2)*0.1,in_(3)],options);
-                                elseif lsw(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)>lsbar 
-                                    [output3,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2),in_(3)*1.5],options);
-                                elseif lsh(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)>lsbar 
-                                    [output3,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2)*1.5,in_(3)],options);
-                                else
-                                    [output3,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2)*1.1,in_(3)*1.1],options);
+                                    fprintf('INIT: Warning');
                                 end
 
+                                if (i>1) || (jh>1) || (jw>1) || (th>1) || (tw>1)
+                                    [output3,~,EXITFLAG]=fsolve(fn, output3__,options);
+                                else                
+                                    in_=inputs0(th,tw,jh,jw,i,3,:);
+                                    [output3,~,EXITFLAG]=fsolve(fn,[in_(1),output3_(2), output3_(3)],options);
+                                end
 
-                                if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 | lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  |...
+                                if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 |  lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  |...
                                     lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                                    fprintf('INIT: Warning ww 3')
-                                    output3=output3_;
-                                else
-                                    %fprintf('Solved');
+                                    if VERBOSE
+                                        fprintf('INIT: Warning 2');
+                                    end
+                                    in_=inputs0(th,tw,jh,jw,i,3,:);
+                                    mu0_=  in_(1); %(lambda*ceh)*((1+((1-lambda)/lambda)^(1/crra))/(Yc(lsh(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda),lsw(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda),ich0,icw0)-hdC(output3_(1),1)))^(crra); %l*(1/(w1_d(0.258,0)))*(1/(0.69)^crrat); %0.42; %0.3902;0.6856
+                                    if lsw(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0 
+                                        [output3,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2),in_(3)*0.1],options);
+                                    elseif lsh(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)<=0
+                                        [output3,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2)*0.1,in_(3)],options);
+                                    elseif lsw(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)>lsbar 
+                                        [output3,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2),in_(3)*1.5],options);
+                                    elseif lsh(in_(1),in_(2)/100,in_(3)/100,dh,dw,lambda)>lsbar 
+                                        [output3,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2)*1.5,in_(3)],options);
+                                    else
+                                        [output3,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2)*1.1,in_(3)*1.1],options);
+                                    end
+
+
+                                    if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 | lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  |...
+                                        lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
+                                        fprintf('INIT: Warning ww 3')
+                                        output3=output3_;
+                                    else
+                                        %fprintf('Solved');
+                                    end
                                 end
+                                
                             end
-                          
+                            
                         end 
 
 
