@@ -64,7 +64,6 @@ end
 fprintf(io,"time =   %16.8f\n",time);
 fprintf(io," iter: %16.8f\n",ITER);
 if G<GMIN
-        GMIN=G;
         fprintf(" \n");
         fprintf(" FLAG: MINIMUM \n");
         fprintf(io," FLAG: MINIMUM \n");
@@ -100,7 +99,6 @@ if EXITFLAG~=999
     fprintf(" \n");
     fprintf(io," data and simulated moments \n");
     if G<GMIN
-        GMIN=G;
         %fprintf(" \n");
         %fprintf(" FLAG: MINIMUM \n");
         fprintf(io," FLAG: MINIMUM \n");
@@ -150,6 +148,8 @@ fclose(io);
 
 
 
-
+if G<GMIN
+        GMIN=G;
+end
 
 end

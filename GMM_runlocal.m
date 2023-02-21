@@ -25,7 +25,7 @@ fprintf(io,"Rerun routine. \n");
 fclose(io);
 
 %%
-forparams =readtable('./input/PREP_e.xlsx','Sheet','PARS','ReadVariableNames', true,'ReadRowNames',true);
+forparams =readtable('./input/PREP_f.xlsx','Sheet','PARS','ReadVariableNames', true,'ReadRowNames',true);
 formom =readtable('./input/PREP.xlsx','Sheet','MOMS','ReadVariableNames', true,'ReadRowNames',true);
 forw =readtable('./input/PREP.xlsx','Sheet','W','ReadVariableNames', true,'ReadRowNames',true);
 
@@ -54,7 +54,7 @@ Wall=table2array(forw( momentest.Properties.RowNames, momentest.Properties.RowNa
 Wall=(DOWN.*Wall)\eye(size(momentest.Properties.RowNames,1));
 % ADD MM CLEARING CONDITION
     momentest('clmm',:)={0}; 
-    Wall(end+1,end+1)=DOWN*10;
+    Wall(end+1,end+1)=DOWN;
 
 Wsq_all=chol(Wall);
 select=momentest;
@@ -84,7 +84,7 @@ pars=paramsest;
 global RESC
 RESC=10^3;
 global VERBOSE
-VERBOSE=0;
+VERBOSE=1;
 
 
 %fopt=10^(-6); % no idea

@@ -25,7 +25,7 @@ fprintf(io,"Rerun routine. \n");
 fclose(io);
 
 %%
-forparams =readtable('./input/PREP_e.xlsx','Sheet','PARS','ReadVariableNames', true,'ReadRowNames',true);
+forparams =readtable('./input/PREP_f.xlsx','Sheet','PARS','ReadVariableNames', true,'ReadRowNames',true);
 formom =readtable('./input/PREP.xlsx','Sheet','MOMS','ReadVariableNames', true,'ReadRowNames',true);
 forw =readtable('./input/PREP.xlsx','Sheet','W','ReadVariableNames', true,'ReadRowNames',true);
 
@@ -48,7 +48,7 @@ Wall=table2array(forw( momentest.Properties.RowNames, momentest.Properties.RowNa
 Wall=(DOWN.*Wall)\eye(size(momentest.Properties.RowNames,1));
 % ADD MM CLEARING CONDITION
     momentest('clmm',:)={0}; 
-    Wall(end+1,end+1)=DOWN*10;
+    Wall(end+1,end+1)=DOWN;
 
 Wsq_all=chol(Wall);
 select=momentest;
@@ -138,13 +138,21 @@ fprintf(io,"%s",output.message);
 fprintf(io," \n");
 fclose(io);
 
+io = fopen(filename2,'a');
+fprintf(io," \n");
+fprintf(io,"Routine terminated. \n");
+
+fprintf(io,"%s",output.message);
+fprintf(io," \n");
+fclose(io);
+
 
 %%
 
 NP=size(table2array(pars),1);
 sob = sobolset(NP,'Skip',1e3,'Leap',1e2);
 sob= scramble(sob,'MatousekAffineOwen');
-SOBN=20;
+SOBN=10;
 sob_ = sob(1:SOBN,:);
 for sobn=1:SOBN
     io = fopen(filename1,'a');
@@ -178,6 +186,14 @@ for sobn=1:SOBN
     fprintf(io,"%s",output.message);
     fprintf(io," \n");
     fclose(io);
+    
+io = fopen(filename2,'a');
+fprintf(io," \n");
+fprintf(io,"Routine terminated. \n");
+
+fprintf(io,"%s",output.message);
+fprintf(io," \n");
+fclose(io);
 
     
 end

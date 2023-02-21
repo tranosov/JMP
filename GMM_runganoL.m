@@ -48,7 +48,7 @@ Wall=table2array(forw( momentest.Properties.RowNames, momentest.Properties.RowNa
 Wall=(DOWN.*Wall)\eye(size(momentest.Properties.RowNames,1));
 % ADD MM CLEARING CONDITION
     momentest('clmm',:)={0}; 
-    Wall(end+1,end+1)=DOWN*10; 
+    Wall(end+1,end+1)=DOWN; 
  
 Wsq_all=chol(Wall);
 select=momentest;
