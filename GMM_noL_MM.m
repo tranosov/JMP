@@ -1,4 +1,5 @@
 function [G]=GMM_noL_MM(pars_,pars,momentest,W,momentall,params,Lpar,Wsq)
+pars_=reshape(pars_,max(size(pars_)),1);
 % set model
 % solve model
 % create moments to compare to daya
