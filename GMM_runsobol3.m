@@ -8,20 +8,20 @@ clear; clc;
 clear global;
 %cd 'C:\Users\ranos\OneDrive - Umich\Documents\D\Michigan\Res\Female careers in location\Codes\matlab'
 rng(357)
-fprintf('Running GMM estimation - ga, with L=LA0.\n');
+fprintf('Running GMM estimation - sobol points and fminsearch, with L=LA0.\n');
 
-
+%%
 global filename1 filename2
-filename1 = "./estimation/progress_ganoL_econstat6_v2.txt";
-filename2 = "./estimation/progressmoment_ganoL_econstat6_v2.txt";
+filename1 = "./estimation/progress_sobol_local3.txt";
+filename2 = "./estimation/progressmoment_sobol_local3.txt";
 io = fopen(filename1,'a');
 fprintf(io," \n");
-fprintf(io,"Rerun routine.  \n");
+fprintf(io,"Rerun routine. \n");
 fclose(io);
 
 io = fopen(filename2,'a');
 fprintf(io," \n");
-fprintf(io,"Rerun routine.\n");
+fprintf(io,"Rerun routine. \n");
 fclose(io);
 
 %%
@@ -48,8 +48,8 @@ Wall=table2array(forw( momentest.Properties.RowNames, momentest.Properties.RowNa
 Wall=(DOWN.*Wall)\eye(size(momentest.Properties.RowNames,1));
 % ADD MM CLEARING CONDITION
     momentest('clmm',:)={0}; 
-    Wall(end+1,end+1)=DOWN; 
- 
+    Wall(end+1,end+1)=DOWN;
+
 Wsq_all=chol(Wall);
 select=momentest;
 select.('blowW')=ones(size(Wall,1),1);
@@ -86,18 +86,37 @@ x0=table2array(paramsest);
 LB=table2array(forparams(paramsest.Properties.RowNames,'min'));
 UB=table2array(forparams(paramsest.Properties.RowNames,'max'));
 
+%%
+share=0.1;
+LB=x0.*(1-share)+LB.*share;
+UB=x0.*(1-share)+UB.*share;
+
+% crra - keep it!
+%LB(2)=x0(2);
+%UB(2)=x0(2);
+
+pars('crra_',:)=[];
+s_=ones(size(pars));
+s_(2)=0;
+LB=LB(s_);
+UB=UB(s_);
+x0=x0(s_);
+
+%%
+
+
 %G_Wdiag=GMM_noL(x0,pars,momentest,Wdiag,momentall,paramsall,1,Wsq_diag);
-%G_W=GMM_noL_MM(x0,pars,momentest,Wall,momentall,paramsall,1,Wsq_all);
+G_W=GMM_noL_MM(x0,pars,momentest,Wall,momentall,paramsall,1,Wsq_all);
 
 %G_Wdiag2=GMM_noL(x0,pars,momentest,Wdiag2,momentall,paramsall,1,Wsq_diag2);
-%G_W2=GMM_noL_MM(x0,pars,momentest,Wall2,momentall,paramsall,1,Wsq_all2);
+G_W2=GMM_noL_MM(x0,pars,momentest,Wall2,momentall,paramsall,1,Wsq_all2);
 
 W_=Wall2;
 Wsq=Wsq_all2;
 
 global Wadd GMINadd
 Wadd=Wall;
-GMINadd=999; %G_W;
+GMINadd=G_W;
 
 global VERBOSE
 VERBOSE=0;
@@ -108,44 +127,99 @@ global GMIN ITER
 GMIN=99999;
 ITER=0;
 
-
-%%
-
+%{
 io = fopen(filename1,'a');
 fprintf(" \n");
 fprintf(io," FLAG: MINIMUM \n");
+fprintf(io,"GMM =   %16.8f\n",GMIN);
 fclose(io);
-
-G_min=GMM_noL_MM(LB,pars,momentest,W_,momentall,paramsall,1,Wsq);
-G_max=GMM_noL_MM(UB,pars,momentest,W_,momentall,paramsall,1,Wsq);
-
+% options
+options = optimset('Display','iter');
     ObjectiveFunction=@(x)GMM_noL_MM(x,pars,momentest,W_,momentall,paramsall,1,Wsq); % pars has the list!
-    rng(300);
-    options = optimoptions(@ga,'Display','iter');
-    % increase temp to have more acceptence
-    
-intcon = [];
-nonlcon = [];
-A = [];
-b = [];
-Aeq = [];
-beq = [];   
-[x,fval,exitFlag,output] = ga(ObjectiveFunction,size(x0,1),A,b,Aeq,beq,LB,UB,nonlcon,intcon,options)
-%simulannealbnd(ObjectiveFunction,x0,LB,UB,options);
+    rng(354);
+    options.TolFun=10^(-1); % lenient!
+    options.TolX=10^(0); % hopefully  - should not matetr
+    options.MaxFunctionEvaluations=500; % pretty low!
+
+    %Unlike other solvers, fminsearch stops when it satisfies both TolFun and TolX.
+
+ObjectiveFunction(x0)   
+[x,fval,exitFlag,output] = fminsearch(ObjectiveFunction,x0,options);
 output
 
 
 io = fopen(filename1,'a');
 fprintf(io," \n");
 fprintf(io,"Routine terminated. \n");
-fprintf(io,"%s",output);
+
+fprintf(io,"%s",output.message);
 fprintf(io," \n");
 fclose(io);
 
-% todo: how to make the algorithm look harder?
+io = fopen(filename2,'a');
+fprintf(io," \n");
+fprintf(io,"Routine terminated. \n");
 
-% maybe lower ReannealInterval a little bit?
+fprintf(io,"%s",output.message);
+fprintf(io," \n");
+fclose(io);
 
-% temperature slower?
-%temperature = @(optimValues,options) options.InitialTemperature.*(0.99^optimValues.k)
-%options.TemperatureFcn=@temperature
+%}
+%%
+
+NP=size(table2array(pars),1);
+sob = sobolset(NP,'Skip',1e3,'Leap',1e2);
+sob= scramble(sob,'MatousekAffineOwen');
+SOBN=10;
+sob_ = sob(1:SOBN,:);
+for sobn=1:SOBN
+    io = fopen(filename1,'a');
+    fprintf(io," \n");
+    fprintf(io,"New input0. \n");
+    fclose(io);
+
+    io = fopen(filename2,'a');
+    fprintf(io," \n");
+    fprintf(io,"New input0. \n");
+    fclose(io);
+
+    x00=UB.*sob_(1,:)'+LB.*(1-sob_(1,:))';
+    % options
+    options = optimset('Display','iter');
+        ObjectiveFunction=@(x)GMM_noL_MM(x,pars,momentest,W_,momentall,paramsall,1,Wsq); % pars has the list!
+        rng(354);
+        options.TolFun=10^(-1); % lenient!
+        options.TolX=10^(0); % hopefully  - should not matetr
+        options.MaxFunctionEvaluations=2000; % pretty low!
+
+        %Unlike other solvers, fminsearch stops when it satisfies both TolFun and TolX.
+        
+    [x,fval,exitFlag,output] = fminsearch(ObjectiveFunction,x00,options);
+    output
+
+
+    io = fopen(filename1,'a');
+    fprintf(io," \n");
+    fprintf(io,"Routine terminated. \n");
+    fprintf(io,"%s",output.message);
+    fprintf(io," \n");
+    fclose(io);
+    
+io = fopen(filename2,'a');
+fprintf(io," \n");
+fprintf(io,"Routine terminated. \n");
+
+fprintf(io,"%s",output.message);
+fprintf(io," \n");
+fclose(io);
+
+    
+end
+
+
+
+
+% try fminunc?
+
+% 1191 iterations and still did not fucking converge. still is improving.
+% that is wild.
