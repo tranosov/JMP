@@ -98,9 +98,9 @@ UB=x0.*(1-share)+UB.*share;
 pars('crra_',:)=[];
 s_=ones(size(pars));
 s_(2)=0;
-LB=LB(s_);
-UB=UB(s_);
-x0=x0(s_);
+LB=LB(logical(s_));
+UB=UB(logical(s_));
+x0=x0(logical(s_));
 
 %%
 
