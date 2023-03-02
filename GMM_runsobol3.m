@@ -96,7 +96,7 @@ UB=x0.*(1-share)+UB.*share;
 %UB(2)=x0(2);
 
 pars('crra_',:)=[];
-s_=ones(size(pars));
+s_=ones(size(x0));
 s_(2)=0;
 LB=LB(logical(s_));
 UB=UB(logical(s_));
@@ -170,7 +170,7 @@ fclose(io);
 NP=size(table2array(pars),1);
 sob = sobolset(NP,'Skip',1e3,'Leap',1e2);
 sob= scramble(sob,'MatousekAffineOwen');
-SOBN=10;
+SOBN=5;
 sob_ = sob(1:SOBN,:);
 for sobn=1:SOBN
     io = fopen(filename1,'a');
