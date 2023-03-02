@@ -116,7 +116,7 @@ fprintf(" \n");
 fprintf(io," FLAG: MINIMUM \n");
 fclose(io);
 
-%G_min=GMM_noL_MM(LB,pars,momentest,W_,momentall,paramsall,1,Wsq);
+G_min=GMM_noL_MM(LB,pars,momentest,W_,momentall,paramsall,1,Wsq);
 G_max=GMM_noL_MM(UB,pars,momentest,W_,momentall,paramsall,1,Wsq);
 
     ObjectiveFunction=@(x)GMM_noL_MM(x,pars,momentest,W_,momentall,paramsall,1,Wsq); % pars has the list!
