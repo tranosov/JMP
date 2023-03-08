@@ -12,7 +12,7 @@ fprintf('Running GMM estimation - sm, with L=LA0.\n');
 
 
 global filename1 filename2
-filename1 = "./estimation/progress_snnoL_econstat5.txt";
+filename1 = "./estimation/progress_smnoL_econstat5.txt";
 filename2 = "./estimation/progressmoment_smnoL_econstat5.txt";
 io = fopen(filename1,'a');
 fprintf(io," \n");
