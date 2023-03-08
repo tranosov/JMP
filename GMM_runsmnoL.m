@@ -121,8 +121,10 @@ fclose(io);
 
 G_min=GMM_noL_MM(LB,pars,momentest,W_,momentall,paramsall,1,Wsq);
 G_max=GMM_noL_MM(UB,pars,momentest,W_,momentall,paramsall,1,Wsq);
-GG=GMM(x0,pars,momentest,W_,momentall,paramsall);
 
+
+    ObjectiveFunction=@(x)GMM_noL_MM(x,pars,momentest,W_,momentall,paramsall,1,Wsq);
+    GG=ObjectiveFunction(x0);
     options.InitialTemperature = 1*max(GG,1); %no try to bring down, default is 100, I think should be in scale of objective function (or like jacobian - how params affect obj function)
     temperature = @(optimValues,options) options.InitialTemperature.*(0.999.^optimValues.k); % slow down?
     options.TemperatureFcn=temperature;
