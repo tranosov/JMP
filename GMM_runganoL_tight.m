@@ -12,8 +12,8 @@ fprintf('Running GMM estimation - ga, with L=LA0.\n');
 
 
 global filename1 filename2
-filename1 = "./estimation/progress_ganoL_econstat5_tight.txt";
-filename2 = "./estimation/progressmoment_ganoL_econstat5_tight.txt";
+filename1 = "./estimation/progress_ganoL_econstat6_tight_nW.txt";
+filename2 = "./estimation/progressmoment_ganoL_econstat6_tight_nW.txt";
 io = fopen(filename1,'a');
 fprintf(io," \n");
 fprintf(io,"Rerun routine.  \n");
