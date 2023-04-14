@@ -20,6 +20,7 @@ fprintf(io,"Rerun routine. \n");
 fclose(io);
 
 io = fopen(filename2,'a');
+
 fprintf(io," \n");
 fprintf(io,"Rerun routine. \n");
 fclose(io);
@@ -61,7 +62,7 @@ select('hdj','blowW')={10^2};
 select('sdj_dif','blowW')={10^2};
 select('wagegap_hw_withn','blowW')={10^2};
 select('betahrs_w','blowW')={10^2};
-select('p_gradient_simple','blowW')={10^2};
+select('p_gradient_simple','blowW')={10^4};
 %select('betalwg_w','blowW')={1};
 Wall2=Wall.*diag(select.('blowW'));
 Wsq_all2=chol(Wall2); %Wsq_all.*diag(select.('blowW'));
@@ -95,9 +96,17 @@ UB=x0.*(1-share)+UB.*share;
 %LB(2)=x0(2);
 %UB(2)=x0(2);
 
+%pars('eta_',:)=[];
 pars('crra_',:)=[];
+pars('crrat_',:)=[];
+%pars('LA0',:)=[];
+pars('plocal_',:)=[];
 s_=ones(size(x0));
 s_(2)=0;
+s_(3)=0;
+%s_(19)=0;
+%s_(1)=0;
+s_(14)=0;
 LB=LB(logical(s_));
 UB=UB(logical(s_));
 x0=x0(logical(s_));
