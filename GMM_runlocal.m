@@ -61,7 +61,7 @@ Wall=(DOWN.*Wall)\eye(size(momentest.Properties.RowNames,1));
 
 Wsq_all=chol(Wall);
 
-Wall2=Wall.*diag(table2array(blow)); % REWEIGHTED!
+Wall2=Wall.*(ones(size(Wall))+diag(table2array(blow))-(diag(ones(size(Wall,1),1))) ); %diag(table2array(blow)); % REWEIGHTED! WRONG!!! THIS PUTS 0S ON COVARIANCES!!!!!!
 Wsq_all2=chol(Wall2); %Wsq_all.*diag(select.('blowW'));
 %[SEs]=SEs(x0,pars,momentest,W,momentall,paramsall);
 

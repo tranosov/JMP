@@ -52,7 +52,7 @@ Wall=(DOWN.*Wall)\eye(size(momentest.Properties.RowNames,1));
     Wall(end+1,end+1)=DOWN;
 
 Wsq_all=chol(Wall);
-Wall2=Wall.*diag(table2array(blow)); % REWEIGHTED!
+Wall2=Wall.*(ones(size(Wall))+diag(table2array(blow))-(diag(ones(size(Wall,1),1))) );
 Wsq_all2=chol(Wall2); %Wsq_all.*diag(select.('blowW'));
 
 
