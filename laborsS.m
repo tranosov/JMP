@@ -107,8 +107,8 @@ for j=1:I
             ic=1-low;
             ics(t,j,i)=ic;
             
-            fn=@(mu,x) [lssh_eq(mu,x,p,d,ic) ,multS_eq(Ys(lssh(mu,x,d),ic),p,mu,x)];
-            fn=@(in) fn(in(1),in(2));
+            fn_=@(mu,x) [lssh_eq(mu,x,p,d,ic) ,multS_eq(Ys(lssh(mu,x,d),ic),p,mu,x)];
+            fn=@(in) fn_(in(1),in(2));
             
             rng(357);
             [output,~,EXITFLAG]=fsolve(fn,inputs0(t,j,i,:),options); 

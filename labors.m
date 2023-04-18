@@ -112,7 +112,7 @@ STEPTOL=10^(-10); % would need more iterations! plus by melo byt <TOL!
 % a unique solution!
 
 iter_='off'; %'iter'
-options = optimoptions('fsolve','MaxIter',500,'MaxFunctionEvaluations',500,...
+options = optimoptions('fsolve','MaxIter',2000,'MaxFunctionEvaluations',2000,...
                  'FunctionTolerance',TOL,'Display',iter_,'Algorithm','trust-region','StepTolerance', STEPTOL); %better for when your guess is already good
              
 options0 = optimoptions('fsolve','MaxIter',1000,'MaxFunctionEvaluations',1000,...
@@ -355,14 +355,20 @@ else
                     [output3,~,EXITFLAG]=fsolve(fn,inputs0(th,tw,jh,jw,i,3,:),options);
                 end
 
-                if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 |  lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  | lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 
+if ((jh==3) && (jw==2) && (th==1) && (tw==2) && (i==3))
+
+    k=1;
+
+end
+
+                if (~isreal(output3)) | (output3(1)<=0) | (output3(2)<=0) |  (lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0)  | (lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0)  | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
                     
                     
                     if (i>1) || (jh>1) || (jw>1) || (th>1) || (tw>1)
                         [output3,~,EXITFLAG]=fsolve(fn, output3__,options);
                     end 
 
-                    if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 |  lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  | lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 
+                    if (~isreal(output3)) | (output3(1)<=0) | (output3(2)<=0) |  (lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0)  | (lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0)  | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
                         if VERBOSE
                             fprintf('Warning');
                         end

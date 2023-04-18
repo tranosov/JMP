@@ -376,10 +376,10 @@ else
 end
 
 
-CONS=10;
+CONS=1;
 % prepare equations to solve for mu (only in spacial cases it has a closed form)
-multS_eq=@(Y,p,mu,x) 1000*(- Y + cs(mu) + hdS(mu,p)*p ); %+ qs(mu,x))]; % will solve a system of equations for (mu,x)
-multC_eq=@(Y,p,mu,xh,xw,lambda) 1000*(- Y + cc(mu,lambda) + hdC(mu,p)*p); % + qc(mu,xh,xw))]; %CONS*
+multS_eq=@(Y,p,mu,x) CONS*10000*(- Y + cs(mu) + hdS(mu,p)*p ); %+ qs(mu,x))]; % will solve a system of equations for (mu,x)
+multC_eq=@(Y,p,mu,xh,xw,lambda) CONS*10000*(- Y + cc(mu,lambda) + hdC(mu,p)*p); % + qc(mu,xh,xw))]; %CONS*
 
 %multS=@(ls,p,ic) (1/ceh)*(Ys(ls,ic).^crra).*(1 + p^(1-1/crra)*(eta/ceh)^(1/crra) )^(-crra); %1/mult!
 %multC=@(lsh,lsw,p,ich,icw) (1/ceh)*((Yc(lsh, lsw,ich,icw)).^crra).*(Z^(1/crra) + p^(1-1/crra)*(etaC/ceh)^(1/crra) )^(-crra);
@@ -505,10 +505,10 @@ lsaw_eq_xw0= @(mu,xh,Lw,p,dh,dw,ic,lambda) [ ((1-lambda)*alphah.*leffectw.*Tl^(1
 
 
 if toinputs==1
-    options = optimoptions('fsolve','MaxIter',500,'MaxFunctionEvaluations',500,...
+    options = optimoptions('fsolve','MaxIter',5000,'MaxFunctionEvaluations',5000,...
             'FunctionTolerance',10^(-6),'Display','off','Algorithm','levenberg-marquardt',...
             'StepTolerance', 10^(-12)); %,'ScaleProblem','jacobian'); %'trust-region'); %'StepTolerance',10^(-15),'ScaleProblem','jacobian',
-    options2 = optimoptions('fsolve','MaxIter',500,'MaxFunctionEvaluations',500,...
+    options2 = optimoptions('fsolve','MaxIter',5000,'MaxFunctionEvaluations',5000,...
             'FunctionTolerance',10^(-6),'Display','off','Algorithm','trust-region',...
             'StepTolerance', 10^(-12)); 
     x0=0.05;
@@ -754,12 +754,12 @@ if toinputs==1
 
                                     if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
                                         if VERBOSE
-                                            fprintf('INIT: Warning 0w 2');
+                                            fprintf('INIT: Warning 0w 3');
                                         end
 
                                         [output2,~,EXITFLAG]=fsolve(fn,[mu0_,in_(2),in_(3)*0.8],options);
                                         if ~isreal(output2) | output2(1)<=0 | output2(2)<=0 | lsw(output2(1),output2(2)/100,output2(3)/100,0,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                                            fprintf('INIT: Warning 0w 3')
+                                            fprintf('INIT: Warning 0w 4')
                                             output2=output2_;
                                         end
 
