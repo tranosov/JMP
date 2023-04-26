@@ -122,8 +122,6 @@ options0 = optimoptions('fsolve','MaxIter',1000,'MaxFunctionEvaluations',1000,..
         %options = optimoptions('fsolve','MaxIter',5000,'MaxFunctionEvaluations',5000,...
          %   'FunctionTolerance',TOL,'Display','off','Algorithm','levenberg-marquardt'); 
          % it seems to me that 'levenberg-marquardt' is just faster?
-
-
              
 options1 = optimoptions('fsolve','MaxIter',5000,'MaxFunctionEvaluations',5000,...
                  'FunctionTolerance',TOL,'Display',iter_,'Algorithm','levenberg-marquardt','StepTolerance', STEPTOL);         
