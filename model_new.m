@@ -507,10 +507,10 @@ lsaw_eq_xw0= @(mu,xh,Lw,p,dh,dw,ic,lambda) [ ((1-lambda)*alphah.*leffectw.*Tl^(1
 if toinputs==1
     options = optimoptions('fsolve','MaxIter',5000,'MaxFunctionEvaluations',5000,...
             'FunctionTolerance',10^(-6),'Display','off','Algorithm','levenberg-marquardt',...
-            'StepTolerance', 10^(-12)); %,'ScaleProblem','jacobian'); %'trust-region'); %'StepTolerance',10^(-15),'ScaleProblem','jacobian',
+            'StepTolerance', 10^(-15)); %,'ScaleProblem','jacobian'); %'trust-region'); %'StepTolerance',10^(-15),'ScaleProblem','jacobian',
     options2 = optimoptions('fsolve','MaxIter',5000,'MaxFunctionEvaluations',5000,...
             'FunctionTolerance',10^(-6),'Display','off','Algorithm','trust-region',...
-            'StepTolerance', 10^(-12)); 
+            'StepTolerance', 10^(-15)); 
     x0=0.05;
     mu0=ces*(1/( Ys(lssh(1,x0,8),ic0)-1))^(crra); %0.7402; % figure out!
     mu0=ces*(1/( Ys(lssh(1,x0,8),ic0)-hdS(mu0,1)))^(crra);
@@ -838,8 +838,14 @@ if toinputs==1
 
                                     if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 | lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  |...
                                         lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
+                                        [output3,~,EXITFLAG]=fsolve(fn,[mu0,xh0_1*100,xw0_1*100*0.75],options)
                                         fprintf('INIT: Warning ww 3')
-                                        output3=output3_;
+
+                                        if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 | lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  |...
+                                        lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
+                                            fprintf('INIT: Warning ww 4')
+                                            output3=output3_;
+                                        end
                                     else
                                         %fprintf('Solved');
                                     end

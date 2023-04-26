@@ -1,0 +1,78 @@
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor       1.00000000
+GMM function value, L not recomputed=   1000000000000.00000000
+time =       108.99025770
+ iter:                 
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor       1.00000000
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor       1.00000000
+GMM function value, L not recomputed=         3.27550918
+time =       153.64449790
+ iter:                 
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor       1.00000000
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor       1.00000000
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor       1.00000000
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor       1.00000000
+ 
+Rerun routine. 
+ 
+Scaling down weighting matrix by a factor       1.00000000
+GMM function value, L not recomputed=         9.91837428
+time =       144.74457270
+ iter:                 
+GMM function value, L not recomputed=        16.18643920
+time =        71.75714330
+ iter:                 
+ FLAG: MINIMUM 
+GMM function value, L not recomputed=        16.18644800
+time =        71.08788110
+ iter:       0.00000000
+ FLAG: MINIMUM 
+GMM - W=inv(V)         9.91844132
+GMM function value, L not recomputed=      1889.17443940
+time =        82.81156090
+ iter:       1.00000000
+GMM - W=inv(V)      1881.85434512
+GMM function value, L not recomputed=        24.28231427
+time =        70.74630170
+ iter:       2.00000000
+GMM - W=inv(V)        18.23333726
+GMM function value, L not recomputed=        22.56334890
+time =       119.73147500
+ iter:       3.00000000
+GMM - W=inv(V)        15.13227416
+GMM function value, L not recomputed=    118947.31867239
+time =       137.67498110
+ iter:       4.00000000
+GMM - W=inv(V)    118937.95094070
+GMM function value, L not recomputed=        63.32058747
+time =       114.48991020
+ iter:       5.00000000
+GMM - W=inv(V)        57.75886553
+GMM function value, L not recomputed=        16.23878810
+time =        77.64172240
+ iter:       6.00000000
+GMM - W=inv(V)         9.95523108
+GMM function value, L not recomputed=        16.19133116
+time =        70.72149340
+ iter:       7.00000000
+GMM - W=inv(V)         9.92443280

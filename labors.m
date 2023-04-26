@@ -188,7 +188,12 @@ for i=1:I
                     
 if (hs_wfh==1) && ((th>T0)&& (tw<=T0))  && ((th<=T0)&& (tw>T0))   % these do not exist under household assignment - save time
     skip=1;
-else    
+else
+
+    if (i==2) & (jh==2) & (jw==3) & (th==1) & (tw==1)
+                            a=1;
+    end
+
                 p=pp(i);
                 
                 dh=D(i,jh);
