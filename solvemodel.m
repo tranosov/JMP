@@ -5,7 +5,7 @@ function [p,LA,EXITFLAG,time]=solvemodel(params,EQS,PARREST,p0,LA0,reinitialize,
 
 %reinitialize=0.5; % 0 vs 0.5 vs 1 - 0.5 is reset PARREST and EQS with new lambda, but not new inputs  
 
-global RESC
+global RESC show
 if isempty(RESC)
     RESC=10^6;
 end

@@ -33,6 +33,7 @@ cs=EQS.('cs');
 hdS=EQS.('hdS');
 Leissh=EQS.('Leissh');
 mus0=EQS.('mus0');  
+uXi=EQS.('uXi');
 
 wfh=PARREST.('wfh');
 T0=T;
@@ -162,7 +163,9 @@ for j=1:I
                 uls(t,j,i)=utills(lssh(output(1),output(2),d),output(2),d);
                 ucls(t,j,i)=utilcls(d);
                 uxs(t,j,i)=utilxs(output(2),0);
-                
+
+                uxi(t,j,i)=uXi(lssh(output(1),output(2),d),ic);
+   
             end
 
         
@@ -199,6 +202,7 @@ if alloutput
     OUTS.('mus') = mus; 
     OUTS.('phs') = phs; 
     OUTS.('epsS') = 0;
+    OUTS.('uxi') = uxi;
 end
 
 

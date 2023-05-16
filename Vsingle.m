@@ -12,6 +12,7 @@ Maybe later add wage, now treat as a global variable!
 %}
 
 function [VS,works,Pn,Pw0,Pw,conexp]=Vsingle(t,j,i, PARREST,OUTS)
+global show 
 
 plocal=PARREST.('plocal');
 

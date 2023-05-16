@@ -1,6 +1,6 @@
 
 function [output,EXITFLAG,time]=solvep(lp0,EQS,PARREST,tolmult)
-global WARNINGS VERBOSE NOLOC
+global WARNINGS VERBOSE NOLOC show
 rng(357);
 if VERBOSE
     iter_="iter";

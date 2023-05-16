@@ -84,21 +84,65 @@ Pww
 %Pw0n-Pnw0
 %vwn-vnw
 %vw0n-vnw0
-if show==1
+if  (show==1 ) %| (i==2 && jh==1 && jw==1)
     %vww0
     %vw0w0
     dw_hus=-vw0w0+vww0
     dw_wif=-vw0w0+vw0w
-%workh
-%workw
-%Pww0-Pw0w
-haccepts=Pww+Pww0+Pwn
-waccepts=Pww+Pw0w+Pnw
-%Pww
-Pw0w0
+    %workh
+    %workw
+    %Pww0-Pw0w
+    haccepts=Pww+Pww0+Pwn
+    waccepts=Pww+Pw0w+Pnw
 
-vww-vwn
-vww-vnw
+    uxih=OUTC.uXih;
+    uxih(th,tw,jh,i,i,3)-uxih(th,tw,i,i,i,3)
+    uch=OUTC.uch;
+    uch(th,tw,jh,i,i,3)-uch(th,tw,i,i,i,3)
+    uho=OUTC.uho;
+    uho(th,tw,jh,i,i,3)-uho(th,tw,i,i,i,3)
+    ulh=OUTC.ulh;
+    ulh(th,tw,jh,i,i,3)-ulh(th,tw,i,i,i,3)
+    ux=OUTC.ux;
+    ux(th,tw,jh,i,i,3)-ux(th,tw,i,i,i,3)
+
+    uxiw=OUTC.uXiw;
+    uxiw(th,tw,jh,i,i,3)-uxiw(th,tw,i,i,i,3)
+    ucw=OUTC.ucw;
+    ucw(th,tw,jh,i,i,3)-ucw(th,tw,i,i,i,3)
+    uho=OUTC.uho;
+    uho(th,tw,jh,i,i,3)-uho(th,tw,i,i,i,3)
+    ulw=OUTC.ulw;
+    ulw(th,tw,jh,i,i,3)-ulw(th,tw,i,i,i,3)
+    ux=OUTC.ux;
+    ux(th,tw,jh,i,i,3)-ux(th,tw,i,i,i,3)
+
+
+    (uxih(th,tw,jh,i,i,3)-uxih(th,tw,i,i,i,3))*0.54+ (uxiw(th,tw,jh,i,i,3)-uxiw(th,tw,i,i,i,3))*(1-0.54)
+    (uch(th,tw,jh,i,i,3)-uch(th,tw,i,i,i,3))*0.54+ (ucw(th,tw,jh,i,i,3)-ucw(th,tw,i,i,i,3))*(1-0.54)
+    uho(th,tw,jh,i,i,3)-uho(th,tw,i,i,i,3)
+    (ulh(th,tw,jh,i,i,3)-ulh(th,tw,i,i,i,3))*0.54+ (ulw(th,tw,jh,i,i,3)-ulw(th,tw,i,i,i,3))*(1-0.54)
+    ux(th,tw,jh,i,i,3)-ux(th,tw,i,i,i,3)
+
+    Yc=OUTC.Yc;
+    Yc(th,tw,jh,i,i,3)-Yc(th,tw,i,i,i,3)
+    
+    
+
+    uh=OUTC.uh;
+    uh(th,tw,jh,i,i,3)-uh(th,tw,i,i,i,3)
+    uw=OUTC.uw;
+    uw(th,tw,jh,i,i,3)-uw(th,tw,i,i,i,3)
+
+    
+    ch=OUTC.ch;
+    ch(th,tw,jh,i,i,3)-ch(th,tw,i,i,i,3)
+
+    %Pww
+    Pw0w0
+    
+    vww-vwn
+    vww-vnw
 end
 %Pww0+Pwn
 %Pw0w+Pnw

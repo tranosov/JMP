@@ -1169,6 +1169,82 @@ distowC_raw=sum(sumC(distowC.*DC))./sum(DCi);
 
 swnmarried=1 - (exp((wVMAR)/sigmam)/(1+exp((wVMAR)/sigmam)));
 shnmarried=1 - (exp((hVMAR)/sigmam)/(1+exp((hVMAR)/sigmam)));
+
+%%
+
+%I want both couples and singles. For each type I want log wage, dist of
+%job to center and 
+%lwagewC
+%lwagehC
+%lwagehS
+
+dist1wS=zeros(I,T,I,W);
+for j=1:I
+    for t=1:T
+        for i=1:I
+            for w=2:W
+                j_=j*(w==3) + i*(w==2);
+                dist1wS(j,t,i,w)=D(1,j_);
+            end
+        end
+    end
+end
+
+dist1whC=zeros(I,I,T,T,I,W,W);
+dist1wwC=zeros(I,I,T,T,I,W,W);
+
+for jh=1:I
+    for jw=1:I
+        for th=1:T
+            for tw=1:T
+                for i=1:I
+                    for wh=1:3 
+                       for ww=1:3
+hi=wh>1;
+wi=ww>1;
+wwi=hi*(1-wi)+2*wi*(1-hi) + 3*wi*hi;
+
+if wwi>0
+    jh_=jh*(wh==3) + i*(wh==2|wh==1);
+    jw_=jw*(ww==3) + i*(ww==2|ww==1);
+    dist1whC(jh,jw,th,tw,i,wh,ww)=D(1,jh_);
+    dist1wwC(jh,jw,th,tw,i,wh,ww)=D(1,jw_);
+end
+                       end
+                    end
+                end
+            end
+        end
+    end
+end
+
+dist1whC_long=reshape(dist1whC,I*I*T*T*I*W*W,1);
+dist1wwC_long=reshape(dist1wwC,I*I*T*T*I*W*W,1);
+dist1wS_long=reshape(dist1wS,I*T*I*W,1);
+wageS_long=reshape(lwagehS,I*T*I*W,1);
+wageS_long(isinf(wageS_long))=0;
+
+W_=[DS_long.*workss_long; DC_long.*worksh_long;  DC_long.*worksw_long];
+dist1=[dist1wS_long; dist1whC_long; dist1wwC_long ];
+y=[wageS_long; wageh_long;wagew_long];
+
+X=[ones(size(y)),dist1];
+y=y(W_>0,:);
+X=X(W_>0,:);
+
+WW=repmat(W_(W_>0),1,size(X,1)).*eye(size(X,1));
+
+try chol((X'*WW*X));
+    
+    b=((X'*WW*X)\eye(size(X'*WW*X)))*(X'*WW*y);
+    betas_comdo=[b(end-1),b(end)];
+
+catch ME
+    betas_comdo=[10^12,10^12];
+    disp('Matrix (X*WW*X) is not symmetric positive definite')
+end
+
+
 %%
 d4=0;
 if I==4

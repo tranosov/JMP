@@ -13,6 +13,7 @@ Maybe later add wage, now treat as a global variable!
 
 function [VS,works,Pn,Pw0,Pw,conexp]=Vsingle1(t,j,i,PARREST,OUTS)
 global show
+
 vs=OUTS.('vs') ;
 %typeic=PARREST.('typeic');
 %D=PARREST.('D');
@@ -50,8 +51,29 @@ works=Pw+Pw0; % ultimately I think this will NOT  be useful
 conexp=Pw0*(mA_+max(mIL_,min(mAL_,(vbar-vw0))))/2;
 VS=Pw*vbar+Pw0*vw0+conexp;
 conexp=Pw*conexp_+ conexp;
-if show==1
-    vw0-vw    
+if (show==1 ) %| (i==2 && j==1)
+    dw=-vw0+vw    
+    uxi=OUTS.uxi;
+    uxi(t,j,i)-uxi(t,i,i)
+    ucs=OUTS.ucs;
+    ucs(t,j,i)-ucs(t,i,i)
+    uhs=OUTS.uhs;
+    uhs(t,j,i)-uhs(t,i,i)
+    uls=OUTS.uls;
+    uls(t,j,i)-uls(t,i,i)
+    uxs=OUTS.uxs;
+    uxs(t,j,i)-uxs(t,i,i)
+    Ys=OUTS.Ys;
+    Ys(t,j,i)-Ys(t,i,i)
+
+    cs=OUTS.conss;
+    cs(t,j,i)-cs(t,i,i)
+    ics=OUTS.ics;
+    ics(t,j,i)-ics(t,i,i)
+    
+
+    
+
     Pw=Pw %- for this to be enough need to be around 37-42 for a third of them getting an offer
 end
 end

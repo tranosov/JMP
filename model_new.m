@@ -505,11 +505,12 @@ lsaw_eq_xw0= @(mu,xh,Lw,p,dh,dw,ic,lambda) [ ((1-lambda)*alphah.*leffectw.*Tl^(1
 
 
 if toinputs==1
+    iter='off';
     options = optimoptions('fsolve','MaxIter',5000,'MaxFunctionEvaluations',5000,...
-            'FunctionTolerance',10^(-6),'Display','off','Algorithm','levenberg-marquardt',...
+            'FunctionTolerance',10^(-6),'Display',iter,'Algorithm','levenberg-marquardt',...
             'StepTolerance', 10^(-15)); %,'ScaleProblem','jacobian'); %'trust-region'); %'StepTolerance',10^(-15),'ScaleProblem','jacobian',
     options2 = optimoptions('fsolve','MaxIter',5000,'MaxFunctionEvaluations',5000,...
-            'FunctionTolerance',10^(-6),'Display','off','Algorithm','trust-region',...
+            'FunctionTolerance',10^(-6),'Display',iter,'Algorithm','trust-region',...
             'StepTolerance', 10^(-15)); 
     x0=0.05;
     mu0=ces*(1/( Ys(lssh(1,x0,8),ic0)-1))^(crra); %0.7402; % figure out!
@@ -593,10 +594,11 @@ if toinputs==1
             for jw=1:I 
                 for th=1:T
                     for tw=1:T
-
+                         dh=D(i,jh);
+                         dw=D(i,jw);
                          inputs0(th,tw,jh,jw,i,1,:)=[mu00,xh0_2*100,xw0_2*100];
                          inputs0(th,tw,jh,jw,i,2,:)=[mu000,xh0_3*100,xw0_3*100];
-                         inputs0(th,tw,jh,jw,i,3,:)=[mu0,xh0_1*100,xw0_1*100];
+                         inputs0(th,tw,jh,jw,i,3,:)=[mu0, (1-0.7*pid_*(dh-dw)/100)*xh0_1*100, (1+0.7*pid_*(dh-dw)/100)*xw0_1*100];
                     end
                 end
             end
@@ -794,7 +796,7 @@ if toinputs==1
                             fn=@(x) fn(x(1),x(2)/100,x(3)/100);
                             in_=[inputs0(th,tw,jh,jw,i,3,1),inputs0(th,tw,jh,jw,i,3,2),(1-betaw*dw-0.23)*100];
                         end
-                        [output3,~,EXITFLAG]=fsolve(fn,in_,options);
+                        [output3,~,EXITFLAG]=fsolve(fn,[in_(1),in_(2),in_(3)],options);
 
                         if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 |  lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  |...
                                 lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
@@ -838,7 +840,7 @@ if toinputs==1
 
                                     if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 | lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  |...
                                         lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                                        [output3,~,EXITFLAG]=fsolve(fn,[mu0,xh0_1*100,xw0_1*100*0.75],options)
+                                        [output3,~,EXITFLAG]=fsolve(fn,[mu0,xh0_1*100,xw0_1*100*0.75],options);
                                         fprintf('INIT: Warning ww 3')
 
                                         if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 | lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  |...

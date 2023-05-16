@@ -4,7 +4,7 @@ pars_=reshape(pars_,max(size(pars_)),1);
 % solve model
 % create moments to compare to daya
 global VERBOSE GMIN ITER IN %DOWN
-global filename1 filename2
+global filename1 filename2 show
 
 if Lpar~=1
     %moments_(end,1)=table2array(params{'LA0',:});% I moved it inside
@@ -114,7 +114,7 @@ if EXITFLAG~=999
     end
     fprintf(io," \n");
     fprintf(io," data and simulated moments: and dif and weighted dif \n");
-    weightedm=((moments_-table2array(momentest))'*Wsq); %.*(moments_-table2array(momentest))';
+    weightedm=((moments_-table2array(momentest))'*Wsq'); %.*(moments_-table2array(momentest))';
     for jj=1:size(moments_,1)
         fprintf(io,"%s",char(momnames(jj,1)));
         fprintf(io,"%16.8f",table2array(momentest(jj,1)) -moments_(jj,1)) ; 

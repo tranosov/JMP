@@ -9,6 +9,7 @@ Function computing the difference between demand and supply in locations
 function clearing = Clearing(lp,EQS,PARREST)
 %global D  AS  AC w uw uh us ch cw cs h hs alphaw betaw alphah betah mu lambda JLs Jw Jm HS Jc NC NS NSh NSw sigmaw 
 %global WARNINGS %mm typeic HS NC NS
+global show
 p=exp(lp);
 %p(2)=1/p(2);
 %p(3)=1/p(3);

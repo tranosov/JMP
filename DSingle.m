@@ -7,7 +7,7 @@ Job offer in j X type t.
 %}
 
 function [DS,HSingle, DSh, DSw, VS,Pws,cexps,OUTS]=DSingle(p,alloutput,EQS,PARREST)
-global WARNINGS 
+global WARNINGS show
 
 D=PARREST.('D');
 sigmal=PARREST.('sigmal');

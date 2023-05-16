@@ -6,7 +6,7 @@ function [moments_,time,EXITFLAG,params_final]=GMMmoments(pars_,pars,momentest,m
 % solve model
 % create moments to compare to daya
 
-global VERBOSE
+global VERBOSE show
 
 tic
 params(pars.Properties.RowNames,:)= array2table( reshape(pars_,max(size(pars_)),1), 'RowNames',pars.Properties.RowNames);
