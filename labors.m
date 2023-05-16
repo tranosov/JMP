@@ -113,16 +113,14 @@ STEPTOL=10^(-10); % would need more iterations! plus by melo byt <TOL!
 
 iter_='off'; %'iter'
 options = optimoptions('fsolve','MaxIter',2000,'MaxFunctionEvaluations',2000,...
-                 'FunctionTolerance',TOL,'Display',iter_,'Algorithm','trust-region','StepTolerance', STEPTOL); %better for when your guess is already good
-             
+                 'FunctionTolerance',TOL,'Display',iter_,'Algorithm','trust-region','StepTolerance', STEPTOL); %better for when your guess is already good             
 options0 = optimoptions('fsolve','MaxIter',1000,'MaxFunctionEvaluations',1000,...
         'FunctionTolerance',TOL,'Display',iter_,'Algorithm','trust-region',...
         'StepTolerance', STEPTOL); %,'StepTolerance', STEPTOL); %'trust-region') ;%,...
         %'StepTolerance', 10^(-20)); %'ScaleProblem','jacobian'
         %options = optimoptions('fsolve','MaxIter',5000,'MaxFunctionEvaluations',5000,...
          %   'FunctionTolerance',TOL,'Display','off','Algorithm','levenberg-marquardt'); 
-         % it seems to me that 'levenberg-marquardt' is just faster?
-             
+         % it seems to me that 'levenberg-marquardt' is just faster?             
 options1 = optimoptions('fsolve','MaxIter',5000,'MaxFunctionEvaluations',5000,...
                  'FunctionTolerance',TOL,'Display',iter_,'Algorithm','levenberg-marquardt','StepTolerance', STEPTOL);         
          
@@ -186,13 +184,9 @@ for i=1:I
             for th=1:T
                 for tw=1:T
                     
-if (hs_wfh==1) && ((th>T0)&& (tw<=T0))  && ((th<=T0)&& (tw>T0))   % these do not exist under household assignment - save time
+if (hs_wfh==1) && (((th>T0)&& (tw<=T0))  || ((th<=T0)&& (tw>T0)))   % these do not exist under household assignment - save time - this is nonsense
     skip=1;
-else
-
-    if (i==2) & (jh==2) & (jw==3) & (th==1) & (tw==1)
-                            a=1;
-    end
+else 
 
                 p=pp(i);
                 
@@ -398,12 +392,17 @@ end
                             end
 
                             if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 |  lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  | lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
-                                fprintf('labors: Warning2 ww')
-                                WARNINGS=WARNINGS+1;
-                                OUTC=999;
-                                inputs(th,tw,jh,jw,i,3,:)=inputs0_(th,tw,jh,jw,i,3,:);
-                                IN.('inputs')=real(inputs);
-                                return
+                               fprintf('labors: Warning2 ww')
+                               [output3,~,EXITFLAG]=fsolve(fn,[mu0,reshape(inputs0(th,tw,jh,jw,i,3,2:3),1,2)*0.9],options); 
+
+                                if ~isreal(output3) | output3(1)<=0 | output3(2)<=0 |  lsh(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0  | lsw(output3(1),output3(2)/100,output3(3)/100,dh,dw,lambda) <=0 | ((EXITFLAG~=1) && (EXITFLAG~=2)&& (EXITFLAG~=3)&& (EXITFLAG~=4))
+                                    fprintf('labors: Warning3 ww')
+                                    WARNINGS=WARNINGS+1;
+                                    OUTC=999;
+                                    inputs(th,tw,jh,jw,i,3,:)=inputs0_(th,tw,jh,jw,i,3,:);
+                                    IN.('inputs')=real(inputs);
+                                    return
+                                end
                             end
                         end
 
