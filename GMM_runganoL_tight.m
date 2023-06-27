@@ -26,8 +26,8 @@ fclose(io);
 
 %%
 forparams =readtable('./input/PREP_tight.xlsx','Sheet','PARS','ReadVariableNames', true,'ReadRowNames',true);
-formom =readtable('./input/PREP.xlsx','Sheet','MOMS','ReadVariableNames', true,'ReadRowNames',true);
-forw =readtable('./input/PREP.xlsx','Sheet','W','ReadVariableNames', true,'ReadRowNames',true);
+formom =readtable('./input/PREP_nolfp.xlsx','Sheet','MOMS','ReadVariableNames', true,'ReadRowNames',true);
+forw =readtable('./input/PREP_NEW.xlsx','Sheet','W','ReadVariableNames', true,'ReadRowNames',true);
 
 fprintf('Inputs loaded.\n');
 
